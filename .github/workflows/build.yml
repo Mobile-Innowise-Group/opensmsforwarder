@@ -35,7 +35,7 @@ jobs:
 
       - name: Decode Release Keystore
         env:
-          ENCODED_RELEASE_STRING: ${{ secrets.KEYSTORE_BASE_64 }}
+          ENCODED_RELEASE_STRING: ${{ secrets.RELEASE_KEY_BASE_64 }}
         run: |
           echo $ENCODED_RELEASE_STRING > release-keystore-b64.txt
           base64 -di release-keystore-b64.txt > release.jks
