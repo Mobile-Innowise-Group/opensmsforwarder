@@ -1,7 +1,7 @@
 package com.github.opensmsforwarder.di
 
 import android.content.Context
-import com.github.opensmsforwarder.R
+import com.github.opensmsforwarder.BuildConfig
 import com.github.opensmsforwarder.helper.GoogleSignInHelper
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -19,9 +19,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 class GoogleSignInModule {
 
     @Provides
-    fun provideGoogleSignInOptions(@ApplicationContext context: Context): GoogleSignInOptions =
+    fun provideGoogleSignInOptions(): GoogleSignInOptions =
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestServerAuthCode(context.getString(R.string.web_client_id), true)
+            .requestServerAuthCode(BuildConfig.CLIENT_ID, true)
             .requestScopes(Scope(GmailScopes.GMAIL_SEND))
             .requestEmail()
             .build()

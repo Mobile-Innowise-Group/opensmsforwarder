@@ -48,7 +48,6 @@
     <string name="error_email_is_not_valid">Email is not valid</string>
     <string name="error_google_sign_in">Unable to sign in to account</string>
     <string name="error_google_sign_out">Unable to sign out from account</string>
-    <string name="web_client_id">471379462467-8jgfn9hdgttt94crrifp8kdnrfe43cho.apps.googleusercontent.com</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="sign_in_to_email">Sign in to your gmail account to be able to forward messages on your behalf</string>
     <string name="signed_in_as">You are signed in as:\n%s</string>
