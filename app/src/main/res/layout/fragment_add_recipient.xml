@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp" />
+
+        <ImageView
+            android:id="@+id/imageBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorOnPrimary" />
+
+        <TextView
+            android:id="@+id/step1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/step_2_from_3"
+            android:textAlignment="center"
+            android:textAppearance="@style/SmsTextAppearance.Bold.16"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintBottom_toBottomOf="@id/imageBack"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toTopOf="@id/imageBack" />
+
+        <TextView
+            android:id="@+id/from_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant"
+            android:text="@string/sign_in_to_email"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/imageBack" />
+
+        <TextView
+            android:id="@+id/sender_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/signed_in_as"
+            android:textAppearance="@style/SmsTextAppearance.Bold.16"
+            android:textColor="@color/green"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/from_label" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            style="@style/GoogleMaterialButton"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/white"
+            android:text="@string/sign_in_with_google"
+            android:textAllCaps="false"
+            app:cornerRadius="36dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="13dp"
+            android:textAppearance="@style/SmsTextAppearance.Medium.14"
+            android:textColor="@color/google_button_text"
+            android:visibility="gone"
+            app:icon="@drawable/ic_google"
+            app:iconGravity="textStart"
+            app:iconTint="@null"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/sender_email"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sign_out_button"
+            android:layout_width="0dp"
+            style="@style/GoogleMaterialButton"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/white"
+            app:cornerRadius="36dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="13dp"
+            android:textAppearance="@style/SmsTextAppearance.Medium.14"
+            android:textColor="@color/google_button_text"
+            android:text="@string/sig_out"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/sender_email" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/sign_in_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/sender_email" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textEnterEmail"
+            android:layout_width="0dp"
+            android:layout_marginTop="32dp"
+            android:textAppearance="@style/SmsTextAppearance.Bold.16"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            android:text="@string/add_recipient_email"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_group"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/recipient_email_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            style="@style/SmsEditText"
+            android:visibility="gone"
+            app:errorEnabled="true"
+            app:errorIconTint="@color/red"
+            app:errorTextColor="@color/red"
+            app:helperTextTextColor="@color/red"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/textEnterEmail"
+            app:startIconDrawable="@drawable/ic_email"
+            tools:visibility="visible">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/recipient_email"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="@string/enter_email_hint"
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textEnterPhone"
+            android:layout_width="0dp"
+            android:layout_marginTop="32dp"
+            android:textAppearance="@style/SmsTextAppearance.Bold.16"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            android:text="@string/add_recipient_phone"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_group"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/recipient_phone_layout"
+            android:layout_width="0dp"
+            style="@style/SmsEditText"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            app:counterEnabled="true"
+            app:counterMaxLength="13"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/textEnterPhone"
+            app:startIconDrawable="@drawable/ic_phone"
+            tools:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/recipient_phone"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:imeOptions="actionDone"
+                android:hint="@string/enter_phone_number_hint"
+                android:inputType="phone"
+                android:maxLength="15" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/edit_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="108dp"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_group" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_btn"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginVertical="8dp"
+            style="@style/SmsMaterialButton"
+            android:text="@string/next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/edit_group"
+            app:layout_constraintVertical_bias="1.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

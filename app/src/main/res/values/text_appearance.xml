@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.Social" parent="Base.Theme.InnoForwarder">
+        <item name="android:fontFamily">@font/mavenpro_bold</item>
+    </style>
+
+    <style name="SmsTextAppearance" parent="TextAppearance.AppCompat" />
+
+
+    <style name="SmsTextAppearance.SemiBold" parent="SmsTextAppearance">
+        <item name="android:fontFamily">@font/mavenpro_semibold</item>
+    </style>
+
+    <style name="SmsTextAppearance.Bold" parent="SmsTextAppearance">
+        <item name="fontFamily">@font/mavenpro_bold</item>
+    </style>
+
+    <style name="SmsTextAppearance.Medium" parent="SmsTextAppearance">
+        <item name="android:fontFamily">@font/mavenpro_medium</item>
+    </style>
+
+    <style name="SmsTextAppearance.Regular" parent="SmsTextAppearance">
+        <item name="android:fontFamily">@font/mavenpro_regular</item>
+    </style>
+
+    <style name="SmsTextAppearance.Bold.16" parent="SmsTextAppearance.Bold">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="SmsTextAppearance.SemiBold.32" parent="SmsTextAppearance.SemiBold">
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="SmsTextAppearance.SemiBold.18" parent="SmsTextAppearance.SemiBold">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="SmsTextAppearance.Medium.12" parent="SmsTextAppearance.Medium">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="SmsTextAppearance.Medium.14" parent="SmsTextAppearance.Medium">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="SmsTextAppearance.Medium.12.Gray" parent="SmsTextAppearance.Medium.12">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="SmsTextAppearance.Medium.12.Red" parent="SmsTextAppearance.Medium.12">
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="SmsTextAppearance.Regular.16" parent="SmsTextAppearance.Regular">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="SmsTextAppearance.Regular.14" parent="SmsTextAppearance.Regular">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="SmsTextAppearance.Regular.14.OnSurfaceVariant" parent="SmsTextAppearance.Regular.14">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+</resources>

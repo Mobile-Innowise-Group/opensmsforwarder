@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="blue_light_theme">#7E49FF</color>
+    <color name="gray">#A1A1A1</color>
+    <color name="stroke_light">#E2E8F0</color>
+    <color name="stroke_dark">#282828</color>
+    <color name="text_disabled_dark">#494949</color>
+    <color name="text_disabled_light">#CBD5E1</color>
+    <color name="button_disabled_dark">#0C0C0C</color>
+    <color name="button_disabled_light">#F1F5F9</color>
+    <color name="platinum">#64748B</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#D72828</color>
+    <color name="blue">#03379F</color>
+    <color name="green">#2D9F03</color>
+    <color name="google_button_text">#3C4043</color>
+    <color name="google_button_stroke">#DADCE0</color>
+    <color name="radio_button_gray">#636366</color>
+</resources>

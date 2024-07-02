@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <ImageView
+        android:id="@+id/imageBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorOnPrimary" />
+
+    <TextView
+        android:id="@+id/step1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/step_3_from_3"
+        android:textAlignment="center"
+        android:textAppearance="@style/SmsTextAppearance.Bold.16"
+        app:layout_constraintBottom_toBottomOf="@id/imageBack"
+        app:layout_constraintEnd_toEndOf="@id/end_margin"
+        app:layout_constraintStart_toStartOf="@id/start_margin"
+        app:layout_constraintTop_toTopOf="@id/imageBack" />
+
+    <TextView
+        android:id="@+id/title_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/add_forwarding_rule"
+        android:textAppearance="@style/SmsTextAppearance.Bold.16"
+        app:layout_constraintEnd_toEndOf="@id/end_margin"
+        app:layout_constraintStart_toStartOf="@id/start_margin"
+        app:layout_constraintTop_toBottomOf="@id/imageBack" />
+
+    <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/add_rule_message"
+        android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant"
+        app:layout_constraintEnd_toEndOf="@id/end_margin"
+        app:layout_constraintStart_toStartOf="@id/start_margin"
+        app:layout_constraintTop_toBottomOf="@id/title_label" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/message_pattern_layout"
+        style="@style/SmsEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="@id/end_margin"
+        app:layout_constraintStart_toStartOf="@id/start_margin"
+        app:layout_constraintTop_toBottomOf="@id/textDescription">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/message_pattern_et"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="@string/enter_text_rule_pattern"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:textAppearance="@style/SmsTextAppearance.Regular.16" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonAddRule"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/add_rule_button"
+        android:textAppearance="@style/SmsTextAppearance.Bold.16"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="@id/end_margin"
+        app:layout_constraintStart_toStartOf="@id/start_margin"
+        app:layout_constraintTop_toBottomOf="@id/message_pattern_layout"
+        app:strokeColor="?attr/strokeColor"
+        app:strokeWidth="1dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rules_rv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="72dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/end_margin"
+        app:layout_constraintStart_toStartOf="@id/start_margin"
+        app:layout_constraintTop_toBottomOf="@id/buttonAddRule"
+        tools:itemCount="10"
+        tools:listitem="@layout/item_rule" />
+
+    <TextView
+        android:id="@+id/rulesEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/empty_rules"
+        android:textAppearance="@style/SmsTextAppearance.Medium.14"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/rules_rv"
+        app:layout_constraintTop_toTopOf="@id/rules_rv" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/finish_btn"
+        style="@style/SmsMaterialButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginVertical="8dp"
+        android:text="@string/finish"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/end_margin"
+        app:layout_constraintStart_toStartOf="@id/start_margin" />
+</androidx.constraintlayout.widget.ConstraintLayout>

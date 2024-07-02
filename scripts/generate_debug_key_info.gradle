@@ -1,0 +1,24 @@
+//The following are defaults for new clones of the project.
+//Replace debugkey.properties values with the actual values
+ext {
+    def storePasswordKey = 'DEBUG_KEYSTORE_PASSWORD'
+    def defaultStorePassword = 'YOUR_DEBUG_STORE_PASSWORD'
+    def keyAliasKey = 'DEBUG_KEYSTORE_ALIAS'
+    def defaultKeyAlias = 'YOUR_DEBUG_KEY_ALIAS'
+    def keyPasswordKey = 'DEBUG_KEY_PASSWORD'
+    def defaultKeyPassword = "YOUR_DEBUG_KEY_PASSWORD"
+
+    debugKeyProperties = new Properties()
+    def debugKeyPropertiesFile = rootProject.file("app/keystore/debug/debug.properties")
+    if (!debugKeyPropertiesFile.exists()) {
+        debugKeyProperties.setProperty(storePasswordKey, defaultStorePassword)
+        debugKeyProperties.setProperty(keyAliasKey, defaultKeyAlias)
+        debugKeyProperties.setProperty(keyPasswordKey, defaultKeyPassword)
+
+        Writer writer = new FileWriter(debugKeyPropertiesFile, false)
+        debugKeyProperties.store(writer, "Replace debug info with your actual values. Don't commit this file to source control.")
+        writer.close()
+    }
+
+    debugKeyProperties.load(new FileInputStream(debugKeyPropertiesFile))
+}

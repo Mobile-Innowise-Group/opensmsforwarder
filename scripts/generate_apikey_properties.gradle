@@ -1,0 +1,24 @@
+//The following are defaults for new clones of the project.
+//Replace apikey.properties values with the actual values
+ext {
+    def clientIdKey = 'CLIENT_ID'
+    def defaultClientId = 'YOUR_CLIENT_ID'
+    def clientIdSecretKey = 'CLIENT_SECRET'
+    def defaultClientSecret = 'YOUR_CLIENT_SECRET'
+    def redirectUriKey = 'REDIRECT_URI'
+    def defaultRedirectUriKey = "YOUR_REDIRECT_URI"
+
+    apikeyProperties = new Properties()
+    def apikeyPropertiesFile = rootProject.file("apikey.properties")
+    if (!apikeyPropertiesFile.exists()) {
+        apikeyProperties.setProperty(clientIdKey, defaultClientId)
+        apikeyProperties.setProperty(clientIdSecretKey, defaultClientSecret)
+        apikeyProperties.setProperty(redirectUriKey, defaultRedirectUriKey)
+
+        Writer writer = new FileWriter(apikeyPropertiesFile, false)
+        apikeyProperties.store(writer, "Replace apikey variables with your actual values. Don't commit this file to source control.")
+        writer.close()
+    }
+
+    apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+}
