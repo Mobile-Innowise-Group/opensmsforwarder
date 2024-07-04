@@ -35,8 +35,8 @@ App tech stack includes:
   ```
   git clone git@github.com:Mobile-Innowise-Group/opensmsforwarder.git
   ```
-- Create and setup the Firebase project for Android app ([https://firebase.google.com/docs/android/setup](https://firebase.google.com/docs/android/setup#create-firebase-project), https://youtu.be/jbHfJpoOzkI?t=187).
-- Enable Google as a sign-in method in the Firebase console (https://firebase.google.com/docs/auth/android/google-signin#before_you_begin)
+- Create and setup the Firebase project for Android app (https://firebase.google.com/docs/android/setup, https://youtu.be/jbHfJpoOzkI?t=187).
+- Enable Google as a sign-in method in the Firebase console (https://firebase.google.com/docs/auth/android/google-signin#before_you_begin):
   -- Open the Auth section
   -- Click on the **Sign in method** tab
   -- Enable the Google sign-in method
@@ -52,7 +52,7 @@ DEBUG_KEY_PASSWORD=YOUR_VALUE
 ```
 - run ./gradlew signingReport in terminal task and copy SHA-1 value of your debug key.
 - Add the SHA-1 debug key to the projects setting in the Firebase Console (https://support.google.com/firebase/answer/9137403?hl=en)
-- Enable **Gmail API** in the Google Cloud Console ([https://cloud.google.com/endpoints/docs/openapi/enable-api#console](https://support.google.com/googleapi/answer/6158841?hl=en))
+- Enable **Gmail API** in the Google Cloud Console (https://cloud.google.com/endpoints/docs/openapi/enable-api#console)
 - Setup WebClient for Google Authentication and fill configure your OAuth Consent Screen **Note!: The Web Client is automatically generated throug the Firabase project - Web client (auto created by Google Service). No need to create a new one** (https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid)
 - 
 - Open apikey.properties file and replace CLIENT_ID, CLIENT_SECRET, REDIRECT_URI values with your ones. Get this values from **Web client (auto created by Google Service)**
