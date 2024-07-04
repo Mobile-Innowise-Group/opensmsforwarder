@@ -29,11 +29,11 @@ App tech stack includes:
 
   by HTTPS
   ```
-  git clone https://github.com/dmorskoi/smsforwarder.git
+  git clone [https://github.com/dmorskoi/smsforwarder.git](https://github.com/Mobile-Innowise-Group/opensmsforwarder.git)
   ```
   or by SSH
   ```
-  git clone git@github.com:Mobile-Innowise-Group/opensmsforwarder.git)
+  git clone git@github.com:Mobile-Innowise-Group/opensmsforwarder.git
   ```
 - Create and setup the Firebase project for Android app ([https://firebase.google.com/docs/android/setup](https://firebase.google.com/docs/android/setup#create-firebase-project), https://youtu.be/jbHfJpoOzkI?t=187).
 - Enable Google as a sign-in method in the Firebase console (https://firebase.google.com/docs/auth/android/google-signin#before_you_begin)
