@@ -5,7 +5,7 @@ You can create a set of forwarding rules that will act as a filter for all incom
 
 # The idea 
 
-We want to make it clear for users (who are developers in fact) to have the source code and see how the app works and there is no other play behind the scene. Also no Ads, no Fee:)
+We want to make it clear for users (who are here developers in fact) having the source code to see how the app works and there is no other things behind the scenes. Also no Ads, no Fee:)
 
 
 # Demo
