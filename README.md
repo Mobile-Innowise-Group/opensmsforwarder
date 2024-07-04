@@ -29,7 +29,7 @@ App tech stack includes:
 
   by HTTPS
   ```
-  git clone [https://github.com/dmorskoi/smsforwarder.git](https://github.com/Mobile-Innowise-Group/opensmsforwarder.git)
+  git clone https://github.com/Mobile-Innowise-Group/opensmsforwarder.git
   ```
   or by SSH
   ```
