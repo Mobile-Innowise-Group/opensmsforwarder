@@ -5,7 +5,7 @@ You can create a set of forwarding rules that will act as a filter for all incom
 
 # The idea 
 
-We want to make it clear for users (who are here developers in fact) having the source code to see how the app works and there is no other things behind the scenes. Also no Ads, no Fee:)
+We want to make it clear for users (who are here developers in fact) having the source code to see how the app works and there is no other things behind the scenes. Also no ads, no paid content:)
 
 # Demo
 <img height="500" src="https://github.com/Mobile-Innowise-Group/opensmsforwarder/assets/79689735/da1993c5-6f02-4404-a07b-5b75b35f66ef" />
@@ -40,7 +40,7 @@ App tech stack includes:
   -- Enable the Google sign-in method
   -- Click Save
 - Download the updated Firebase config file (google-services.json), which now contains the OAuth client information required for Google sign-in and put it in app/google-services.json.
-- Generate debug key and put it in app/keystore/debug/ directory (https://developer.android.com/studio/publish/app-signing#generate-key)
+- Generate debug key, name it "debug.jks" and put it in app/keystore/debug/ directory (https://developer.android.com/studio/publish/app-signing#generate-key)
 - Sync and build the project (Don't bother if you gave any errors while building on this step:).
 - Open app/keystore/debug/debug.properties file (was generated on previous step) and replace DEBUG_KEYSTORE_ALIAS, DEBUG_KEYSTORE_PASSWORD, DEBUG_KEY_PASSWORD with your actual values.
 ```
@@ -50,7 +50,7 @@ DEBUG_KEY_PASSWORD=YOUR_VALUE
 ```
 - run ./gradlew signingReport in terminal task and copy SHA-1 value of your debug key.
 - Add the SHA-1 debug key to the projects setting in the Firebase Console (https://support.google.com/firebase/answer/9137403?hl=en)
-- Enable **Gmail API** in the Google Cloud Console (https://cloud.google.com/endpoints/docs/openapi/enable-api#console)
+- Go to Google Cloud Console, choose your project and enable **Gmail API**. (https://cloud.google.com/endpoints/docs/openapi/enable-api#console)
 - Setup WebClient for Google Authentication and fill configure your OAuth Consent Screen **Note!: The Web Client is automatically generated throug the Firabase project - Web client (auto created by Google Service). No need to create a new one** (https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid)
 - 
 - Open apikey.properties file and replace CLIENT_ID, CLIENT_SECRET, REDIRECT_URI values with your ones. Get this values from **Web client (auto created by Google Service)**
