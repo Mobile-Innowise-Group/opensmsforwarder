@@ -41,8 +41,8 @@
             android:text="@string/step_2_from_3"
             android:textAlignment="center"
             android:textAppearance="@style/SmsTextAppearance.Bold.16"
-            app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintBottom_toBottomOf="@id/imageBack"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
             app:layout_constraintTop_toTopOf="@id/imageBack" />
 
@@ -51,8 +51,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant"
             android:text="@string/sign_in_to_email"
+            android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
             app:layout_constraintTop_toBottomOf="@id/imageBack" />
@@ -71,19 +71,16 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/sign_in_button"
+            style="@style/GoogleMaterialButton"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            style="@style/GoogleMaterialButton"
             android:layout_marginTop="12dp"
-            android:backgroundTint="@color/white"
             android:text="@string/sign_in_with_google"
             android:textAllCaps="false"
-            app:cornerRadius="36dp"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="13dp"
             android:textAppearance="@style/SmsTextAppearance.Medium.14"
-            android:textColor="@color/google_button_text"
+            android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
+            app:cornerRadius="36dp"
             app:icon="@drawable/ic_google"
             app:iconGravity="textStart"
             app:iconTint="@null"
@@ -94,18 +91,18 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/sign_out_button"
-            android:layout_width="0dp"
             style="@style/GoogleMaterialButton"
+            android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/white"
-            app:cornerRadius="36dp"
-            android:paddingVertical="10dp"
             android:paddingHorizontal="13dp"
+            android:paddingVertical="10dp"
+            android:text="@string/sig_out"
             android:textAppearance="@style/SmsTextAppearance.Medium.14"
             android:textColor="@color/google_button_text"
-            android:text="@string/sig_out"
             android:visibility="visible"
+            app:cornerRadius="36dp"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
             app:layout_constraintTop_toBottomOf="@id/sender_email" />
@@ -122,20 +119,20 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textEnterEmail"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:text="@string/add_recipient_email"
             android:textAppearance="@style/SmsTextAppearance.Bold.16"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
-            android:text="@string/add_recipient_email"
-            app:layout_constraintTop_toBottomOf="@id/sign_in_group"
-            android:layout_height="wrap_content" />
+            app:layout_constraintTop_toBottomOf="@id/sign_in_group" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/recipient_email_layout"
+            style="@style/SmsEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            style="@style/SmsEditText"
             android:visibility="gone"
             app:errorEnabled="true"
             app:errorIconTint="@color/red"
@@ -159,18 +156,18 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textEnterPhone"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:text="@string/add_recipient_phone"
             android:textAppearance="@style/SmsTextAppearance.Bold.16"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
-            android:text="@string/add_recipient_phone"
-            app:layout_constraintTop_toBottomOf="@id/sign_in_group"
-            android:layout_height="wrap_content" />
+            app:layout_constraintTop_toBottomOf="@id/sign_in_group" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/recipient_phone_layout"
-            android:layout_width="0dp"
             style="@style/SmsEditText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:visibility="gone"
@@ -187,8 +184,8 @@
                 android:id="@+id/recipient_phone"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:imeOptions="actionDone"
                 android:hint="@string/enter_phone_number_hint"
+                android:imeOptions="actionDone"
                 android:inputType="phone"
                 android:maxLength="15" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -204,10 +201,10 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/next_btn"
+            style="@style/SmsMaterialButton"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginVertical="8dp"
-            style="@style/SmsMaterialButton"
             android:text="@string/next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
