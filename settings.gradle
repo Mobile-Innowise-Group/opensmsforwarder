@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "OpenSmsForwarder"
+rootProject.name = "opensmsforwarder"
 include ':app'
