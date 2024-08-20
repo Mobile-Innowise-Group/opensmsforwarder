@@ -12,7 +12,7 @@ import com.github.opensmsforwarder.extension.showOkDialog
 import com.github.opensmsforwarder.extension.smsReceivePermissionGranted
 import com.github.opensmsforwarder.extension.smsSendPermissionGranted
 import com.github.opensmsforwarder.navigation.AnimatedAppNavigator
-import com.github.opensmsforwarder.navigation.Screens.homeFragment
+import com.github.opensmsforwarder.navigation.Screens.splashFragment
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Replace
 import dagger.hilt.android.AndroidEntryPoint
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
     private fun navigateToHomeScreenIfNeed() {
         showError(isShow = false)
         if (isContainerEmpty()) {
-            navigator.applyCommands(arrayOf(Replace(homeFragment())))
+            navigator.applyCommands(arrayOf(Replace(splashFragment())))
         }
     }
 
