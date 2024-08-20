@@ -68,8 +68,9 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
                 R.color.stroke_light
             )
         )
-        fillAnimation = ValueAnimator.ofFloat(0f, 100f).applyFillAnimation(
-            durationMillis = 3000L,
+
+        fillAnimation = ValueAnimator.ofFloat(BUTTON_ANIMATION_START, BUTTON_ANIMATION_END).applyFillAnimation(
+            durationMillis = BUTTON_ANIMATION_DURATION,
             onUpdate = { animatedValue ->
                 binding.pbCountdown.setProgressPercentage(animatedValue.toDouble(), false)
             },
@@ -133,5 +134,11 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
         super.onDestroyView()
         fillAnimation?.cancel()
         fillAnimation = null
+    }
+
+    companion object{
+        private const val BUTTON_ANIMATION_DURATION = 3000L
+        const val BUTTON_ANIMATION_START = 0f
+        const val BUTTON_ANIMATION_END = 100f
     }
 }
