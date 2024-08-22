@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     private val localSettingsRepository: LocalSettingsRepository,
@@ -27,7 +26,6 @@ class OnboardingViewModel @Inject constructor(
 
     private val _viewEffect: Channel<OnboardingEffect> = Channel(Channel.BUFFERED)
     val viewEffect: Flow<OnboardingEffect> = _viewEffect.receiveAsFlow()
-
 
     fun onSlidePage(position: Int, itemCount: Int) {
         val isLastSlide = position == itemCount - 1

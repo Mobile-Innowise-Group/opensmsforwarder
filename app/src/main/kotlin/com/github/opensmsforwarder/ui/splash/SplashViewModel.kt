@@ -18,17 +18,17 @@ class SplashViewModel @Inject constructor(
 
     fun onScreenInit() {
         viewModelScope.launch {
-            val isOnboardingComplete = localSettingsRepository.getOnboardingCompleteFlag()
             delay(SPLASH_DELAY)
-            if (isOnboardingComplete) {
-                router.replaceScreen(Screens.homeFragment())
+            val screen = if (localSettingsRepository.getOnboardingCompleteFlag()) {
+                Screens.homeFragment()
             } else {
-                router.replaceScreen(Screens.onboardingFragment())
+                Screens.onboardingFragment()
             }
+            router.replaceScreen(screen)
         }
     }
 
-    companion object {
-        private const val SPLASH_DELAY = 2000L
+    private companion object {
+        const val SPLASH_DELAY = 2000L
     }
 }

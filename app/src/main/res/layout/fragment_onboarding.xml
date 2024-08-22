@@ -37,19 +37,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/button_next" />
 
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_next"
         android:layout_width="120dp"
         android:layout_height="40dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        app:backgroundTint="@null"
         android:background="@drawable/rounded_corners_background"
         android:clickable="true"
         android:gravity="center"
         android:text="@string/finish"
         android:textColor="@color/white"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
