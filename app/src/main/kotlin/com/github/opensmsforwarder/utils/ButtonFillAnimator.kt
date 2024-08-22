@@ -13,7 +13,7 @@ import com.github.opensmsforwarder.R
 
 class ButtonFillAnimator(
     private val button: TextView,
-    private val lifecycle: Lifecycle,
+    lifecycle: Lifecycle,
     private val onAnimationStart: () -> Unit,
     private val onAnimationEnd: () -> Unit,
     private val animationDuration: Long = DEFAULT_ANIMATION_DURATION,
@@ -66,7 +66,6 @@ class ButtonFillAnimator(
 
     override fun onDestroy(owner: LifecycleOwner) {
         stopAnimation()
-        lifecycle.removeObserver(this)
     }
 
     companion object {
