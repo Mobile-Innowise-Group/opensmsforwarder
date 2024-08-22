@@ -24,9 +24,9 @@ class OnboardingSliderAdapter : RecyclerView.Adapter<SliderViewHolder>() {
 
     override fun getItemCount(): Int = slides.size
 
-    fun setData(slide: List<OnboardingPagerSlide>) {
+    fun setData(slides: List<OnboardingPagerSlide>) {
         this.slides.clear()
-        this.slides.addAll(slide)
+        this.slides.addAll(slides)
     }
 
     fun getItem(position: Int): OnboardingPagerSlide {
@@ -49,8 +49,13 @@ class SliderViewHolder(private val binding: ItemOnboardingSlideBinding) :
             textTitle.text = root.context.getString(slide.titleId)
             textSubtitle.text = root.context.getString(slide.subtitleId)
             image.setImageResource(slide.imageId)
+            checkboxAgree.isChecked = slide.isChecked
             checkboxAgree.isVisible = slide.isLastSlide
-            if (slide.isLastSlide) checkboxAgree.isClickable = isCheckboxClickable
+            if (slide.isLastSlide) {
+                checkboxAgree.isClickable = isCheckboxClickable
+            } else {
+                checkboxAgree.isClickable = false
+            }
             checkboxAgree.setOnCheckedChangeListener { _, isChecked ->
                 slide.isChecked = isChecked
             }

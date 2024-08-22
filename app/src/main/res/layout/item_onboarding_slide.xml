@@ -21,7 +21,7 @@
             android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_title" />
+            app:layout_constraintTop_toBottomOf="@id/text_title" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_title"
@@ -47,7 +47,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image" />
+            app:layout_constraintTop_toBottomOf="@id/image" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkbox_agree"
@@ -56,8 +56,8 @@
             android:layout_marginTop="24dp"
             android:text="@string/risk_agreement_text"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@+id/text_subtitle"
-            app:layout_constraintStart_toStartOf="@+id/text_subtitle"
-            app:layout_constraintTop_toBottomOf="@+id/text_subtitle" />
+            app:layout_constraintEnd_toEndOf="@id/text_subtitle"
+            app:layout_constraintStart_toStartOf="@id/text_subtitle"
+            app:layout_constraintTop_toBottomOf="@id/text_subtitle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

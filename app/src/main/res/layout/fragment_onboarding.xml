@@ -19,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="16dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@+id/countDownTimer"
+        app:layout_constraintBottom_toTopOf="@id/button_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:tabBackground="@drawable/dots_selector"
@@ -33,36 +33,24 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:src="@drawable/ic_back"
-        app:layout_constraintBottom_toBottomOf="@+id/countDownTimer"
+        app:layout_constraintBottom_toBottomOf="@id/button_next"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/countDownTimer" />
+        app:layout_constraintTop_toTopOf="@id/button_next" />
 
-    <FrameLayout
-        android:id="@+id/countDownTimer"
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_next"
         android:layout_width="120dp"
         android:layout_height="40dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        app:backgroundTint="@null"
+        android:background="@drawable/rounded_corners_background"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/finish"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.mackhartley.roundedprogressbar.RoundedProgressBar
-            android:id="@+id/pb_countdown"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:rpbBackgroundColor="@color/blue_light_theme"
-            app:rpbCornerRadius="12dp"
-            app:rpbProgressColor="@color/blue_light_theme"
-            app:rpbShowProgressText="false" />
-
-        <TextView
-            android:id="@+id/button_next"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@color/white"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="@string/finish" />
-    </FrameLayout>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

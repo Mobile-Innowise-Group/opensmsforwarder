@@ -29,7 +29,7 @@ class OnboardingViewModel @Inject constructor(
     val viewEffect: Flow<OnboardingEffect> = _viewEffect.receiveAsFlow()
 
 
-    fun slidePage(position: Int, itemCount: Int) {
+    fun onSlidePage(position: Int, itemCount: Int) {
         val isLastSlide = position == itemCount - 1
         val isFirstSlide = position == FIRST_SLIDE_INDEX
         val isPreFinalSlide = position == itemCount - 2
@@ -48,8 +48,8 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    fun finishOnboarding(onboardingCompleteFlag: Boolean) {
-        if (onboardingCompleteFlag) {
+    fun onFinishOnboarding(isOnboardingCompleted: Boolean) {
+        if (isOnboardingCompleted) {
             localSettingsRepository.setOnboardingCompleteFlag(true)
             router.replaceScreen(Screens.homeFragment())
         } else {

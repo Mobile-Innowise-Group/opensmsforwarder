@@ -6,9 +6,9 @@ import javax.inject.Inject
 class LocalSettingsRepository @Inject constructor(
     private val prefs: Prefs
 ) {
-    fun getOnboardingCompleteFlag() = prefs.onboardingCompleted
+    fun getOnboardingCompleteFlag() = prefs.isOnboardingCompleted
 
-    fun setOnboardingCompleteFlag(onboardingCompleteFlag: Boolean) {
-        prefs.onboardingCompleted = onboardingCompleteFlag
+    fun setOnboardingCompleteFlag(isOnboardingCompleted: Boolean) {
+        prefs.isOnboardingCompleted = isOnboardingCompleted
     }
 }

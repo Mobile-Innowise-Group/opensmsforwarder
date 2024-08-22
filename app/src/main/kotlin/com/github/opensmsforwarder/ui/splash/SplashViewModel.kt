@@ -16,7 +16,7 @@ class SplashViewModel @Inject constructor(
     private val router: Router,
 ) : ViewModel() {
 
-    fun checkOnboardingCompleteFlag() {
+    fun onScreenInit() {
         viewModelScope.launch {
             val isOnboardingComplete = localSettingsRepository.getOnboardingCompleteFlag()
             delay(SPLASH_DELAY)

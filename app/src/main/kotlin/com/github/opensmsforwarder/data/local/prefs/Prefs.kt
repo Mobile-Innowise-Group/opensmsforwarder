@@ -15,7 +15,7 @@ class Prefs @Inject constructor(
                 .putLong(CURRENT_RECIPIENT_ID, value)
                 .apply()
 
-    var onboardingCompleted: Boolean
+    var isOnboardingCompleted: Boolean
         get() = sharedPreferences.getBoolean(ONBOARDING_COMPLETED, false)
         set(value) =
             sharedPreferences
