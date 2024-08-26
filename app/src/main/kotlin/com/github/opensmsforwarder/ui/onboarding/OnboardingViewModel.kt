@@ -30,7 +30,6 @@ class OnboardingViewModel @Inject constructor(
     fun onSlidePage(position: Int, itemCount: Int) {
         val isLastSlide = position == itemCount - 1
         val isFirstSlide = position == FIRST_SLIDE_INDEX
-        val isPreFinalSlide = position == itemCount - 2
         val nextButtonRes = if (isLastSlide) {
             R.string.onboarding_fragment_finish
         } else {
@@ -39,8 +38,7 @@ class OnboardingViewModel @Inject constructor(
         _viewState.update {
             it.copy(
                 isBackButtonVisible = !isFirstSlide,
-                isLastSlide =  isLastSlide,
-                isPreFinalSlide = isPreFinalSlide,
+                isLastSlide = isLastSlide,
                 nextButtonRes = nextButtonRes
             )
         }

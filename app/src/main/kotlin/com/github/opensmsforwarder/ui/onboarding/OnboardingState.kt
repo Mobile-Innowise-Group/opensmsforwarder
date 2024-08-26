@@ -8,10 +8,9 @@ import com.github.opensmsforwarder.model.OnboardingPagerSlide
 data class OnboardingState(
     val isBackButtonVisible: Boolean = false,
     val isLastSlide: Boolean = false,
-    val isPreFinalSlide: Boolean = false,
     @StringRes val nextButtonRes: Int = R.string.onboarding_fragment_next,
-){
-    companion object{
+) {
+    companion object {
         val slides by unsafeLazy {
             listOf(
                 OnboardingPagerSlide(
@@ -38,7 +37,6 @@ data class OnboardingState(
                     titleId = R.string.scammer_warning_label,
                     subtitleId = R.string.scammer_warning_message,
                     imageId = R.drawable.ic_warning,
-                    isLastSlide = true
                 )
             )
         }

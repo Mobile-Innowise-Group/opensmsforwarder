@@ -61,10 +61,10 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
             button = binding.buttonNext,
             lifecycle = viewLifecycleOwner.lifecycle,
             onAnimationStart = {
-                adapter.setCheckboxClickable(false)
+                binding.checkboxAgree.isClickable = false
             },
             onAnimationEnd = {
-                adapter.setCheckboxClickable(true)
+                binding.checkboxAgree.isClickable = true
             }
         )
     }
@@ -81,6 +81,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
 
     private fun renderState(onboardingState: OnboardingState) {
         binding.buttonBack.isVisible = onboardingState.isBackButtonVisible
+        binding.checkboxAgree.isVisible = onboardingState.isLastSlide
         binding.buttonNext.text = getString(onboardingState.nextButtonRes)
         if (onboardingState.isLastSlide) buttonFillAnimator.startAnimation() else buttonFillAnimator.stopAnimation()
     }
@@ -99,8 +100,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
 
     private fun onNextButtonClick() {
         if (binding.viewPager.currentItem + 1 == adapter.itemCount) {
-            val currentSlide = adapter.getItem(binding.viewPager.currentItem)
-            viewModel.onFinishOnboarding(currentSlide.isChecked)
+            viewModel.onFinishOnboarding(binding.checkboxAgree.isChecked)
         } else {
             binding.viewPager.currentItem++
         }
