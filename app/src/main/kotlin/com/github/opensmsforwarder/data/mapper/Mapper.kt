@@ -1,5 +1,6 @@
 package com.github.opensmsforwarder.data.mapper
 
+import com.github.opensmsforwarder.data.local.database.entity.ForwardedSmsEntity
 import com.github.opensmsforwarder.data.local.database.entity.RecipientEntity
 import com.github.opensmsforwarder.data.local.database.entity.RuleEntity
 import com.github.opensmsforwarder.model.Recipient
@@ -43,5 +44,22 @@ class Mapper @Inject constructor() {
             id = ruleEntity.id,
             recipientId = ruleEntity.recipientId,
             textRule = ruleEntity.rule
+        )
+
+    fun fromRecipientToForwardedSmsEntity(
+        recipient: Recipient,
+        time: Long,
+        message: String,
+        isForwardSuccessful: Boolean,
+    ): ForwardedSmsEntity =
+        ForwardedSmsEntity(
+            date = time,
+            title = recipient.title,
+            forwardingType = recipient.forwardingType,
+            recipientPhone = recipient.recipientPhone,
+            senderEmail = recipient.senderEmail,
+            recipientEmail = recipient.recipientEmail,
+            message = message,
+            isForwardSuccessful = isForwardSuccessful
         )
 }
