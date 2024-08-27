@@ -1,6 +1,8 @@
 package com.github.opensmsforwarder.navigation
 
 import com.github.opensmsforwarder.ui.home.HomeFragment
+import com.github.opensmsforwarder.ui.onboarding.OnboardingFragment
+import com.github.opensmsforwarder.ui.splash.SplashFragment
 import com.github.opensmsforwarder.ui.steps.choosemethod.ChooseForwardingMethodFragment
 import com.github.opensmsforwarder.ui.steps.addrecipient.AddRecipientFragment
 import com.github.opensmsforwarder.ui.steps.addrule.AddForwardingRuleFragment
@@ -11,4 +13,6 @@ object Screens {
     fun chooseForwardingMethodFragment() = FragmentScreen { ChooseForwardingMethodFragment() }
     fun addRecipientFragment() = FragmentScreen { AddRecipientFragment() }
     fun addForwardingRuleFragment() = FragmentScreen { AddForwardingRuleFragment() }
+    fun onboardingFragment() = FragmentScreen { OnboardingFragment() }
+    fun splashFragment() = FragmentScreen { SplashFragment() }
 }

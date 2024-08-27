@@ -74,4 +74,17 @@
     <string name="add_recipient_phone">Phone Number</string>
     <string name="battery_save_warning_title">Make app an exemptions from Power Management</string>
     <string name="battery_save_warning_message">In order for app to work when device is not active for a long time,\nplease, make it an exemption from Power Management features</string>
+    <string name="onboarding_fragment_finish">Finish</string>
+    <string name="onboarding_fragment_next">Next</string>
+    <string name="sms_forwarding_steps_description">This app simplifies and enhances message management by automatically forwarding incoming SMS messages to your chosen phone numbers or email addresses. With an intuitive three-step setup, you can effortlessly configure recipients and gain complete control over your message delivery.</string>
+    <string name="onboarding_first_step_description">Choose the type of recipient for forwarding: Phone number or email</string>
+    <string name="onboarding_first_step_label">Step 1</string>
+    <string name="onboarding_second_step_description">For SMS forwarding, enter the recipient\'s phone number. If using email, sign in with the Google account that will be used to send the messages and enter the recipient\'s email</string>
+    <string name="onboarding_second_step_label">Step 2</string>
+    <string name="onboarding_third_step_description">Define the keywords that the SMS must contain to be eligible for forwarding</string>
+    <string name="onboarding_third_step_label">Step 3</string>
+    <string name="scammer_warning_label">Warning</string>
+    <string name="scammer_warning_message">Be cautious—scammers may try to trick you into entering their details to intercept your SMS. This app is not distributed by banks or any public organizations. It is intended for personal use only and should be downloaded exclusively from Google Play</string>
+    <string name="risk_agreement_text">I acknowledge the potential risks and agree to proceed</string>
+    <string name="acknowledge_risks_message">Please confirm that you acknowledge the potential risks.</string>
 </resources>

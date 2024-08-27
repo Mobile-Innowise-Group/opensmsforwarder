@@ -15,7 +15,16 @@ class Prefs @Inject constructor(
                 .putLong(CURRENT_RECIPIENT_ID, value)
                 .apply()
 
+    var isOnboardingCompleted: Boolean
+        get() = sharedPreferences.getBoolean(ONBOARDING_COMPLETED, false)
+        set(value) =
+            sharedPreferences
+                .edit()
+                .putBoolean(ONBOARDING_COMPLETED, value)
+                .apply()
+
     private companion object {
         const val CURRENT_RECIPIENT_ID = "CURRENT_RECIPIENT_ID"
+        const val ONBOARDING_COMPLETED = "ONBOARDING_COMPLETED"
     }
 }
