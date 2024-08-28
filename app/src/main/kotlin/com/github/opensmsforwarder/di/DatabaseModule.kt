@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.github.opensmsforwarder.data.local.database.RecipientsDatabase
 import com.github.opensmsforwarder.data.local.database.dao.AuthTokenDao
-import com.github.opensmsforwarder.data.local.database.dao.ForwardedSmsDao
+import com.github.opensmsforwarder.data.local.database.dao.ForwardingHistoryDao
 import com.github.opensmsforwarder.data.local.database.dao.RecipientsDao
 import com.github.opensmsforwarder.data.local.database.dao.RulesDao
 import dagger.Module
@@ -41,7 +41,7 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideForwardedSmsDao(database: RecipientsDatabase): ForwardedSmsDao = database.forwardedSmsDao()
+    fun provideForwardingHistoryDao(database: RecipientsDatabase): ForwardingHistoryDao = database.forwardingHistoryDao()
 
     private companion object {
         const val DATABASE_NAME = "sms_forwarder"

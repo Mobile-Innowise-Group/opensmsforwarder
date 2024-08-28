@@ -5,13 +5,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.github.opensmsforwarder.model.ForwardingType
 
-const val FORWARDED_SMS_TABLE = "forwarded_sms_table"
+const val FORWARDING_HISTORY_TABLE = "forwarded_sms_table"
 const val FORWARDED_SMS_ID_FIELD = "id"
 const val FORWARDED_SMS_DATE_FIELD = "date"
 const val FORWARDED_SMS_MESSAGE_FIELD = "message"
 
-@Entity(tableName = FORWARDED_SMS_TABLE)
-data class ForwardedSmsEntity(
+@Entity(tableName = FORWARDING_HISTORY_TABLE)
+data class ForwardingHistoryEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = FORWARDED_SMS_ID_FIELD)
@@ -39,5 +39,5 @@ data class ForwardedSmsEntity(
     val message: String = "",
 
     @ColumnInfo(name = RECIPIENT_SUCCESSFUL_FORWARD_FIELD)
-    val isForwardSuccessful: Boolean = true
+    val isForwardingSuccessful: Boolean = true
 )

@@ -3,11 +3,11 @@ package com.github.opensmsforwarder.data.local.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.github.opensmsforwarder.data.local.database.dao.AuthTokenDao
-import com.github.opensmsforwarder.data.local.database.dao.ForwardedSmsDao
+import com.github.opensmsforwarder.data.local.database.dao.ForwardingHistoryDao
 import com.github.opensmsforwarder.data.local.database.dao.RecipientsDao
 import com.github.opensmsforwarder.data.local.database.dao.RulesDao
 import com.github.opensmsforwarder.data.local.database.entity.AuthTokenEntity
-import com.github.opensmsforwarder.data.local.database.entity.ForwardedSmsEntity
+import com.github.opensmsforwarder.data.local.database.entity.ForwardingHistoryEntity
 import com.github.opensmsforwarder.data.local.database.entity.RecipientEntity
 import com.github.opensmsforwarder.data.local.database.entity.RuleEntity
 
@@ -16,7 +16,7 @@ import com.github.opensmsforwarder.data.local.database.entity.RuleEntity
         RecipientEntity::class,
         RuleEntity::class,
         AuthTokenEntity::class,
-        ForwardedSmsEntity::class
+        ForwardingHistoryEntity::class
     ],
     version = 1
 )
@@ -24,5 +24,5 @@ abstract class RecipientsDatabase : RoomDatabase() {
     abstract fun recipientsDao(): RecipientsDao
     abstract fun authDao(): AuthTokenDao
     abstract fun rulesDao(): RulesDao
-    abstract fun forwardedSmsDao(): ForwardedSmsDao
+    abstract fun forwardingHistoryDao(): ForwardingHistoryDao
 }

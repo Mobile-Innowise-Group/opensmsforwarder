@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 import com.github.opensmsforwarder.MainActivity
 import com.github.opensmsforwarder.R
 import com.github.opensmsforwarder.data.AuthRepository
-import com.github.opensmsforwarder.data.ForwardedSmsRepository
+import com.github.opensmsforwarder.data.ForwardingHistoryRepository
 import com.github.opensmsforwarder.data.RecipientsRepository
 import com.github.opensmsforwarder.data.RulesRepository
 import com.github.opensmsforwarder.data.remote.interceptor.RefreshTokenException
@@ -42,7 +42,7 @@ class SmsForwarderService : Service() {
     lateinit var authRepository: AuthRepository
 
     @Inject
-    lateinit var forwardedSmsRepository: ForwardedSmsRepository
+    lateinit var forwardingHistoryRepository: ForwardingHistoryRepository
 
     @Inject
     lateinit var emailComposer: EmailComposer
@@ -112,12 +112,12 @@ class SmsForwarderService : Service() {
                             recipientsRepository.insertOrUpdateRecipient(
                                 recipient.copy(isForwardSuccessful = true)
                             )
-                            forwardedSmsRepository.insertForwardedSms(recipient, message, true)
+                            forwardingHistoryRepository.insertForwardedSms(recipient, message, true)
                         }.onFailure {
                             recipientsRepository.insertOrUpdateRecipient(
                                 recipient.copy(isForwardSuccessful = false)
                             )
-                            forwardedSmsRepository.insertForwardedSms(recipient, message, false)
+                            forwardingHistoryRepository.insertForwardedSms(recipient, message, false)
                         }
 
                         ForwardingType.EMAIL -> runCatching {
@@ -126,12 +126,12 @@ class SmsForwarderService : Service() {
                             recipientsRepository.insertOrUpdateRecipient(
                                 recipient.copy(isForwardSuccessful = true)
                             )
-                            forwardedSmsRepository.insertForwardedSms(recipient, message, true)
+                            forwardingHistoryRepository.insertForwardedSms(recipient, message, true)
                         }.onFailure { error ->
                             recipientsRepository.insertOrUpdateRecipient(
                                 recipient.copy(isForwardSuccessful = false)
                             )
-                            forwardedSmsRepository.insertForwardedSms(recipient, message, false)
+                            forwardingHistoryRepository.insertForwardedSms(recipient, message, false)
                             if (error is TokenRevokedException || error is RefreshTokenException) {
                                 authRepository.signOut(recipient)
                             }
