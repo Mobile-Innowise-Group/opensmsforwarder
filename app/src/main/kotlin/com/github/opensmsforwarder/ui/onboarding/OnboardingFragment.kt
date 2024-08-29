@@ -53,6 +53,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
         with(binding) {
             buttonNext bindClicksTo ::onNextButtonClick
             buttonBack bindClicksTo ::onBackButtonClick
+            buttonSkipAll bindClicksTo ::onSkipAllButtonClick
         }
     }
 
@@ -82,7 +83,11 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
     private fun renderState(onboardingState: OnboardingState) {
         binding.buttonBack.isVisible = onboardingState.isBackButtonVisible
         binding.checkboxAgree.isVisible = onboardingState.isLastSlide
+        binding.stepLabel.isVisible = !onboardingState.isLastSlide
+        binding.buttonSkipAll.isVisible = !onboardingState.isLastSlide
         binding.buttonNext.text = getString(onboardingState.nextButtonRes)
+        binding.stepLabel.text =
+            getString(R.string.onboarding_step_label, onboardingState.slidePosition)
         if (onboardingState.isLastSlide) buttonFillAnimator.startAnimation() else buttonFillAnimator.stopAnimation()
     }
 
@@ -90,7 +95,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
         when (effect) {
             is WarningEffect -> {
                 requireActivity().showOkDialog(
-                    title = getString(R.string.scammer_warning_label),
+                    title = getString(R.string.privacy_info_heading),
                     message = getString(R.string.acknowledge_risks_message),
                     dialogStyle = R.style.SmsAlertDialog,
                 )
@@ -108,5 +113,9 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
 
     private fun onBackButtonClick() {
         binding.viewPager.currentItem--
+    }
+
+    private fun onSkipAllButtonClick() {
+        binding.viewPager.currentItem = adapter.itemCount - 1
     }
 }
