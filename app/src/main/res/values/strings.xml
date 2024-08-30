@@ -8,7 +8,7 @@
     <string name="empty_rules">You need to add at least one rule</string>
     <string name="enter_text_rule_pattern">Enter text rule</string>
     <string name="permissions_rationale_title">Why do you need to grant permissions?</string>
-    <string name="permissions_rationale_message">SMS permissions are needed for forwarding SMS.</string>
+    <string name="permissions_rationale_message">SMS and notification permissions are needed for forwarding SMS.</string>
     <string name="empty" />
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -87,4 +87,7 @@
     <string name="scammer_warning_message">Be cautious—scammers may try to trick you into entering their details to intercept your SMS. This app is not distributed by banks or any public organizations. It is intended for personal use only and should be downloaded exclusively from Google Play</string>
     <string name="risk_agreement_text">I acknowledge the potential risks and agree to proceed</string>
     <string name="acknowledge_risks_message">Please confirm that you acknowledge the potential risks.</string>
+    <string name="forwarded_messages">Forwarded messages!</string>
+    <string name="messages_was_forwarded">%1$d messages was forwarded</string>
+    <string name="forwarded_messages_count">Forwarded messages count</string>
 </resources>

@@ -3,6 +3,7 @@ package com.github.opensmsforwarder.extension
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
@@ -20,6 +21,16 @@ fun Activity.smsSendPermissionGranted(): Boolean =
         this,
         Manifest.permission.SEND_SMS
     ) == PackageManager.PERMISSION_GRANTED
+
+fun Activity.postNotificationsPermissionGranted(): Boolean =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+    } else {
+        true
+    }
 
 fun Activity.showOkDialog(
     title: String? = null,

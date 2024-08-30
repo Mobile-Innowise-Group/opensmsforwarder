@@ -47,18 +47,14 @@ class Mapper @Inject constructor() {
         )
 
     fun toForwardingHistoryEntity(
-        recipient: Recipient,
+        recipientId: Long,
         time: Long,
         message: String,
         isForwardingSuccessful: Boolean,
     ): ForwardingHistoryEntity =
         ForwardingHistoryEntity(
+            recipientId = recipientId,
             date = time,
-            title = recipient.title,
-            forwardingType = recipient.forwardingType,
-            recipientPhone = recipient.recipientPhone,
-            senderEmail = recipient.senderEmail,
-            recipientEmail = recipient.recipientEmail,
             message = message,
             isForwardingSuccessful = isForwardingSuccessful
         )
