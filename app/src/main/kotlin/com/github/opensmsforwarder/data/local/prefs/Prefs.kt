@@ -23,8 +23,17 @@ class Prefs @Inject constructor(
                 .putBoolean(ONBOARDING_COMPLETED, value)
                 .apply()
 
+    var isSmsAccessMessageShowed: Boolean
+        get() = sharedPreferences.getBoolean(SMS_ACCESS_MESSAGE_SHOWED, false)
+        set(value) =
+            sharedPreferences
+                .edit()
+                .putBoolean(SMS_ACCESS_MESSAGE_SHOWED, value)
+                .apply()
+
     private companion object {
         const val CURRENT_RECIPIENT_ID = "CURRENT_RECIPIENT_ID"
         const val ONBOARDING_COMPLETED = "ONBOARDING_COMPLETED"
+        const val SMS_ACCESS_MESSAGE_SHOWED = "SMS_ACCESS_MESSAGE_SHOWED"
     }
 }

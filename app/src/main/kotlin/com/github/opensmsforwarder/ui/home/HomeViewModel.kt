@@ -2,6 +2,7 @@ package com.github.opensmsforwarder.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.opensmsforwarder.data.LocalSettingsRepository
 import com.github.opensmsforwarder.data.RecipientsRepository
 import com.github.opensmsforwarder.data.RecipientsRepository.Companion.NO_ID
 import com.github.opensmsforwarder.data.RulesRepository
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val recipientsRepository: RecipientsRepository,
     private val rulesRepository: RulesRepository,
+    private val localSettingsRepository: LocalSettingsRepository,
     private val router: Router,
 ) : ViewModel() {
 
@@ -52,8 +54,16 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onAddNewRecipientClicked() {
-        recipientsRepository.setCurrentRecipientId(NO_ID)
-        router.navigateTo(Screens.chooseForwardingMethodFragment())
+        if (!localSettingsRepository.getSmsAccessMessageShowedFlag()) {
+            _viewEffect.trySend(FirstRecipientCreationEffect)
+        } else {
+            navigateToChooseForwardingMethod()
+        }
+    }
+
+    fun onStartAddNewRecipient() {
+        localSettingsRepository.setSmsAccessMessageShowedFlag(true)
+        navigateToChooseForwardingMethod()
     }
 
     fun onItemEditClicked(id: Long) {
@@ -73,5 +83,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             recipientsRepository.deleteRecipient(id)
         }
+    }
+
+    private fun navigateToChooseForwardingMethod() {
+        recipientsRepository.setCurrentRecipientId(NO_ID)
+        router.navigateTo(Screens.chooseForwardingMethodFragment())
     }
 }

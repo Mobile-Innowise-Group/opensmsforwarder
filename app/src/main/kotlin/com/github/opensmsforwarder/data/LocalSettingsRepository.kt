@@ -11,4 +11,10 @@ class LocalSettingsRepository @Inject constructor(
     fun setOnboardingCompleteFlag(isOnboardingCompleted: Boolean) {
         prefs.isOnboardingCompleted = isOnboardingCompleted
     }
+
+    fun getSmsAccessMessageShowedFlag() = prefs.isSmsAccessMessageShowed
+
+    fun setSmsAccessMessageShowedFlag(isSmsAccessMessageShowed: Boolean) {
+        prefs.isSmsAccessMessageShowed = isSmsAccessMessageShowed
+    }
 }

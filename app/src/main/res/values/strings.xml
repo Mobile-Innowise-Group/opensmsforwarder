@@ -87,4 +87,8 @@
     <string name="scammer_warning_message">Be cautious—scammers may try to trick you into entering their details to intercept your SMS. This app is not distributed by banks or any public organizations. It is intended for personal use only and should be downloaded exclusively from Google Play</string>
     <string name="risk_agreement_text">I acknowledge the potential risks and agree to proceed</string>
     <string name="acknowledge_risks_message">Please confirm that you acknowledge the potential risks.</string>
+    <string name="decline">Decline</string>
+    <string name="accept">Accept</string>
+    <string name="sms_content_usage_title">Confirm SMS Content Usage</string>
+    <string name="sms_content_usage_message">We will use the content of your SMS for forwarding. Do you agree to continue?</string>
 </resources>

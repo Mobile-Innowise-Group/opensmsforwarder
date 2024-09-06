@@ -16,6 +16,7 @@ import com.github.opensmsforwarder.databinding.FragmentHomeBinding
 import com.github.opensmsforwarder.extension.bindClicksTo
 import com.github.opensmsforwarder.extension.observeWithLifecycle
 import com.github.opensmsforwarder.extension.showOkDialog
+import com.github.opensmsforwarder.extension.showAcceptDeclineDialog
 import com.github.opensmsforwarder.extension.unsafeLazy
 import com.github.opensmsforwarder.ui.dialog.delete.DeleteDialog
 import com.github.opensmsforwarder.ui.dialog.delete.DeleteDialogListener
@@ -101,6 +102,16 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
                                 Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
                             requireActivity().startActivity(intent)
                         }
+                    }
+                )
+
+            is FirstRecipientCreationEffect ->
+                requireActivity().showAcceptDeclineDialog(
+                    title = requireActivity().getString(R.string.sms_content_usage_title),
+                    message = requireActivity().getString(R.string.sms_content_usage_message),
+                    dialogStyle = R.style.SmsAlertDialog,
+                    acceptClickAction = {
+                        viewModel.onStartAddNewRecipient()
                     }
                 )
         }
