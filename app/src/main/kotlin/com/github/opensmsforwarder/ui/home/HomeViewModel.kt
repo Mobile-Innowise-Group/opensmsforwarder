@@ -85,6 +85,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun onGoToSettingsRequired() {
+        _viewEffect.trySend(GoToSettingsEffect)
+    }
+
+    fun onPermissionsRationaleRequired() {
+        _viewEffect.trySend(PermissionsRationalEffect)
+    }
+
     private fun navigateToChooseForwardingMethod() {
         recipientsRepository.setCurrentRecipientId(NO_ID)
         router.navigateTo(Screens.chooseForwardingMethodFragment())
