@@ -2,6 +2,8 @@ package com.github.opensmsforwarder.ui.steps.choosemethod
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.RECIPIENT_CREATION_STEP1_NEXT_CLICKED
+import com.github.opensmsforwarder.analytics.AnalyticsTracker
 import com.github.opensmsforwarder.data.RecipientsRepository
 import com.github.opensmsforwarder.data.RecipientsRepository.Companion.NO_ID
 import com.github.opensmsforwarder.model.ForwardingType
@@ -20,6 +22,7 @@ import javax.inject.Inject
 class ChooseForwardingMethodViewModel @Inject constructor(
     private val recipientsRepository: RecipientsRepository,
     private val router: Router,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModel() {
 
     private val _viewState: MutableStateFlow<Recipient> = MutableStateFlow(Recipient())
@@ -64,6 +67,7 @@ class ChooseForwardingMethodViewModel @Inject constructor(
 
             viewModelScope.launch {
                 recipientsRepository.insertOrUpdateRecipient(recipient)
+                analyticsTracker.trackEvent(RECIPIENT_CREATION_STEP1_NEXT_CLICKED)
                 router.navigateTo(Screens.addRecipientFragment())
             }
         }

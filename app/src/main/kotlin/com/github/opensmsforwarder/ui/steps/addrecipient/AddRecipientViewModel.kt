@@ -5,6 +5,8 @@ import androidx.activity.result.ActivityResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.opensmsforwarder.R
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.RECIPIENT_CREATION_STEP2_NEXT_CLICKED
+import com.github.opensmsforwarder.analytics.AnalyticsTracker
 import com.github.opensmsforwarder.data.AuthRepository
 import com.github.opensmsforwarder.data.RecipientsRepository
 import com.github.opensmsforwarder.helper.GoogleSignInHelper
@@ -31,6 +33,7 @@ class AddRecipientViewModel @Inject constructor(
     private val phoneValidator: PhoneValidator,
     private val emailValidator: EmailValidator,
     private val router: Router,
+    private val analyticsTracker: AnalyticsTracker,
 ) : ViewModel() {
 
     private var _viewState: MutableStateFlow<AddRecipientViewState> =
@@ -138,6 +141,7 @@ class AddRecipientViewModel @Inject constructor(
     fun onNextClicked() {
         viewModelScope.launch {
             recipientsRepository.insertOrUpdateRecipient(viewState.value.recipient)
+            analyticsTracker.trackEvent(RECIPIENT_CREATION_STEP2_NEXT_CLICKED)
             router.navigateTo(Screens.addForwardingRuleFragment())
         }
     }

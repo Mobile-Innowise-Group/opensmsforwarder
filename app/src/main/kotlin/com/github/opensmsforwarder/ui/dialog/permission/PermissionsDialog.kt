@@ -10,11 +10,17 @@ import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.github.opensmsforwarder.R
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.PERMISSIONS_DIALOG_GO_TO_SETTINGS_CLICKED
+import com.github.opensmsforwarder.analytics.AnalyticsTracker
 import com.github.opensmsforwarder.extension.notificationsPermissionGranted
 import com.github.opensmsforwarder.extension.smsReceivePermissionGranted
 import com.github.opensmsforwarder.extension.smsSendPermissionGranted
+import javax.inject.Inject
 
 class PermissionsDialog : DialogFragment() {
+
+    @Inject
+    lateinit var analyticsTracker: AnalyticsTracker
 
     private val systemSettingsStartForResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -40,6 +46,7 @@ class PermissionsDialog : DialogFragment() {
             .setTitle(getString(R.string.app_name))
             .setMessage(getString(messageRes))
             .setPositiveButton(positiveButtonRes) { _, _ ->
+                analyticsTracker.trackEvent(PERMISSIONS_DIALOG_GO_TO_SETTINGS_CLICKED)
                 systemSettingsStartForResultLauncher.launch(getSystemSettingsIntent())
             }
             .create()
