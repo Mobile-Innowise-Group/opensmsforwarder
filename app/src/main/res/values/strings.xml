@@ -8,7 +8,7 @@
     <string name="empty_rules">You need to add at least one rule</string>
     <string name="enter_text_rule_pattern">Enter text rule</string>
     <string name="permissions_rationale_title">Why do you need to grant permissions?</string>
-    <string name="permissions_rationale_message">SMS permissions are needed for forwarding SMS.</string>
+    <string name="permissions_rationale_message">SMS and notification permissions are needed for forwarding SMS.</string>
     <string name="empty" />
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -91,4 +91,7 @@
     <string name="accept">Accept</string>
     <string name="sms_content_usage_title">Confirm SMS Content Usage</string>
     <string name="sms_content_usage_message">We will use the content of your SMS for forwarding. Do you agree to continue?</string>
+    <string name="forwarded_messages">Forwarded messages!</string>
+    <string name="messages_was_forwarded">%1$d messages was forwarded</string>
+    <string name="forwarded_messages_count">Forwarded messages count</string>
 </resources>
