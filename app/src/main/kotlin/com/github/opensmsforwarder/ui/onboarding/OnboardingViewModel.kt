@@ -39,7 +39,8 @@ class OnboardingViewModel @Inject constructor(
             it.copy(
                 isBackButtonVisible = !isFirstSlide,
                 isLastSlide = isLastSlide,
-                nextButtonRes = nextButtonRes
+                nextButtonRes = nextButtonRes,
+                slidePosition = position + 1
             )
         }
     }

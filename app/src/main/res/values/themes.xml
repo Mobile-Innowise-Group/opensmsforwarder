@@ -13,6 +13,7 @@
         <item name="colorSecondaryFixed">@color/button_disabled_light</item>
         <item name="colorOnSecondaryFixed">@color/text_disabled_light</item>
         <item name="colorOnSurfaceVariant">@color/platinum</item>
+        <item name="colorSplashBackground">@color/blue_light_theme</item>
     </style>
 
     <style name="Theme.InnoForwarder" parent="Base.Theme.InnoForwarder" />
