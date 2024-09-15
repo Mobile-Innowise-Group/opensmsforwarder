@@ -95,7 +95,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
             state.rules.isNotEmpty() && batteryOptimizationDisabled()
         binding.recipients.isVisible = state.recipients.isNotEmpty()
         binding.textEmpty.isVisible = state.recipients.isEmpty()
-        checkPermissions(state.recipients.isNotEmpty())
+        checkPermissions(state.recipients.any { it.allStepsCompleted })
     }
 
     override fun onButtonDeleteClicked(id: Long) {
