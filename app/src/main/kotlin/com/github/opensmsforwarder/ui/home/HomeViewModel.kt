@@ -74,4 +74,12 @@ class HomeViewModel @Inject constructor(
             recipientsRepository.deleteRecipient(id)
         }
     }
+
+    fun onGoToSettingsRequired() {
+        _viewEffect.trySend(GoToSettingsEffect)
+    }
+
+    fun onPermissionsRationaleRequired() {
+        _viewEffect.trySend(PermissionsRationalEffect)
+    }
 }
