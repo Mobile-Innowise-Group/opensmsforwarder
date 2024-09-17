@@ -87,4 +87,13 @@
     <string name="scammer_warning_message">Be cautious—scammers may try to trick you into entering their details to intercept your SMS. This app is not distributed by banks or any public organizations. It is intended for personal use only and should be downloaded exclusively from Google Play</string>
     <string name="risk_agreement_text">I acknowledge the potential risks and agree to proceed</string>
     <string name="acknowledge_risks_message">Please confirm that you acknowledge the potential risks.</string>
+    <string name="forwarding_is_disabled_some_problem_with_internet_connection">Forwarding is disabled.\nSome problem with internet connection</string>
+    <string name="forwarding_is_disabled_recipient_is_not_found">Forwarding is disabled.\nRecipient is not found.</string>
+    <string name="error_the_server_could_not_be_reached">Error.\nThe server could not be reached.</string>
+    <string name="error_the_request_timed_out">Error.\nThe request timed out.</string>
+    <string name="forwarding_is_disabled_an_unknown_error_occurred">Forwarding is disabled.\nAn unknown error occurred.</string>
+    <string name="forwarding_is_disabled_radio_is_off">Forwarding is disabled.\nRadio is off</string>
+    <string name="forwarding_is_disabled_null_pdu">Forwarding is disabled.\nNull PDU</string>
+    <string name="forwarding_is_disabled_no_service_available">Forwarding is disabled.\nNo Service Available</string>
+    <string name="forwarding_is_disabled_generic_failure_error">Forwarding is disabled.\nGeneric Failure Error</string>
 </resources>

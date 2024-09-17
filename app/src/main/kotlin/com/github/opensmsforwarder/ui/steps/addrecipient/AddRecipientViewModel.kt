@@ -107,7 +107,7 @@ class AddRecipientViewModel @Inject constructor(
                             .onSuccess { response ->
                                 val recipient = viewState.value.recipient.copy(
                                     senderEmail = googleAccount.email,
-                                    isForwardSuccessful = true
+                                    errorText = ""
                                 )
                                 recipientsRepository.insertOrUpdateRecipient(recipient)
                                 authRepository.saveTokensForRecipient(

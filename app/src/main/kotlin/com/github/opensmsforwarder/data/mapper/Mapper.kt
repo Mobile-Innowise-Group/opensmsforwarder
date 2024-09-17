@@ -16,7 +16,7 @@ class Mapper @Inject constructor() {
             recipientPhone = recipientEntity.recipientPhone,
             senderEmail = recipientEntity.senderEmail,
             recipientEmail = recipientEntity.recipientEmail,
-            isForwardSuccessful = recipientEntity.isForwardSuccessful
+            errorText = recipientEntity.errorText
         )
     }
 
@@ -28,7 +28,7 @@ class Mapper @Inject constructor() {
             recipientPhone = recipient.recipientPhone,
             senderEmail = recipient.senderEmail,
             recipientEmail = recipient.recipientEmail,
-            isForwardSuccessful = recipient.isForwardSuccessful
+            errorText = recipient.errorText
         )
 
     fun toRuleEntity(rule: Rule) =
