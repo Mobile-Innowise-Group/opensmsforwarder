@@ -6,6 +6,8 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
 import android.os.IBinder
 import android.telephony.SmsManager
 import androidx.core.app.NotificationCompat
@@ -18,11 +20,16 @@ import com.github.opensmsforwarder.data.RulesRepository
 import com.github.opensmsforwarder.data.remote.interceptor.RefreshTokenException
 import com.github.opensmsforwarder.data.remote.interceptor.TokenRevokedException
 import com.github.opensmsforwarder.data.remote.service.EmailService
+import com.github.opensmsforwarder.extension.getErrorDescription
 import com.github.opensmsforwarder.model.ForwardingType
 import com.github.opensmsforwarder.model.Recipient
+import com.github.opensmsforwarder.model.SmsSendException
 import com.github.opensmsforwarder.processing.composer.EmailComposer
 import com.github.opensmsforwarder.processing.reciever.SmsBroadcastReceiver
+import com.github.opensmsforwarder.utils.BROADCAST_ACTION_SENT_NAME
+import com.github.opensmsforwarder.utils.createSentStatusReceiver
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -103,14 +110,14 @@ class SmsForwarderService : Service() {
                 recipientsRepository.getRecipientById(recipientId)?.let { recipient ->
                     when (recipient.forwardingType) {
                         ForwardingType.SMS -> runCatching {
-                            forwardSmsToPhone(recipient.recipientPhone, message)
+                            forwardSmsToPhone(recipient.recipientPhone, message).await()
                         }.onSuccess {
                             recipientsRepository.insertOrUpdateRecipient(
-                                recipient.copy(isForwardSuccessful = true)
+                                recipient.copy(errorText = "")
                             )
-                        }.onFailure {
+                        }.onFailure { error ->
                             recipientsRepository.insertOrUpdateRecipient(
-                                recipient.copy(isForwardSuccessful = false)
+                                recipient.copy(errorText = error.message.orEmpty())
                             )
                         }
 
@@ -118,11 +125,11 @@ class SmsForwarderService : Service() {
                             forwardSmsToEmail(recipient, message)
                         }.onSuccess {
                             recipientsRepository.insertOrUpdateRecipient(
-                                recipient.copy(isForwardSuccessful = true)
+                                recipient.copy(errorText = "")
                             )
                         }.onFailure { error ->
                             recipientsRepository.insertOrUpdateRecipient(
-                                recipient.copy(isForwardSuccessful = false)
+                                recipient.copy(errorText = getString(error.getErrorDescription()))
                             )
                             if (error is TokenRevokedException || error is RefreshTokenException) {
                                 authRepository.signOut(recipient)
@@ -166,12 +173,39 @@ class SmsForwarderService : Service() {
         }
     }
 
-    private fun forwardSmsToPhone(to: String, sms: String) {
-        val smsManager: SmsManager? = ContextCompat.getSystemService(
-            applicationContext,
-            SmsManager::class.java
+    private fun forwardSmsToPhone(to: String, sms: String): CompletableDeferred<Unit> {
+        val sentResult = CompletableDeferred<Unit>()
+        val sentIntent = PendingIntent.getBroadcast(
+            this,
+            0,
+            Intent(BROADCAST_ACTION_SENT_NAME),
+            PendingIntent.FLAG_IMMUTABLE
         )
-        smsManager?.sendTextMessage(to, null, sms, null, null)
+        val sentStatusReceiver = createSentStatusReceiver(sentResult)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            applicationContext.registerReceiver(
+                sentStatusReceiver, IntentFilter(BROADCAST_ACTION_SENT_NAME),
+                RECEIVER_EXPORTED
+            )
+        } else {
+            @Suppress("UnspecifiedRegisterReceiverFlag")
+            applicationContext.registerReceiver(
+                sentStatusReceiver, IntentFilter(BROADCAST_ACTION_SENT_NAME)
+            )
+        }
+
+        try {
+            val smsManager: SmsManager? = ContextCompat.getSystemService(
+                applicationContext,
+                SmsManager::class.java
+            )
+            smsManager?.sendTextMessage(to, null, sms, sentIntent, null)
+        } catch (e: Exception) {
+            sentResult.completeExceptionally(SmsSendException(getString(R.string.sms_forward_phone_error)))
+        }
+
+        return sentResult
     }
 
     private companion object {

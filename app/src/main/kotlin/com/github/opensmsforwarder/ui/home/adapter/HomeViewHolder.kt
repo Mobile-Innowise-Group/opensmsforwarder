@@ -24,15 +24,10 @@ class HomeViewHolder(
         emailGroup.isVisible =
             recipient.forwardingType == ForwardingType.EMAIL && recipient.recipientEmail.isNotEmpty()
         email.text = recipient.recipientEmail
-        stepsError.isVisible = !recipient.allStepsCompleted || !recipient.isForwardSuccessful
+        stepsError.isVisible = !recipient.allStepsCompleted || recipient.errorText.isNotEmpty()
         stepsError.text = when {
             !recipient.allStepsCompleted -> context.getString(R.string.steps_are_not_completed_error)
-            !recipient.isForwardSuccessful && recipient.isEmailForwardingType ->
-                context.getString(R.string.sms_forward_email_error)
-
-            !recipient.isForwardSuccessful && recipient.isSmsForwardingType ->
-                context.getString(R.string.sms_forward_phone_error)
-
+            recipient.errorText.isNotEmpty() -> recipient.errorText
             else -> null
         }
 

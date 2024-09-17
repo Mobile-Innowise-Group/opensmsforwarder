@@ -7,7 +7,7 @@ data class Recipient(
     val senderEmail: String? = null,
     val recipientPhone: String = "",
     val recipientEmail: String = "",
-    val isForwardSuccessful: Boolean = true,
+    val errorText: String = "",
 ) {
 
     val isSmsForwardingType: Boolean get() = forwardingType != null && forwardingType == ForwardingType.SMS
