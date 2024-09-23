@@ -2,9 +2,9 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CustomDialogStroke"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/CustomDialogStroke"
     app:cardCornerRadius="10dp">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -32,18 +32,16 @@
             android:id="@+id/positive_btn"
             style="@style/SmsMaterialButton"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             tools:text="Save" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/negative_btn"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
             style="@style/SmsCancelMaterialButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/cancel" />
-
     </androidx.appcompat.widget.LinearLayoutCompat>
-
 </com.google.android.material.card.MaterialCardView>

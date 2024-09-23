@@ -29,7 +29,6 @@ class OnboardingViewModel @Inject constructor(
 
     fun onSlidePage(position: Int, itemCount: Int) {
         val isLastSlide = position == itemCount - 1
-        val isFirstSlide = position == FIRST_SLIDE_INDEX
         val nextButtonRes = if (isLastSlide) {
             R.string.onboarding_fragment_finish
         } else {
@@ -37,10 +36,9 @@ class OnboardingViewModel @Inject constructor(
         }
         _viewState.update {
             it.copy(
-                isBackButtonVisible = !isFirstSlide,
                 isLastSlide = isLastSlide,
                 nextButtonRes = nextButtonRes,
-                slidePosition = position + 1
+                currentStep = position + 1
             )
         }
     }
@@ -52,9 +50,5 @@ class OnboardingViewModel @Inject constructor(
         } else {
             _viewEffect.trySend(WarningEffect)
         }
-    }
-
-    private companion object {
-        const val FIRST_SLIDE_INDEX = 0
     }
 }

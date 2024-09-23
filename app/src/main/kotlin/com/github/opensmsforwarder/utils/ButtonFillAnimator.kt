@@ -69,7 +69,7 @@ class ButtonFillAnimator(
     }
 
     private companion object {
-        const val DEFAULT_ANIMATION_DURATION = 5000L
+        const val DEFAULT_ANIMATION_DURATION = 7000L
         const val DEFAULT_ANIMATION_START = 0
         const val DEFAULT_ANIMATION_END = 10000
     }

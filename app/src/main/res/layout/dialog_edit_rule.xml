@@ -50,7 +50,7 @@
             android:id="@+id/positive_btn"
             style="@style/SmsMaterialButton"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             tools:text="@string/save" />
 
@@ -58,10 +58,8 @@
             android:id="@+id/negative_btn"
             style="@style/SmsCancelMaterialButton"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             tools:text="@string/cancel" />
-
     </androidx.appcompat.widget.LinearLayoutCompat>
-
 </com.google.android.material.card.MaterialCardView>

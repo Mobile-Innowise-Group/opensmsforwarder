@@ -71,7 +71,7 @@
         android:id="@+id/add_new_recipient"
         style="@style/SmsMaterialButton"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
         android:text="@string/create_recipient"
         app:layout_constraintBottom_toBottomOf="parent"
