@@ -53,6 +53,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
         with(binding) {
             buttonNext bindClicksTo ::onNextButtonClick
             buttonBack bindClicksTo ::onBackButtonClick
+            buttonSkipAll bindClicksTo ::onSkipAllButtonClick
         }
     }
 
@@ -61,10 +62,10 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
             button = binding.buttonNext,
             lifecycle = viewLifecycleOwner.lifecycle,
             onAnimationStart = {
-                binding.checkboxAgree.isClickable = false
+                binding.checkboxAgree.isEnabled = false
             },
             onAnimationEnd = {
-                binding.checkboxAgree.isClickable = true
+                binding.checkboxAgree.isEnabled = true
             }
         )
     }
@@ -80,17 +81,23 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
     }
 
     private fun renderState(onboardingState: OnboardingState) {
-        binding.buttonBack.isVisible = onboardingState.isBackButtonVisible
-        binding.checkboxAgree.isVisible = onboardingState.isLastSlide
-        binding.buttonNext.text = getString(onboardingState.nextButtonRes)
-        if (onboardingState.isLastSlide) buttonFillAnimator.startAnimation() else buttonFillAnimator.stopAnimation()
+        with(binding) {
+            buttonBack.isVisible = onboardingState.currentStep in 2..<slides.size
+            checkboxAgree.isVisible = onboardingState.isLastSlide
+            stepLabel.isVisible = !onboardingState.isLastSlide
+            buttonSkipAll.isVisible = !onboardingState.isLastSlide
+            buttonNext.text = getString(onboardingState.nextButtonRes)
+            stepLabel.text =
+                getString(R.string.onboarding_step_label, onboardingState.currentStep)
+            if (onboardingState.isLastSlide) buttonFillAnimator.startAnimation() else buttonFillAnimator.stopAnimation()
+        }
     }
 
     private fun handleEffect(effect: OnboardingEffect) {
         when (effect) {
             is WarningEffect -> {
                 requireActivity().showOkDialog(
-                    title = getString(R.string.scammer_warning_label),
+                    title = getString(R.string.privacy_info_heading),
                     message = getString(R.string.acknowledge_risks_message),
                     dialogStyle = R.style.SmsAlertDialog,
                 )
@@ -108,5 +115,9 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
 
     private fun onBackButtonClick() {
         binding.viewPager.currentItem--
+    }
+
+    private fun onSkipAllButtonClick() {
+        binding.viewPager.currentItem = adapter.itemCount - 1
     }
 }
