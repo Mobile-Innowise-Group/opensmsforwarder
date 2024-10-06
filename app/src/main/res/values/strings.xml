@@ -8,7 +8,7 @@
     <string name="empty_rules">You need to add at least one rule</string>
     <string name="enter_text_rule_pattern">Enter text rule</string>
     <string name="permissions_rationale_title">Why do you need to grant permissions?</string>
-    <string name="permissions_rationale_message">SMS permissions are needed for forwarding SMS.</string>
+    <string name="permissions_rationale_message">SMS and notification permissions are needed for forwarding SMS.</string>
     <string name="empty" />
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -59,7 +59,7 @@
     <string name="dialog_delete_rule_message">The rule \"%s\" will be deleted.</string>
     <string name="dialog_edit_rule_title">Change rule</string>
     <string name="dialog_edit_rule_message">The rule \"%s\" will be changed to</string>
-    <string name="processing">Processing</string>
+    <string name="forwarding_sms">Forwarding SMS…</string>
     <string name="remove_title">You are about to remove item</string>
     <string name="remove_message">Do you want to continue?</string>
     <string name="add_rule_message">Enter the text that the message should contain</string>
@@ -89,4 +89,6 @@
     <string name="privacy_info_description">Be cautious — scammers may trick you into sharing details to intercept your SMS. This app is not distributed by banks or public organizations and is for personal use only. Download it exclusively from Google Play.</string>
     <string name="risk_agreement_text">I acknowledge the potential risks and agree to proceed</string>
     <string name="acknowledge_risks_message">Please confirm that you acknowledge the potential risks.</string>
+    <string name="forwarded_messages">Forwarded messages</string>
+    <string name="forwarded_messages_count">%1$s messages were forwarded in the last 24 hours</string>
 </resources>

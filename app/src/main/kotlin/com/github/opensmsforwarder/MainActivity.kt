@@ -3,11 +3,13 @@ package com.github.opensmsforwarder
 import android.Manifest
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.github.opensmsforwarder.databinding.ActivityMainBinding
+import com.github.opensmsforwarder.extension.postNotificationsPermissionGranted
 import com.github.opensmsforwarder.extension.showOkDialog
 import com.github.opensmsforwarder.extension.smsReceivePermissionGranted
 import com.github.opensmsforwarder.extension.smsSendPermissionGranted
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private val systemSettingsStartForResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { _ ->
-        if (smsReceivePermissionGranted() && smsSendPermissionGranted()) {
+        if (smsReceivePermissionGranted() && smsSendPermissionGranted() && postNotificationsPermissionGranted()) {
             navigateToHomeScreenIfNeed()
         }
     }
@@ -40,12 +42,14 @@ class MainActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             when {
                 permissions[Manifest.permission.RECEIVE_SMS] == true &&
-                        permissions[Manifest.permission.SEND_SMS] == true -> {
+                        permissions[Manifest.permission.SEND_SMS] == true &&
+                        permissions[Manifest.permission.POST_NOTIFICATIONS] == true -> {
                     navigateToHomeScreenIfNeed()
                 }
 
                 shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS) ||
-                        shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS) -> {
+                        shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS) ||
+                        shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
                     showPermissionsRational()
                 }
 
@@ -62,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             systemSettingsStartForResultLauncher.launch(getSystemSettingsIntent())
         }
 
-        if (smsReceivePermissionGranted() && smsSendPermissionGranted()) {
+        if (smsReceivePermissionGranted() && smsSendPermissionGranted() && postNotificationsPermissionGranted()) {
             if (savedInstanceState == null) {
                 navigateToHomeScreenIfNeed()
             }
@@ -110,10 +114,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun requestPermissions() {
         permissionsResultLauncher.launch(
-            arrayOf(
-                Manifest.permission.RECEIVE_SMS,
-                Manifest.permission.SEND_SMS
-            )
+            mutableListOf<String>().apply {
+                add(Manifest.permission.RECEIVE_SMS)
+                add(Manifest.permission.SEND_SMS)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    add(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }.toTypedArray()
         )
     }
 
