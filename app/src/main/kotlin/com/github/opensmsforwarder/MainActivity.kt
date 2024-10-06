@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS) ||
-                        shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS)||
+                        shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS) ||
                         shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
                     showPermissionsRational()
                 }
