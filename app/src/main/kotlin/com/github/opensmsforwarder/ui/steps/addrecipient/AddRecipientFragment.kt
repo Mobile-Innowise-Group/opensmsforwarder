@@ -43,7 +43,7 @@ class AddRecipientFragment : Fragment(R.layout.fragment_add_recipient) {
             signInButton bindClicksTo viewModel::onSignInClicked
             signOutButton bindClicksTo viewModel::onSignOutClicked
             nextBtn bindClicksTo viewModel::onNextClicked
-            imageBack bindClicksTo viewModel::onBackClicked
+            arrowBack bindClicksTo viewModel::onBackClicked
         }
     }
 
