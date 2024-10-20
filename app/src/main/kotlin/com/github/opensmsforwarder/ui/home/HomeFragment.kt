@@ -20,11 +20,8 @@ import com.github.opensmsforwarder.analytics.AnalyticsEvents.REQUEST_PERMISSIONS
 import com.github.opensmsforwarder.analytics.AnalyticsTracker
 import com.github.opensmsforwarder.databinding.FragmentHomeBinding
 import com.github.opensmsforwarder.extension.bindClicksTo
-import com.github.opensmsforwarder.extension.notificationsPermissionGranted
 import com.github.opensmsforwarder.extension.observeWithLifecycle
 import com.github.opensmsforwarder.extension.showOkDialog
-import com.github.opensmsforwarder.extension.smsReceivePermissionGranted
-import com.github.opensmsforwarder.extension.smsSendPermissionGranted
 import com.github.opensmsforwarder.extension.unsafeLazy
 import com.github.opensmsforwarder.ui.dialog.delete.DeleteDialog
 import com.github.opensmsforwarder.ui.dialog.delete.DeleteDialogListener
@@ -102,7 +99,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
             state.rules.isNotEmpty() && batteryOptimizationDisabled()
         binding.recipients.isVisible = state.recipients.isNotEmpty()
         binding.textEmpty.isVisible = state.recipients.isEmpty()
-        checkPermissions(state.recipients.isNotEmpty())
     }
 
     override fun onButtonDeleteClicked(id: Long) {
@@ -168,14 +164,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
                 }
             }.toTypedArray()
         )
-    }
-
-    private fun checkPermissions(isNotEmptyRecipientList: Boolean) {
-        if (isNotEmptyRecipientList && (!requireActivity().smsReceivePermissionGranted()
-                    || !requireActivity().smsSendPermissionGranted() || !requireActivity().notificationsPermissionGranted())
-        ) {
-            requestPermissions()
-        }
     }
 
     private fun showPermissionsRationaleDialog() {

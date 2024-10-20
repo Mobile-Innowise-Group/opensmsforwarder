@@ -7,7 +7,6 @@ import com.github.opensmsforwarder.analytics.AnalyticsEvents.PERMISSIONS_DIALOG_
 import com.github.opensmsforwarder.analytics.AnalyticsEvents.PERMISSIONS_RATIONALE_DIALOG_NAVIGATED
 import com.github.opensmsforwarder.analytics.AnalyticsEvents.RECIPIENT_CREATION_CLICKED
 import com.github.opensmsforwarder.analytics.AnalyticsTracker
-import com.github.opensmsforwarder.data.LocalSettingsRepository
 import com.github.opensmsforwarder.data.RecipientsRepository
 import com.github.opensmsforwarder.data.RecipientsRepository.Companion.NO_ID
 import com.github.opensmsforwarder.data.RulesRepository
@@ -29,7 +28,6 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val recipientsRepository: RecipientsRepository,
     private val rulesRepository: RulesRepository,
-    private val localSettingsRepository: LocalSettingsRepository,
     private val router: Router,
     private val analyticsTracker: AnalyticsTracker,
 ) : ViewModel() {
