@@ -10,6 +10,7 @@ const val FORWARDING_HISTORY_TABLE = "forwarded_sms_table"
 const val FORWARDED_SMS_ID_FIELD = "id"
 const val FORWARDED_SMS_DATE_FIELD = "date"
 const val FORWARDED_SMS_MESSAGE_FIELD = "message"
+const val RECIPIENT_SUCCESSFUL_FORWARD_FIELD = "is_successful"
 
 @Entity(
     tableName = FORWARDING_HISTORY_TABLE,
