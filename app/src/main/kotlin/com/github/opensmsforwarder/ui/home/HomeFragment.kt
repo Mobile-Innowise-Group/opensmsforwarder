@@ -16,14 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.opensmsforwarder.R
 import com.github.opensmsforwarder.analytics.AnalyticsEvents.BATTERY_OPTIMIZATION_DIALOG_GO_TO_SETTINGS_CLICKED
-import com.github.opensmsforwarder.analytics.AnalyticsEvents.FIRST_RECIPIENT_CREATION_DIALOG_GO_TO_SETTINGS_CLICKED
 import com.github.opensmsforwarder.analytics.AnalyticsEvents.REQUEST_PERMISSIONS
 import com.github.opensmsforwarder.analytics.AnalyticsTracker
 import com.github.opensmsforwarder.databinding.FragmentHomeBinding
 import com.github.opensmsforwarder.extension.bindClicksTo
 import com.github.opensmsforwarder.extension.notificationsPermissionGranted
 import com.github.opensmsforwarder.extension.observeWithLifecycle
-import com.github.opensmsforwarder.extension.showAcceptDeclineDialog
 import com.github.opensmsforwarder.extension.showOkDialog
 import com.github.opensmsforwarder.extension.smsReceivePermissionGranted
 import com.github.opensmsforwarder.extension.smsSendPermissionGranted
@@ -128,7 +126,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
                     dialogStyle = R.style.SmsAlertDialog,
                     okClickAction = {
                         if (batteryOptimizationDisabled()) {
-                            analyticsTracker.trackEvent(BATTERY_OPTIMIZATION_DIALOG_GO_TO_SETTINGS_CLICKED)
+                            analyticsTracker.trackEvent(
+                                BATTERY_OPTIMIZATION_DIALOG_GO_TO_SETTINGS_CLICKED
+                            )
                             val intent =
                                 Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
                             requireActivity().startActivity(intent)
@@ -147,17 +147,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
                     message = getString(R.string.permissions_rationale_message),
                     dialogStyle = R.style.SmsAlertDialog,
                     okClickAction = { requestPermissions() }
-                )
-
-            FirstRecipientCreationEffect ->
-                requireActivity().showAcceptDeclineDialog(
-                    title = requireActivity().getString(R.string.sms_content_usage_title),
-                    message = requireActivity().getString(R.string.sms_content_usage_message),
-                    dialogStyle = R.style.SmsAlertDialog,
-                    acceptClickAction = {
-                        analyticsTracker.trackEvent(FIRST_RECIPIENT_CREATION_DIALOG_GO_TO_SETTINGS_CLICKED)
-                        viewModel.onStartAddNewRecipient()
-                    }
                 )
         }
     }

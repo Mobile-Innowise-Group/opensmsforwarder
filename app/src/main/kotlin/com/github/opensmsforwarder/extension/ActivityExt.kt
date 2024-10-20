@@ -23,27 +23,3 @@ fun Activity.showOkDialog(
         .create()
         .show()
 }
-
-fun Activity.showAcceptDeclineDialog(
-    title: String? = null,
-    message: String,
-    @StringRes buttonAcceptNameRes: Int = R.string.accept,
-    @StringRes buttonDeclineNameRes: Int = R.string.decline,
-    @StyleRes dialogStyle: Int = 0,
-    acceptClickAction: (() -> Unit)? = null,
-    declineClickAction: (() -> Unit)? = null,
-) {
-    AlertDialog.Builder(this, dialogStyle)
-        .setTitle(title)
-        .setMessage(message)
-        .setPositiveButton(buttonAcceptNameRes) { dialog, _ ->
-            dialog.dismiss()
-            acceptClickAction?.invoke()
-        }
-        .setNegativeButton(buttonDeclineNameRes) { dialog, _ ->
-            dialog.dismiss()
-            declineClickAction?.invoke()
-        }
-        .create()
-        .show()
-}
