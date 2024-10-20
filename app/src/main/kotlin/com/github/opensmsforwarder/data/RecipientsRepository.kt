@@ -41,9 +41,9 @@ class RecipientsRepository @Inject constructor(
 
     suspend fun getRecipientById(id: Long): Recipient? =
         withContext(Dispatchers.IO) {
-            recipientsDao.getRecipientById(id)?.let {
-                mapper.toRecipient(it)
-            }
+            recipientsDao
+                .getRecipientById(id)
+                ?.let(mapper::toRecipient)
         }
 
     suspend fun insertOrUpdateRecipient(recipient: Recipient) =

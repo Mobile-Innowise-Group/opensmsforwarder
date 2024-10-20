@@ -13,6 +13,7 @@
         <item name="colorOnSecondaryFixed">@color/text_disabled_dark</item>
         <item name="strokeColor">@color/stroke_dark</item>
         <item name="colorOnSurfaceVariant">@color/gray</item>
+        <item name="colorSplashBackground">@color/black</item>
     </style>
 
     <style name="GoogleMaterialButton">

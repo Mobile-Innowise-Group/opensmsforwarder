@@ -3,6 +3,9 @@ package com.github.opensmsforwarder.ui.steps.addrule
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.opensmsforwarder.R
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.RECIPIENT_CREATION_FINISHED
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.RULE_ADD_CLICKED
+import com.github.opensmsforwarder.analytics.AnalyticsTracker
 import com.github.opensmsforwarder.data.RecipientsRepository
 import com.github.opensmsforwarder.data.RulesRepository
 import com.github.opensmsforwarder.model.Rule
@@ -23,6 +26,7 @@ class AddForwardingRuleViewModel @Inject constructor(
     private val recipientsRepository: RecipientsRepository,
     private val rulesRepository: RulesRepository,
     private val router: Router,
+    private val analyticsTracker: AnalyticsTracker,
 ) : ViewModel() {
 
     private var _viewState: MutableStateFlow<AddForwardingRuleState> =
@@ -61,6 +65,7 @@ class AddForwardingRuleViewModel @Inject constructor(
     }
 
     fun onFinishClicked() {
+        analyticsTracker.trackEvent(RECIPIENT_CREATION_FINISHED)
         router.backTo(null)
     }
 
@@ -69,6 +74,7 @@ class AddForwardingRuleViewModel @Inject constructor(
     }
 
     fun onAddRuleClicked(rule: String) {
+        analyticsTracker.trackEvent(RULE_ADD_CLICKED)
         viewModelScope.launch {
             rulesRepository.insertRule(
                 Rule(

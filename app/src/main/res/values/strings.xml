@@ -8,7 +8,7 @@
     <string name="empty_rules">You need to add at least one rule</string>
     <string name="enter_text_rule_pattern">Enter text rule</string>
     <string name="permissions_rationale_title">Why do you need to grant permissions?</string>
-    <string name="permissions_rationale_message">SMS permissions are needed for forwarding SMS.</string>
+    <string name="permissions_rationale_message">SMS and notification permissions are needed for forwarding SMS.</string>
     <string name="empty" />
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -59,7 +59,7 @@
     <string name="dialog_delete_rule_message">The rule \"%s\" will be deleted.</string>
     <string name="dialog_edit_rule_title">Change rule</string>
     <string name="dialog_edit_rule_message">The rule \"%s\" will be changed to</string>
-    <string name="processing">Processing</string>
+    <string name="forwarding_sms">Forwarding SMS…</string>
     <string name="remove_title">You are about to remove item</string>
     <string name="remove_message">Do you want to continue?</string>
     <string name="add_rule_message">Enter the text that the message should contain</string>
@@ -76,15 +76,17 @@
     <string name="battery_save_warning_message">In order for app to work when device is not active for a long time,\nplease, make it an exemption from Power Management features</string>
     <string name="onboarding_fragment_finish">Finish</string>
     <string name="onboarding_fragment_next">Next</string>
-    <string name="sms_forwarding_steps_description">This app simplifies and enhances message management by automatically forwarding incoming SMS messages to your chosen phone numbers or email addresses. With an intuitive three-step setup, you can effortlessly configure recipients and gain complete control over your message delivery.</string>
-    <string name="onboarding_first_step_description">Choose the type of recipient for forwarding: Phone number or email</string>
-    <string name="onboarding_first_step_label">Step 1</string>
-    <string name="onboarding_second_step_description">For SMS forwarding, enter the recipient\'s phone number. If using email, sign in with the Google account that will be used to send the messages and enter the recipient\'s email</string>
-    <string name="onboarding_second_step_label">Step 2</string>
+    <string name="onboarding_skip_all">Skip all</string>
+    <string name="splash_description">This app automatically forwards SMS to selected numbers or emails, simplifying message management with a simple three-step setup.</string>
+    <string name="onboarding_step_label">Step %1$d</string>
+    <string name="onboarding_first_step_heading">Choosing forwarding method</string>
+    <string name="onboarding_first_step_description">Choose the type of recipient for forwarding: Phone number or Email</string>
+    <string name="onboarding_second_step_heading">Forwarding SMS and Emails</string>
+    <string name="onboarding_second_step_description">To forward SMS, enter the recipient\'s phone number. For email, sign in with your Google account and provide the recipient\'s email.</string>
+    <string name="onboarding_third_step_heading">Adding forwarding rules</string>
     <string name="onboarding_third_step_description">Define the keywords that the SMS must contain to be eligible for forwarding</string>
-    <string name="onboarding_third_step_label">Step 3</string>
-    <string name="scammer_warning_label">Warning</string>
-    <string name="scammer_warning_message">Be cautious—scammers may try to trick you into entering their details to intercept your SMS. This app is not distributed by banks or any public organizations. It is intended for personal use only and should be downloaded exclusively from Google Play</string>
+    <string name="privacy_info_heading">Privacy info</string>
+    <string name="privacy_info_description">Be cautious — scammers may trick you into sharing details to intercept your SMS. This app is not distributed by banks or public organizations and is for personal use only. Download it exclusively from Google Play.</string>
     <string name="risk_agreement_text">I acknowledge the potential risks and agree to proceed</string>
     <string name="acknowledge_risks_message">Please confirm that you acknowledge the potential risks.</string>
     <string name="forwarding_is_disabled_some_problem_with_internet_connection">Forwarding is disabled.\nSome problem with internet connection</string>
@@ -96,4 +98,6 @@
     <string name="forwarding_is_disabled_null_pdu">Forwarding is disabled.\nNull PDU</string>
     <string name="forwarding_is_disabled_no_service_available">Forwarding is disabled.\nNo Service Available</string>
     <string name="forwarding_is_disabled_generic_failure_error">Forwarding is disabled.\nGeneric Failure Error</string>
+    <string name="forwarded_messages">Forwarded messages</string>
+    <string name="forwarded_messages_count">%1$s messages were forwarded in the last 24 hours</string>
 </resources>

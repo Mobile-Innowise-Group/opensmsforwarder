@@ -9,23 +9,26 @@ import androidx.work.Data
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.github.opensmsforwarder.processing.forwarder.SmsForwarderStarter
+import com.github.opensmsforwarder.extension.notificationsPermissionGranted
+import com.github.opensmsforwarder.processing.forwarding.ForwardingStarter
 
 class SmsBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        if (!context.notificationsPermissionGranted()) return
+
         if (isSmsReceived(intent.action)) {
             val smsMessages =
                 Telephony.Sms.Intents.getMessagesFromIntent(intent).map { it.messageBody }
             if (smsMessages.isNotEmpty()) {
-                startForwardingRequest(context, smsMessages)
+                startProcessing(context, smsMessages)
             }
         }
     }
 
-    private fun startForwardingRequest(context: Context, smsMessages: List<String>) {
+    private fun startProcessing(context: Context, smsMessages: List<String>) {
         val workRequestBuilder: OneTimeWorkRequest.Builder =
-            OneTimeWorkRequest.Builder(SmsForwarderStarter::class.java)
+            OneTimeWorkRequest.Builder(ForwardingStarter::class.java)
 
         val data = Data.Builder()
             .putStringArray(MESSAGES_KEY, smsMessages.toTypedArray())
@@ -43,7 +46,8 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
         WorkManager.getInstance(context).enqueue(workRequest)
     }
 
-    private fun isSmsReceived(action: String?) = action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION
+    private fun isSmsReceived(action: String?): Boolean =
+        action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION
 
     companion object {
         const val MESSAGES_KEY = "SMS_BODY_KEY"
