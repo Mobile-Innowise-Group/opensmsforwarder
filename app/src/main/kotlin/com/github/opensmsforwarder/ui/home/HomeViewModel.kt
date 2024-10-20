@@ -2,6 +2,11 @@ package com.github.opensmsforwarder.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.BATTERY_OPTIMIZATION_DIALOG_NAVIGATED
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.PERMISSIONS_DIALOG_NAVIGATED
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.PERMISSIONS_RATIONALE_DIALOG_NAVIGATED
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.RECIPIENT_CREATION_CLICKED
+import com.github.opensmsforwarder.analytics.AnalyticsTracker
 import com.github.opensmsforwarder.data.LocalSettingsRepository
 import com.github.opensmsforwarder.data.RecipientsRepository
 import com.github.opensmsforwarder.data.RecipientsRepository.Companion.NO_ID
@@ -26,6 +31,7 @@ class HomeViewModel @Inject constructor(
     private val rulesRepository: RulesRepository,
     private val localSettingsRepository: LocalSettingsRepository,
     private val router: Router,
+    private val analyticsTracker: AnalyticsTracker,
 ) : ViewModel() {
 
     private val _viewState: MutableStateFlow<HomeState> = MutableStateFlow(HomeState())
@@ -54,16 +60,9 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onAddNewRecipientClicked() {
-        if (!localSettingsRepository.getSmsAccessMessageShowedFlag()) {
-            _viewEffect.trySend(FirstRecipientCreationEffect)
-        } else {
-            navigateToChooseForwardingMethod()
-        }
-    }
-
-    fun onStartAddNewRecipient() {
-        localSettingsRepository.setSmsAccessMessageShowedFlag(true)
-        navigateToChooseForwardingMethod()
+        analyticsTracker.trackEvent(RECIPIENT_CREATION_CLICKED)
+        recipientsRepository.setCurrentRecipientId(NO_ID)
+        router.navigateTo(Screens.chooseForwardingMethodFragment())
     }
 
     fun onItemEditClicked(id: Long) {
@@ -76,6 +75,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onBatteryOptimizationWarningClicked() {
+        analyticsTracker.trackEvent(BATTERY_OPTIMIZATION_DIALOG_NAVIGATED)
         _viewEffect.trySend(BatteryWarningEffect)
     }
 
@@ -86,15 +86,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onGoToSettingsRequired() {
+        analyticsTracker.trackEvent(PERMISSIONS_DIALOG_NAVIGATED)
         _viewEffect.trySend(GoToSettingsEffect)
     }
 
     fun onPermissionsRationaleRequired() {
+        analyticsTracker.trackEvent(PERMISSIONS_RATIONALE_DIALOG_NAVIGATED)
         _viewEffect.trySend(PermissionsRationalEffect)
-    }
-
-    private fun navigateToChooseForwardingMethod() {
-        recipientsRepository.setCurrentRecipientId(NO_ID)
-        router.navigateTo(Screens.chooseForwardingMethodFragment())
     }
 }

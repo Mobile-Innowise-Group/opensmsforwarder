@@ -2,6 +2,9 @@ package com.github.opensmsforwarder.ui.onboarding
 
 import androidx.lifecycle.ViewModel
 import com.github.opensmsforwarder.R
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.ONBOARDING_CHECKBOX_WARNING_DIALOG_SHOWN
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.ONBOARDING_COMPLETE
+import com.github.opensmsforwarder.analytics.AnalyticsTracker
 import com.github.opensmsforwarder.data.LocalSettingsRepository
 import com.github.opensmsforwarder.navigation.Screens
 import com.github.terrakok.cicerone.Router
@@ -19,6 +22,7 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val localSettingsRepository: LocalSettingsRepository,
     private val router: Router,
+    private val analyticsTracker: AnalyticsTracker,
 ) : ViewModel() {
 
     private val _viewState: MutableStateFlow<OnboardingState> = MutableStateFlow(OnboardingState())
@@ -29,7 +33,6 @@ class OnboardingViewModel @Inject constructor(
 
     fun onSlidePage(position: Int, itemCount: Int) {
         val isLastSlide = position == itemCount - 1
-        val isFirstSlide = position == FIRST_SLIDE_INDEX
         val nextButtonRes = if (isLastSlide) {
             R.string.onboarding_fragment_finish
         } else {
@@ -37,10 +40,9 @@ class OnboardingViewModel @Inject constructor(
         }
         _viewState.update {
             it.copy(
-                isBackButtonVisible = !isFirstSlide,
                 isLastSlide = isLastSlide,
                 nextButtonRes = nextButtonRes,
-                slidePosition = position + 1
+                currentStep = position + 1
             )
         }
     }
@@ -48,13 +50,11 @@ class OnboardingViewModel @Inject constructor(
     fun onFinishOnboarding(isOnboardingCompleted: Boolean) {
         if (isOnboardingCompleted) {
             localSettingsRepository.setOnboardingCompleteFlag(true)
+            analyticsTracker.trackEvent(ONBOARDING_COMPLETE)
             router.replaceScreen(Screens.homeFragment())
         } else {
+            analyticsTracker.trackEvent(ONBOARDING_CHECKBOX_WARNING_DIALOG_SHOWN)
             _viewEffect.trySend(WarningEffect)
         }
-    }
-
-    private companion object {
-        const val FIRST_SLIDE_INDEX = 0
     }
 }

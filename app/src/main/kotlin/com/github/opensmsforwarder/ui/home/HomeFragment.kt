@@ -15,13 +15,14 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.opensmsforwarder.R
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.BATTERY_OPTIMIZATION_DIALOG_GO_TO_SETTINGS_CLICKED
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.REQUEST_PERMISSIONS
+import com.github.opensmsforwarder.analytics.AnalyticsTracker
 import com.github.opensmsforwarder.databinding.FragmentHomeBinding
 import com.github.opensmsforwarder.extension.bindClicksTo
 import com.github.opensmsforwarder.extension.notificationsPermissionGranted
 import com.github.opensmsforwarder.extension.observeWithLifecycle
-import com.github.opensmsforwarder.extension.showAcceptDeclineDialog
 import com.github.opensmsforwarder.extension.showOkDialog
-import com.github.opensmsforwarder.extension.showAcceptDeclineDialog
 import com.github.opensmsforwarder.extension.smsReceivePermissionGranted
 import com.github.opensmsforwarder.extension.smsSendPermissionGranted
 import com.github.opensmsforwarder.extension.unsafeLazy
@@ -30,9 +31,13 @@ import com.github.opensmsforwarder.ui.dialog.delete.DeleteDialogListener
 import com.github.opensmsforwarder.ui.dialog.permission.PermissionsDialog
 import com.github.opensmsforwarder.ui.home.adapter.HomeAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
+
+    @Inject
+    lateinit var analyticsTracker: AnalyticsTracker
 
     private val binding by viewBinding(FragmentHomeBinding::bind)
     private val viewModel: HomeViewModel by viewModels()
@@ -121,6 +126,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
                     dialogStyle = R.style.SmsAlertDialog,
                     okClickAction = {
                         if (batteryOptimizationDisabled()) {
+                            analyticsTracker.trackEvent(
+                                BATTERY_OPTIMIZATION_DIALOG_GO_TO_SETTINGS_CLICKED
+                            )
                             val intent =
                                 Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
                             requireActivity().startActivity(intent)
@@ -140,16 +148,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
                     dialogStyle = R.style.SmsAlertDialog,
                     okClickAction = { requestPermissions() }
                 )
-
-            FirstRecipientCreationEffect ->
-                requireActivity().showAcceptDeclineDialog(
-                    title = requireActivity().getString(R.string.sms_content_usage_title),
-                    message = requireActivity().getString(R.string.sms_content_usage_message),
-                    dialogStyle = R.style.SmsAlertDialog,
-                    acceptClickAction = {
-                        viewModel.onStartAddNewRecipient()
-                    }
-                )
         }
     }
 
@@ -160,6 +158,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
     }
 
     private fun requestPermissions() {
+        analyticsTracker.trackEvent(REQUEST_PERMISSIONS)
         permissionsResultLauncher.launch(
             mutableListOf<String>().apply {
                 add(Manifest.permission.RECEIVE_SMS)

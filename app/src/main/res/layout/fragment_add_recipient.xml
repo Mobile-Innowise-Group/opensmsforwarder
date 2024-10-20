@@ -26,42 +26,42 @@
             app:layout_constraintGuide_end="16dp" />
 
         <ImageView
-            android:id="@+id/imageBack"
+            android:id="@+id/arrowBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?attr/colorOnPrimary" />
+            android:src="@drawable/arrow_back"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toTopOf="@id/step2" />
 
         <TextView
-            android:id="@+id/step1"
+            android:id="@+id/step2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="@string/step_2_from_3"
             android:textAlignment="center"
             android:textAppearance="@style/SmsTextAppearance.Bold.16"
-            app:layout_constraintBottom_toBottomOf="@id/imageBack"
+            app:layout_constraintBottom_toBottomOf="@id/arrowBack"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
-            app:layout_constraintTop_toTopOf="@id/imageBack" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/from_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:text="@string/sign_in_to_email"
             android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
-            app:layout_constraintTop_toBottomOf="@id/imageBack" />
+            app:layout_constraintTop_toBottomOf="@id/arrowBack" />
 
         <TextView
             android:id="@+id/sender_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:text="@string/signed_in_as"
             android:textAppearance="@style/SmsTextAppearance.Regular.14"
             android:textColor="@color/green"
@@ -73,7 +73,7 @@
             android:id="@+id/sign_in_button"
             style="@style/GoogleMaterialButton"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/sign_in_with_google"
             android:textAllCaps="false"
@@ -93,7 +93,7 @@
             android:id="@+id/sign_out_button"
             style="@style/GoogleMaterialButton"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/sig_out"
             android:textAppearance="@style/SmsTextAppearance.Medium.14"
@@ -200,7 +200,7 @@
             android:id="@+id/next_btn"
             style="@style/SmsMaterialButton"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
             android:layout_marginVertical="8dp"
             android:text="@string/next"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -6,10 +6,9 @@ import com.github.opensmsforwarder.extension.unsafeLazy
 import com.github.opensmsforwarder.model.OnboardingPagerSlide
 
 data class OnboardingState(
-    val isBackButtonVisible: Boolean = false,
+    val currentStep: Int = 1,
     val isLastSlide: Boolean = false,
     @StringRes val nextButtonRes: Int = R.string.onboarding_fragment_next,
-    val slidePosition: Int = 1
 ) {
     companion object {
         val slides by unsafeLazy {

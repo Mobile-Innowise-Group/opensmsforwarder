@@ -62,10 +62,10 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
             button = binding.buttonNext,
             lifecycle = viewLifecycleOwner.lifecycle,
             onAnimationStart = {
-                binding.checkboxAgree.isClickable = false
+                binding.checkboxAgree.isEnabled = false
             },
             onAnimationEnd = {
-                binding.checkboxAgree.isClickable = true
+                binding.checkboxAgree.isEnabled = true
             }
         )
     }
@@ -81,14 +81,16 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
     }
 
     private fun renderState(onboardingState: OnboardingState) {
-        binding.buttonBack.isVisible = onboardingState.isBackButtonVisible
-        binding.checkboxAgree.isVisible = onboardingState.isLastSlide
-        binding.stepLabel.isVisible = !onboardingState.isLastSlide
-        binding.buttonSkipAll.isVisible = !onboardingState.isLastSlide
-        binding.buttonNext.text = getString(onboardingState.nextButtonRes)
-        binding.stepLabel.text =
-            getString(R.string.onboarding_step_label, onboardingState.slidePosition)
-        if (onboardingState.isLastSlide) buttonFillAnimator.startAnimation() else buttonFillAnimator.stopAnimation()
+        with(binding) {
+            buttonBack.isVisible = onboardingState.currentStep in 2..<slides.size
+            checkboxAgree.isVisible = onboardingState.isLastSlide
+            stepLabel.isVisible = !onboardingState.isLastSlide
+            buttonSkipAll.isVisible = !onboardingState.isLastSlide
+            buttonNext.text = getString(onboardingState.nextButtonRes)
+            stepLabel.text =
+                getString(R.string.onboarding_step_label, onboardingState.currentStep)
+            if (onboardingState.isLastSlide) buttonFillAnimator.startAnimation() else buttonFillAnimator.stopAnimation()
+        }
     }
 
     private fun handleEffect(effect: OnboardingEffect) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -12,24 +13,23 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_title" />
+            app:layout_constraintTop_toBottomOf="@id/text_title"
+            tools:src="@drawable/privacy_info_image" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginHorizontal="32dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
             android:gravity="center"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,14 +40,12 @@
             android:id="@+id/text_subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="32dp"
             android:gravity="center"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/image" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

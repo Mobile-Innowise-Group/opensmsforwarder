@@ -52,7 +52,7 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
     private fun setListeners() {
         with(binding) {
             finishBtn bindClicksTo viewModel::onFinishClicked
-            imageBack bindClicksTo viewModel::onBackClicked
+            arrowBack bindClicksTo viewModel::onBackClicked
             buttonAddRule bindClicksTo {
                 viewModel.onAddRuleClicked(messagePatternEt.text.toString())
                 messagePatternEt.setText("")
