@@ -12,7 +12,7 @@ const val FORWARDING_TYPE_FIELD = "forwarding_type"
 const val RECIPIENT_PHONE_FIELD = "recipient_phone"
 const val SENDER_EMAIL_FIELD = "sender_email"
 const val RECIPIENT_EMAIL_FIELD = "recipient_email"
-const val RECIPIENT_SUCCESSFUL_FORWARD_FIELD = "recipient_is_successful_forward"
+const val RECIPIENT_ERROR_TEXT_FIELD = "recipient_error_text"
 
 @Entity(tableName = RECIPIENTS_TABLE)
 data class RecipientEntity(
@@ -36,6 +36,6 @@ data class RecipientEntity(
     @ColumnInfo(name = RECIPIENT_EMAIL_FIELD)
     val recipientEmail: String = "",
 
-    @ColumnInfo(name = RECIPIENT_SUCCESSFUL_FORWARD_FIELD)
-    val isForwardSuccessful: Boolean = true
+    @ColumnInfo(name = RECIPIENT_ERROR_TEXT_FIELD)
+    val errorText: String = "",
 )
