@@ -22,36 +22,37 @@
         app:layout_constraintGuide_end="16dp" />
 
     <ImageView
-        android:id="@+id/imageBack"
+        android:id="@+id/arrowBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="?attr/colorOnPrimary" />
+        android:src="@drawable/arrow_back"
+        app:layout_constraintStart_toStartOf="@id/start_margin"
+        app:layout_constraintTop_toTopOf="@id/step3"
+        tools:ignore="ContentDescription" />
 
     <TextView
-        android:id="@+id/step1"
+        android:id="@+id/step3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/step_3_from_3"
         android:textAlignment="center"
         android:textAppearance="@style/SmsTextAppearance.Bold.16"
-        app:layout_constraintBottom_toBottomOf="@id/imageBack"
+        app:layout_constraintBottom_toBottomOf="@id/arrowBack"
         app:layout_constraintEnd_toEndOf="@id/end_margin"
         app:layout_constraintStart_toStartOf="@id/start_margin"
-        app:layout_constraintTop_toTopOf="@id/imageBack" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/title_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:text="@string/add_forwarding_rule"
         android:textAppearance="@style/SmsTextAppearance.Bold.16"
         app:layout_constraintEnd_toEndOf="@id/end_margin"
         app:layout_constraintStart_toStartOf="@id/start_margin"
-        app:layout_constraintTop_toBottomOf="@id/imageBack" />
+        app:layout_constraintTop_toBottomOf="@id/arrowBack" />
 
     <TextView
         android:id="@+id/textDescription"
@@ -88,7 +89,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonAddRule"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/add_rule_button"
         android:textAppearance="@style/SmsTextAppearance.Bold.16"
@@ -127,7 +128,7 @@
         android:id="@+id/finish_btn"
         style="@style/SmsMaterialButton"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
         android:text="@string/finish"
         app:layout_constraintBottom_toBottomOf="parent"

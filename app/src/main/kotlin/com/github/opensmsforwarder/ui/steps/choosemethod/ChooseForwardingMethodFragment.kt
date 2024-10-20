@@ -36,7 +36,7 @@ class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forward
             titleEt bindTextChangesTo viewModel::onTitleChanged
             radioButtonEmail bindCheckChangesTo { viewModel.onForwardingMethodChanged(ForwardingType.EMAIL) }
             radioButtonSms bindCheckChangesTo { viewModel.onForwardingMethodChanged(ForwardingType.SMS) }
-            imageBack bindClicksTo viewModel::onBackClicked
+            arrowBack bindClicksTo viewModel::onBackClicked
             nextBtn bindClicksTo viewModel::onNextClicked
         }
     }

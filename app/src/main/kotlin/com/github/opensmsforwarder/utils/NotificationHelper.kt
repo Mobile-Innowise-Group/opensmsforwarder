@@ -10,31 +10,26 @@ import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
 import com.github.opensmsforwarder.MainActivity
 import com.github.opensmsforwarder.R
 
-object NotificationUtils {
+object NotificationHelper {
 
     private const val CHANNEL_ID = "SMS_FORWARDER_NOTIFICATION_CHANNEL"
 
-    fun createReminderNotification(context: Context, count: Int) {
+    fun createNotification(
+        context: Context,
+        contentTitle: String? = null,
+        contentText: String? = null
+    ) {
         createNotificationChannel(context)
-        val notification = createBaseNotificationBuilder(context)
-            .setContentTitle(context.getString(R.string.forwarded_messages))
-            .setContentText(context.getString(R.string.messages_was_forwarded, count))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+        val notification = createDefaultNotificationBuilder(context)
+            .setContentTitle(contentTitle)
+            .setContentText(contentText)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .setVisibility(VISIBILITY_PUBLIC)
             .build()
 
         val manager = context.getSystemService(NotificationManager::class.java)
         manager.notify(1, notification)
-    }
-
-    fun createBaseNotificationBuilder(context: Context): NotificationCompat.Builder {
-        val notificationIntent = Intent(context, MainActivity::class.java)
-        val pendingIntent =
-            PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
-        return NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_sms_forwarding)
-            .setContentIntent(pendingIntent)
     }
 
     fun createNotificationChannel(context: Context) {
@@ -44,7 +39,16 @@ object NotificationUtils {
             appName,
             NotificationManager.IMPORTANCE_DEFAULT
         )
-        val manager = context.getSystemService(NotificationManager::class.java)
-        manager.createNotificationChannel(serviceChannel)
+        val notificationManager = context.getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(serviceChannel)
+    }
+
+    fun createDefaultNotificationBuilder(context: Context): NotificationCompat.Builder {
+        val notificationIntent = Intent(context, MainActivity::class.java)
+        val pendingIntent =
+            PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
+        return NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_sms_forwarding)
+            .setContentIntent(pendingIntent)
     }
 }

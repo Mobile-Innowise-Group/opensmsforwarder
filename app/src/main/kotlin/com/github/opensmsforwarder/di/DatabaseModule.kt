@@ -41,7 +41,8 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideForwardingHistoryDao(database: RecipientsDatabase): ForwardingHistoryDao = database.forwardingHistoryDao()
+    fun provideForwardingHistoryDao(database: RecipientsDatabase): ForwardingHistoryDao =
+        database.forwardingHistoryDao()
 
     private companion object {
         const val DATABASE_NAME = "sms_forwarder"

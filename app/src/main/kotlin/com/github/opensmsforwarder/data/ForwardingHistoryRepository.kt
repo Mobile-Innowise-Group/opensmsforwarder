@@ -10,11 +10,11 @@ class ForwardingHistoryRepository @Inject constructor(
     private val forwardingHistoryDao: ForwardingHistoryDao,
     private val mapper: Mapper
 ) {
-    suspend fun getForwardedMessagesCountLast24Hours(): Int = withContext(Dispatchers.IO) {
+    suspend fun getForwardedMessagesForLast24Hours(): Int = withContext(Dispatchers.IO) {
         forwardingHistoryDao.getForwardedMessagesCountLast24Hours()
     }
 
-    suspend fun upsertForwardedSms(
+    suspend fun insertOrUpdateForwardedSms(
         recipientId: Long,
         message: String,
         isForwardingSuccessful: Boolean
