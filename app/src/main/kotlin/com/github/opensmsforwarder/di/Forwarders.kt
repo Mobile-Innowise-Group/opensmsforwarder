@@ -1,9 +1,9 @@
 package com.github.opensmsforwarder.di
 
 import com.github.opensmsforwarder.model.ForwardingType
-import com.github.opensmsforwarder.processing.forwarding.handler.EmailForwardingHandler
-import com.github.opensmsforwarder.processing.forwarding.handler.ForwardingHandler
-import com.github.opensmsforwarder.processing.forwarding.handler.SmsForwardingHandler
+import com.github.opensmsforwarder.processing.handler.EmailForwarder
+import com.github.opensmsforwarder.processing.handler.Forwarder
+import com.github.opensmsforwarder.processing.handler.SmsForwarder
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -13,17 +13,17 @@ import dagger.multibindings.IntoMap
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class ForwardingHandlers {
+abstract class Forwarders {
 
     @Binds
     @IntoMap
     @ForwardingTypeKey(ForwardingType.EMAIL)
-    abstract fun provideEmailForwardingHandler(emailForwardingHandler: EmailForwardingHandler): ForwardingHandler
+    abstract fun provideEmailForwarder(emailForwarder: EmailForwarder): Forwarder
 
     @Binds
     @IntoMap
     @ForwardingTypeKey(ForwardingType.SMS)
-    abstract fun provideSmsForwardingHandler(smsForwardingHandler: SmsForwardingHandler): ForwardingHandler
+    abstract fun provideSmsForwarder(smsForwarder: SmsForwarder): Forwarder
 }
 
 @MapKey

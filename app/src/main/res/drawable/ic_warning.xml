@@ -4,7 +4,7 @@
     android:viewportWidth="122.88"
     android:viewportHeight="111.54">
     <path
-        android:fillColor="@color/blue_light_theme"
+        android:fillColor="@color/light_blue"
         android:fillType="evenOdd"
         android:pathData="M9,88.75 L52.12,14.16c5.24,-8.25 13.54,-8.46 18.87,0l42.43,73.69c3.39,6.81 1.71,16 -9.33,15.77H17.61C10.35,103.8 5.67,97.43 9,88.75Z" />
     <path

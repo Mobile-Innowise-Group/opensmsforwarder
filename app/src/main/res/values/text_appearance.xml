@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="TextAppearance.Social" parent="Base.Theme.InnoForwarder">
+    <style name="TextAppearance.Social" parent="Theme.Forwarder">
         <item name="android:fontFamily">@font/mavenpro_bold</item>
     </style>
 

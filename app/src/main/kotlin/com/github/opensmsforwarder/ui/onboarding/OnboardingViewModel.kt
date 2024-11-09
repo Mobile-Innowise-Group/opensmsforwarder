@@ -49,7 +49,7 @@ class OnboardingViewModel @Inject constructor(
 
     fun onFinishOnboarding(isOnboardingCompleted: Boolean) {
         if (isOnboardingCompleted) {
-            localSettingsRepository.setOnboardingCompleteFlag(true)
+            localSettingsRepository.setOnboardingCompleted(true)
             analyticsTracker.trackEvent(ONBOARDING_COMPLETE)
             router.replaceScreen(Screens.homeFragment())
         } else {

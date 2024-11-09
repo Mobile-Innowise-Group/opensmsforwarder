@@ -1,4 +1,4 @@
-package com.github.opensmsforwarder.processing.forwarding.processor
+package com.github.opensmsforwarder.processing.processor
 
 import com.github.opensmsforwarder.data.AuthRepository
 import com.github.opensmsforwarder.data.ForwardingHistoryRepository
@@ -8,11 +8,11 @@ import com.github.opensmsforwarder.data.remote.interceptor.RefreshTokenException
 import com.github.opensmsforwarder.data.remote.interceptor.TokenRevokedException
 import com.github.opensmsforwarder.model.ForwardingType
 import com.github.opensmsforwarder.model.Recipient
-import com.github.opensmsforwarder.processing.forwarding.handler.ForwardingHandler
+import com.github.opensmsforwarder.processing.handler.Forwarder
 import javax.inject.Inject
 
 class ForwardingProcessor @Inject constructor(
-    private val forwardingHandlers: Map<ForwardingType, @JvmSuppressWildcards ForwardingHandler>,
+    private val forwarders: Map<ForwardingType, @JvmSuppressWildcards Forwarder>,
     private val rulesRepository: RulesRepository,
     private val recipientsRepository: RecipientsRepository,
     private val forwardingHistoryRepository: ForwardingHistoryRepository,
@@ -35,8 +35,8 @@ class ForwardingProcessor @Inject constructor(
 
         messagesToForward.forEach { (recipientId, message) ->
             recipientsRepository.getRecipientById(recipientId)?.let { recipient ->
-                forwardingHandlers[recipient.forwardingType]
-                    ?.run(recipient, message)
+                forwarders[recipient.forwardingType]
+                    ?.execute(recipient, message)
                     ?.onSuccess {
                         updateForwardingStatus(recipient, message, "")
                     }

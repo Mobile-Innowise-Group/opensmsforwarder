@@ -50,7 +50,11 @@ android {
 
     buildTypes {
         debug {
-            manifestPlaceholders = [appName: "OpenSmsForwarder_DEBUG"]
+            manifestPlaceholders = [
+                    appName     : "OpenSmsForwarder_DEBUG",
+                    appIcon     : "@mipmap/ic_launcher_debug",
+                    appIconRound: "@mipmap/ic_launcher_debug_round"
+            ]
             applicationIdSuffix ".debug"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -62,7 +66,11 @@ android {
         }
 
         release {
-            manifestPlaceholders = [appName: "OpenSmsForwarder"]
+            manifestPlaceholders = [
+                    appName     : "OpenSmsForwarder",
+                    appIcon     : "@mipmap/ic_launcher",
+                    appIconRound: "@mipmap/ic_launcher_round"
+            ]
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

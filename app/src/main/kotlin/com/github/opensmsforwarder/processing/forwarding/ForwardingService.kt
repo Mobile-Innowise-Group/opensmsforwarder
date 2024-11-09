@@ -5,7 +5,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.github.opensmsforwarder.R
-import com.github.opensmsforwarder.processing.forwarding.processor.ForwardingProcessor
+import com.github.opensmsforwarder.processing.processor.ForwardingProcessor
 import com.github.opensmsforwarder.processing.reciever.SmsBroadcastReceiver
 import com.github.opensmsforwarder.utils.NotificationHelper
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="blue_light_theme">#7E49FF</color>
+    <color name="light_blue">#7E49FF</color>
     <color name="gray">#A1A1A1</color>
     <color name="stroke_light">#E2E8F0</color>
     <color name="stroke_dark">#282828</color>

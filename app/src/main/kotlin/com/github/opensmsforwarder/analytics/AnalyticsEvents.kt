@@ -2,8 +2,8 @@ package com.github.opensmsforwarder.analytics
 
 object AnalyticsEvents {
 
-    const val ONBOARDING_START = "onboarding_start"
-    const val HOME_SCREEN_DIRECT_NAVIGATION = "home_screen_direct_navigation"
+    const val ONBOARDING_SCREEN_START = "onboarding_start"
+    const val HOME_SCREEN_START = "home_screen_direct_navigation"
     const val ONBOARDING_COMPLETE = "onboarding_complete"
     const val ONBOARDING_CHECKBOX_WARNING_DIALOG_SHOWN = "onboarding_checkbox_warning_dialog_shown"
     const val RECIPIENT_CREATION_CLICKED = "recipient_creation_clicked"
