@@ -11,7 +11,7 @@ data class OnboardingState(
     @StringRes val nextButtonRes: Int = R.string.onboarding_fragment_next,
 ) {
     companion object {
-        val slides by unsafeLazy {
+        val slides: List<OnboardingPagerSlide> by unsafeLazy {
             listOf(
                 OnboardingPagerSlide(
                     titleId = R.string.onboarding_first_step_heading,

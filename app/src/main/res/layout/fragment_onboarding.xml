@@ -56,13 +56,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@id/checkbox_agree"
+        app:layout_constraintBottom_toTopOf="@id/check_box_acknowledge"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:layout_constraintTop_toBottomOf="@id/step_label" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/checkbox_agree"
+        android:id="@+id/check_box_acknowledge"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"

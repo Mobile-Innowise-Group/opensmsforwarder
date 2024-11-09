@@ -2,8 +2,8 @@ package com.github.opensmsforwarder.ui.onboarding
 
 import androidx.lifecycle.ViewModel
 import com.github.opensmsforwarder.R
-import com.github.opensmsforwarder.analytics.AnalyticsEvents.ONBOARDING_CHECKBOX_WARNING_DIALOG_SHOWN
 import com.github.opensmsforwarder.analytics.AnalyticsEvents.ONBOARDING_COMPLETE
+import com.github.opensmsforwarder.analytics.AnalyticsEvents.ONBOARDING_WARNING_SHOW
 import com.github.opensmsforwarder.analytics.AnalyticsTracker
 import com.github.opensmsforwarder.data.LocalSettingsRepository
 import com.github.opensmsforwarder.navigation.Screens
@@ -31,8 +31,8 @@ class OnboardingViewModel @Inject constructor(
     private val _viewEffect: Channel<OnboardingEffect> = Channel(Channel.BUFFERED)
     val viewEffect: Flow<OnboardingEffect> = _viewEffect.receiveAsFlow()
 
-    fun onSlidePage(position: Int, itemCount: Int) {
-        val isLastSlide = position == itemCount - 1
+    fun onSlidePage(position: Int) {
+        val isLastSlide = position == OnboardingState.slides.size - 1
         val nextButtonRes = if (isLastSlide) {
             R.string.onboarding_fragment_finish
         } else {
@@ -47,14 +47,26 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    fun onFinishOnboarding(isOnboardingCompleted: Boolean) {
-        if (isOnboardingCompleted) {
-            localSettingsRepository.setOnboardingCompleted(true)
-            analyticsTracker.trackEvent(ONBOARDING_COMPLETE)
-            router.replaceScreen(Screens.homeFragment())
+    fun onNextButtonClicked(currentItem: Int, potentialRisksAcknowledged: Boolean) {
+        if (currentItem == OnboardingState.slides.size - 1) {
+            if (potentialRisksAcknowledged) {
+                localSettingsRepository.setOnboardingCompleted(true)
+                analyticsTracker.trackEvent(ONBOARDING_COMPLETE)
+                router.replaceScreen(Screens.homeFragment())
+            } else {
+                analyticsTracker.trackEvent(ONBOARDING_WARNING_SHOW)
+                _viewEffect.trySend(WarningEffect)
+            }
         } else {
-            analyticsTracker.trackEvent(ONBOARDING_CHECKBOX_WARNING_DIALOG_SHOWN)
-            _viewEffect.trySend(WarningEffect)
+            _viewEffect.trySend(NextEffect)
         }
+    }
+
+    fun onPreviousButtonClicked() {
+        _viewEffect.trySend(PreviousEffect)
+    }
+
+    fun onSkipAllButtonClicked() {
+        _viewEffect.trySend(SkipAllEffect)
     }
 }

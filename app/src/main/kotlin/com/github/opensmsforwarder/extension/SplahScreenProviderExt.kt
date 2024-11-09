@@ -8,9 +8,9 @@ import androidx.core.splashscreen.SplashScreenViewProvider
 
 fun SplashScreenViewProvider.playSplashAnimation(
     fromX: Float = 1f,
-    toX: Float = 1.3f,
+    toX: Float = 1.4f,
     fromY: Float = 1f,
-    toY: Float = 1.3f,
+    toY: Float = 1.4f,
     pivotValue: Float = 0.5f,
     interpolatorTension: Float = 5f,
     scaleAnimationDuration: Long = 1000,

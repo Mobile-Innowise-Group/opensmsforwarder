@@ -43,7 +43,11 @@ class ButtonFillAnimator(
         }
     }
 
-    fun startAnimation() {
+    fun startAnimationWithPrecondition(precondition: () -> Boolean) {
+        if (precondition()) startAnimation() else stopAnimation()
+    }
+
+    private fun startAnimation() {
         fillAnimator?.cancel()
         button.isEnabled = false
         onAnimationStart.invoke()
@@ -58,7 +62,7 @@ class ButtonFillAnimator(
         }
     }
 
-    fun stopAnimation() {
+    private fun stopAnimation() {
         button.setBackgroundResource(R.drawable.rounded_corners_background)
         fillAnimator?.cancel()
         fillAnimator = null
