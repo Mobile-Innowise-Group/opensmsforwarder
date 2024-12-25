@@ -6,7 +6,7 @@ object AnalyticsEvents {
     const val HOME_SCREEN_START = "home_screen_direct_navigation"
     const val ONBOARDING_COMPLETE = "onboarding_complete"
     const val ONBOARDING_WARNING_SHOW = "onboarding_checkbox_warning_dialog_shown"
-    const val RECIPIENT_CREATION_CLICKED = "recipient_creation_clicked"
+    const val FORWARDING_CREATION_CLICKED = "recipient_creation_clicked"
     const val RECIPIENT_CREATION_STEP2_NEXT_CLICKED = "recipient_creation_step2_next_clicked"
     const val RECIPIENT_CREATION_STEP1_NEXT_CLICKED = "recipient_creation_step1_next_clicked"
     const val RULE_ADD_CLICKED = "rule_add_clicked"

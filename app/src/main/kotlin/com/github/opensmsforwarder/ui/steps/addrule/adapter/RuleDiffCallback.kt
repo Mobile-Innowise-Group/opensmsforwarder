@@ -1,7 +1,7 @@
 package com.github.opensmsforwarder.ui.steps.addrule.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.github.opensmsforwarder.model.Rule
+import com.github.opensmsforwarder.domain.model.Rule
 
 class RuleDiffCallback : DiffUtil.ItemCallback<Rule>() {
 

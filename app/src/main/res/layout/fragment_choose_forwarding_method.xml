@@ -28,7 +28,7 @@
             app:layout_constraintGuide_end="16dp" />
 
         <ImageView
-            android:id="@+id/arrowBack"
+            android:id="@+id/arrow_back_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/arrow_back"
@@ -43,7 +43,7 @@
             android:text="@string/step_1_from_3"
             android:textAlignment="center"
             android:textAppearance="@style/SmsTextAppearance.Bold.16"
-            app:layout_constraintBottom_toBottomOf="@id/arrowBack"
+            app:layout_constraintBottom_toBottomOf="@id/arrow_back_iv"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
             app:layout_constraintTop_toTopOf="parent" />
@@ -53,11 +53,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="@string/choose_title_and_forwarding_method"
+            android:text="@string/forwarding_title"
             android:textAppearance="@style/SmsTextAppearance.Bold.16"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
-            app:layout_constraintTop_toBottomOf="@id/arrowBack" />
+            app:layout_constraintTop_toBottomOf="@id/arrow_back_iv" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/title_layout"
@@ -73,7 +73,7 @@
                 android:id="@+id/title_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/enter_title_hint"
+                android:hint="@string/forwarding_title_hint"
                 android:imeOptions="actionDone"
                 android:inputType="textCapSentences"
                 android:textAppearance="@style/SmsTextAppearance.Regular.16" />
@@ -96,7 +96,7 @@
                 android:textAppearance="@style/SmsTextAppearance.Bold.16" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/radioButtonEmail"
+                android:id="@+id/email_rb"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="16dp"
@@ -107,7 +107,7 @@
                 app:buttonTint="@drawable/radio_color_state_list" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/radioButtonSms"
+                android:id="@+id/sms_rb"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="16dp"

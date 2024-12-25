@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.opensmsforwarder.databinding.ItemOnboardingSlideBinding
-import com.github.opensmsforwarder.model.OnboardingPagerSlide
 
 class OnboardingSliderAdapter : RecyclerView.Adapter<SliderViewHolder>() {
 

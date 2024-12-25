@@ -5,18 +5,17 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.PrimaryKey
-
-const val RULES_TABLE = "rules_table"
-const val RULE_ID_FIELD = "id"
-const val RULE_FIELD = "rule"
+import com.github.opensmsforwarder.data.local.database.entity.ForwardingEntity.Companion.ID
+import com.github.opensmsforwarder.data.local.database.entity.RuleEntity.Companion.FORWARDING_ID
+import com.github.opensmsforwarder.data.local.database.entity.RuleEntity.Companion.FORWARDING_RULES_TABLE
 
 @Entity(
-    tableName = RULES_TABLE,
+    tableName = FORWARDING_RULES_TABLE,
     foreignKeys = [
         ForeignKey(
-            entity = RecipientEntity::class,
-            parentColumns = [RECIPIENT_ID_FIELD],
-            childColumns = [RECIPIENT_ID],
+            entity = ForwardingEntity::class,
+            parentColumns = [ID],
+            childColumns = [FORWARDING_ID],
             onDelete = CASCADE
         )
     ]
@@ -24,12 +23,20 @@ const val RULE_FIELD = "rule"
 data class RuleEntity(
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = RULE_ID_FIELD)
+    @ColumnInfo(name = ID)
     val id: Long = 0L,
 
-    @ColumnInfo(name = RECIPIENT_ID)
-    val recipientId: Long,
+    @ColumnInfo(name = FORWARDING_ID)
+    val forwardingId: Long,
 
-    @ColumnInfo(name = RULE_FIELD)
+    @ColumnInfo(name = RULE)
     val rule: String,
-)
+) {
+
+    companion object {
+        const val FORWARDING_RULES_TABLE = "forwarding_rules_table"
+        const val ID = "id"
+        const val FORWARDING_ID = "forwarding_id"
+        const val RULE = "rule"
+    }
+}

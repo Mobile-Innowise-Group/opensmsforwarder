@@ -2,7 +2,7 @@ package com.github.opensmsforwarder.ui.steps.addrule.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.github.opensmsforwarder.databinding.ItemRuleBinding
-import com.github.opensmsforwarder.model.Rule
+import com.github.opensmsforwarder.domain.model.Rule
 
 class RuleViewHolder(
     private val binding: ItemRuleBinding,

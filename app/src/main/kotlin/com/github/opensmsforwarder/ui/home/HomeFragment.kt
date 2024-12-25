@@ -61,58 +61,53 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setAdapter()
         setListeners()
         setObservers()
     }
 
     override fun onDestroyView() {
-        binding.recipients.adapter = null
+        binding.forwardings.adapter = null
         super.onDestroyView()
     }
 
     private fun setAdapter() {
-        binding.recipients.adapter = adapter
-        binding.recipients.layoutManager =
+        binding.forwardings.adapter = adapter
+        binding.forwardings.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
     private fun setListeners() {
         binding.powerManagementWarning bindClicksTo viewModel::onBatteryOptimizationWarningClicked
-        binding.addNewRecipient bindClicksTo viewModel::onAddNewRecipientClicked
+        binding.startNewForwardingBtn bindClicksTo viewModel::onNewForwardingClicked
     }
 
     private fun setObservers() {
-        viewModel.viewState.observeWithLifecycle(viewLifecycleOwner) { state ->
-            renderState(state)
-        }
-
-        viewModel.viewEffect.observeWithLifecycle(viewLifecycleOwner) { effect ->
-            handleEffect(effect)
-        }
+        viewModel.viewState.observeWithLifecycle(viewLifecycleOwner, action = ::renderState)
+        viewModel.viewEffect.observeWithLifecycle(viewLifecycleOwner, action = ::handleEffect)
     }
 
     private fun renderState(state: HomeState) {
-        adapter.submitList(state.recipients)
+        adapter.submitList(state.forwardings)
         binding.powerManagementWarning.isVisible =
-            state.rules.isNotEmpty() && batteryOptimizationDisabled()
-        binding.recipients.isVisible = state.recipients.isNotEmpty()
-        binding.textEmpty.isVisible = state.recipients.isEmpty()
+            state.hasAtLeastOneCompletedItem() && batteryOptimizationDisabled()
+        binding.forwardings.isVisible = state.forwardings.isNotEmpty()
+        binding.emptyStateText.isVisible = state.forwardings.isEmpty()
     }
 
-    override fun onButtonDeleteClicked(id: Long) {
+    override fun onButtonRemoveClicked(id: Long) {
         viewModel.onRemoveConfirmed(id)
     }
 
     private fun handleEffect(effect: HomeEffect) {
         when (effect) {
-            is DeleteEffect -> DeleteDialog
-                .create(effect.id)
-                .title(R.string.remove_title)
-                .message(R.string.remove_message)
-                .positiveButton(R.string.ok)
-                .show(childFragmentManager, DeleteDialog.TAG)
+            is DeleteEffect ->
+                DeleteDialog
+                    .create(effect.id)
+                    .title(R.string.remove_title)
+                    .message(R.string.remove_message)
+                    .positiveButton(R.string.ok)
+                    .show(childFragmentManager, DeleteDialog.TAG)
 
             BatteryWarningEffect ->
                 requireActivity().showOkDialog(

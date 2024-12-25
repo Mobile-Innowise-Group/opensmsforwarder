@@ -41,7 +41,7 @@
         </activity>
 
         <service
-            android:name=".processing.forwarding.ForwardingService"
+            android:name=".processing.starter.ForwardingService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="remoteMessaging" />

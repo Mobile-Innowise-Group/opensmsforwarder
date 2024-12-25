@@ -1,21 +1,21 @@
 package com.github.opensmsforwarder.processing.processor
 
-import com.github.opensmsforwarder.data.AuthRepository
-import com.github.opensmsforwarder.data.ForwardingHistoryRepository
-import com.github.opensmsforwarder.data.RecipientsRepository
-import com.github.opensmsforwarder.data.RulesRepository
+import com.github.opensmsforwarder.data.repository.AuthRepository
+import com.github.opensmsforwarder.data.repository.HistoryRepository
+import com.github.opensmsforwarder.data.repository.ForwardingRepository
+import com.github.opensmsforwarder.data.repository.RulesRepository
 import com.github.opensmsforwarder.data.remote.interceptor.RefreshTokenException
 import com.github.opensmsforwarder.data.remote.interceptor.TokenRevokedException
-import com.github.opensmsforwarder.model.ForwardingType
-import com.github.opensmsforwarder.model.Recipient
-import com.github.opensmsforwarder.processing.handler.Forwarder
+import com.github.opensmsforwarder.domain.model.ForwardingType
+import com.github.opensmsforwarder.domain.model.Forwarding
+import com.github.opensmsforwarder.processing.forwarder.Forwarder
 import javax.inject.Inject
 
 class ForwardingProcessor @Inject constructor(
     private val forwarders: Map<ForwardingType, @JvmSuppressWildcards Forwarder>,
     private val rulesRepository: RulesRepository,
-    private val recipientsRepository: RecipientsRepository,
-    private val forwardingHistoryRepository: ForwardingHistoryRepository,
+    private val forwardingRepository: ForwardingRepository,
+    private val historyRepository: HistoryRepository,
     private val authRepository: AuthRepository
 ) {
 
@@ -28,13 +28,13 @@ class ForwardingProcessor @Inject constructor(
         messages.forEach { message ->
             rules.forEach { rule ->
                 if (message.contains(rule.textRule)) {
-                    messagesToForward.add(rule.recipientId to message)
+                    messagesToForward.add(rule.forwardingId to message)
                 }
             }
         }
 
         messagesToForward.forEach { (recipientId, message) ->
-            recipientsRepository.getRecipientById(recipientId)?.let { recipient ->
+            forwardingRepository.getForwardingById(recipientId)?.let { recipient ->
                 forwarders[recipient.forwardingType]
                     ?.execute(recipient, message)
                     ?.onSuccess {
@@ -51,15 +51,15 @@ class ForwardingProcessor @Inject constructor(
     }
 
     private suspend fun updateForwardingStatus(
-        recipient: Recipient,
+        forwarding: Forwarding,
         message: String,
         errorText: String
     ) {
-        recipientsRepository.insertOrUpdateRecipient(
-            recipient.copy(errorText = errorText)
+        forwardingRepository.insertOrUpdateForwarding(
+            forwarding.copy(error = errorText)
         )
-        forwardingHistoryRepository.insertOrUpdateForwardedSms(
-            recipientId = recipient.id,
+        historyRepository.insertOrUpdateForwardedSms(
+            forwardingId = forwarding.id,
             message = message,
             isForwardingSuccessful = errorText.isEmpty()
         )

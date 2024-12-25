@@ -1,16 +1,17 @@
 package com.github.opensmsforwarder.extension
 
 import android.view.View
+import android.widget.CompoundButton
 import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.radiobutton.MaterialRadioButton
 
-inline infix fun MaterialRadioButton.bindCheckChangesTo(crossinline block: () -> Unit) {
-    setOnCheckedChangeListener { _, isChecked ->
+inline infix fun MaterialRadioButton.bindCheckChangesTo(crossinline block: (CompoundButton) -> Unit) {
+    setOnCheckedChangeListener { view, isChecked ->
         if (isChecked) {
-            block()
+            block(view)
         }
     }
 }

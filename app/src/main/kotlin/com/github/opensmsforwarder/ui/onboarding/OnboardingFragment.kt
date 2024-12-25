@@ -30,53 +30,51 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupView()
         setupClickListeners()
         setupObservers()
     }
 
     private fun setupView() {
-        adapter.setData(slides)
-        binding.viewPager.adapter = adapter
-        TabLayoutMediator(binding.dotsIndicator, binding.viewPager) { _, _ -> }.attach()
-        buttonFillAnimator = ButtonFillAnimator(
-            button = binding.buttonNext,
-            lifecycle = viewLifecycleOwner.lifecycle,
-            onAnimationStart = { binding.checkBoxAcknowledge.isEnabled = false },
-            onAnimationEnd = { binding.checkBoxAcknowledge.isEnabled = true }
-        )
+        with(binding) {
+            adapter.setData(slides)
+            onboardingVp.adapter = adapter
+            TabLayoutMediator(dotsIndicator, onboardingVp) { _, _ -> }.attach()
+            buttonFillAnimator = ButtonFillAnimator(
+                button = nextBtn,
+                lifecycle = viewLifecycleOwner.lifecycle,
+                onAnimationStart = { acknowledgeChBx.isEnabled = false },
+                onAnimationEnd = { acknowledgeChBx.isEnabled = true }
+            )
+        }
     }
 
     private fun setupClickListeners() {
         with(binding) {
-            buttonNext bindClicksTo {
-                viewModel.onNextButtonClicked(viewPager.currentItem, checkBoxAcknowledge.isChecked)
+            nextBtn bindClicksTo {
+                viewModel.onNextButtonClicked(
+                    onboardingVp.currentItem,
+                    acknowledgeChBx.isChecked
+                )
             }
-            buttonBack bindClicksTo viewModel::onPreviousButtonClicked
-            buttonSkipAll bindClicksTo viewModel::onSkipAllButtonClicked
-            viewPager bindPageChangesTo viewModel::onSlidePage
+            backBtn bindClicksTo viewModel::onPreviousButtonClicked
+            skipAllBtn bindClicksTo viewModel::onSkipAllButtonClicked
+            onboardingVp bindPageChangesTo viewModel::onSlidePage
         }
     }
 
     private fun setupObservers() {
-        viewModel.viewState.observeWithLifecycle(viewLifecycleOwner) { uiState ->
-            renderState(uiState)
-        }
-
-        viewModel.viewEffect.observeWithLifecycle(viewLifecycleOwner) { effect ->
-            handleEffect(effect)
-        }
+        viewModel.viewState.observeWithLifecycle(viewLifecycleOwner, action = ::renderState)
+        viewModel.viewEffect.observeWithLifecycle(viewLifecycleOwner, action = ::handleEffect)
     }
 
     private fun renderState(onboardingState: OnboardingState) {
         with(binding) {
-            buttonBack.isVisible = onboardingState.currentStep in 2..<slides.size
-            checkBoxAcknowledge.isVisible = onboardingState.isLastSlide
-            stepLabel.isVisible = !onboardingState.isLastSlide
-            buttonSkipAll.isVisible = !onboardingState.isLastSlide
-            buttonNext.text = getString(onboardingState.nextButtonRes)
+            backBtn.isVisible = onboardingState.currentStep >= 2
             stepLabel.text = getString(R.string.onboarding_step_label, onboardingState.currentStep)
+            skipAllBtn.isVisible = !onboardingState.isLastSlide
+            nextBtn.text = getString(onboardingState.nextButtonRes)
+            acknowledgeChBx.isVisible = onboardingState.isLastSlide
             buttonFillAnimator?.startAnimationWithPrecondition(onboardingState::isLastSlide)
         }
     }
@@ -91,9 +89,9 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
                 )
             }
 
-            NextEffect -> binding.viewPager.currentItem++
-            PreviousEffect -> binding.viewPager.currentItem--
-            SkipAllEffect -> binding.viewPager.currentItem = adapter.itemCount - 1
+            NextPageEffect -> binding.onboardingVp.currentItem++
+            PreviousPageEffect -> binding.onboardingVp.currentItem--
+            SkipAllEffect -> binding.onboardingVp.currentItem = adapter.itemCount - 1
         }
     }
 }

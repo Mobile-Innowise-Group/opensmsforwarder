@@ -1,9 +1,9 @@
 package com.github.opensmsforwarder.di
 
-import com.github.opensmsforwarder.model.ForwardingType
-import com.github.opensmsforwarder.processing.handler.EmailForwarder
-import com.github.opensmsforwarder.processing.handler.Forwarder
-import com.github.opensmsforwarder.processing.handler.SmsForwarder
+import com.github.opensmsforwarder.domain.model.ForwardingType
+import com.github.opensmsforwarder.processing.forwarder.EmailForwarder
+import com.github.opensmsforwarder.processing.forwarder.Forwarder
+import com.github.opensmsforwarder.processing.forwarder.SmsForwarder
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module

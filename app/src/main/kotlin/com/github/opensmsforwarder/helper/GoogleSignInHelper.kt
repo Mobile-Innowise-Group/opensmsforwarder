@@ -22,7 +22,7 @@ class GoogleSignInHelper @Inject constructor(
         }
 
     suspend fun getGoogleSignInAccount(data: Intent?): Result<GoogleSignInAccount> =
-        kotlin.runCatching {
+        runCatching {
             withContext(Dispatchers.IO) {
                 Tasks.await(GoogleSignIn.getSignedInAccountFromIntent(data))
             }

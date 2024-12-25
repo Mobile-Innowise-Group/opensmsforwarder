@@ -1,17 +1,17 @@
 package com.github.opensmsforwarder.ui.home.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.github.opensmsforwarder.model.Recipient
+import com.github.opensmsforwarder.ui.model.ForwardingUI
 
-class HomeDiffCallback : DiffUtil.ItemCallback<Recipient>() {
+class HomeDiffCallback : DiffUtil.ItemCallback<ForwardingUI>() {
 
     override fun areContentsTheSame(
-        oldItem: Recipient,
-        newItem: Recipient,
+        oldItem: ForwardingUI,
+        newItem: ForwardingUI,
     ) = oldItem == newItem
 
     override fun areItemsTheSame(
-        oldItem: Recipient,
-        newItem: Recipient,
+        oldItem: ForwardingUI,
+        newItem: ForwardingUI,
     ) = oldItem.id == newItem.id
 }

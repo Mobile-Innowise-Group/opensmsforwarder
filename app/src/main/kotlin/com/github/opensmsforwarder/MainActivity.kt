@@ -5,7 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.github.opensmsforwarder.databinding.ActivityMainBinding
-import com.github.opensmsforwarder.extension.playSplashAnimation
+import com.github.opensmsforwarder.extension.playCustomSplashAnimation
 import com.github.opensmsforwarder.navigation.AnimatedAppNavigator
 import com.github.terrakok.cicerone.NavigatorHolder
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,8 +25,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().setOnExitAnimationListener { splashScreenProvider ->
-            splashScreenProvider.playSplashAnimation(
-                onAnimationEnd = {
+            splashScreenProvider.playCustomSplashAnimation(
+                onAnimationEnded = {
                     viewModel.onInit(binding.container.childCount)
                 }
             )

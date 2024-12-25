@@ -4,8 +4,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.github.opensmsforwarder.R
 import com.github.opensmsforwarder.databinding.ItemRecipientBinding
-import com.github.opensmsforwarder.model.ForwardingType
-import com.github.opensmsforwarder.model.Recipient
+import com.github.opensmsforwarder.ui.home.HomeState
+import com.github.opensmsforwarder.ui.model.ForwardingUI
 
 class HomeViewHolder(
     private val binding: ItemRecipientBinding,
@@ -13,24 +13,23 @@ class HomeViewHolder(
     private val onItemRemove: (Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(recipient: Recipient) = with(binding) {
+    fun bind(state: ForwardingUI) = with(binding) {
         val context = itemView.context
-        buttonEditItem.setOnClickListener { onItemEdit(recipient.id) }
-        title.text = recipient.title
-        forwardingType.text = recipient.forwardingType?.value
-        phoneGroup.isVisible =
-            recipient.forwardingType == ForwardingType.SMS && recipient.recipientPhone.isNotEmpty()
-        recipientPhone.text = recipient.recipientPhone
-        emailGroup.isVisible =
-            recipient.forwardingType == ForwardingType.EMAIL && recipient.recipientEmail.isNotEmpty()
-        email.text = recipient.recipientEmail
-        stepsError.isVisible = !recipient.allStepsCompleted || recipient.errorText.isNotEmpty()
-        stepsError.text = when {
-            !recipient.allStepsCompleted -> context.getString(R.string.steps_are_not_completed_error)
-            recipient.errorText.isNotEmpty() -> recipient.errorText
+        title.isVisible = state.title.isNotBlank()
+        title.text = state.title
+        forwardingType.text = state.forwardingType?.value
+        phoneGroup.isVisible = state.isSmsBlockCompleted()
+        recipientPhoneEt.text = state.recipientPhone
+        emailGroup.isVisible = state.isEmailBlockCompleted()
+        email.text = state.recipientEmail
+        error.isVisible = !state.allStepsCompleted || state.error.isNotEmpty()
+        error.text = when {
+            !state.allStepsCompleted -> context.getString(R.string.steps_are_not_completed_error)
+            state.error.isNotEmpty() -> state.error
             else -> null
         }
 
-        buttonRemoveItem.setOnClickListener { onItemRemove(recipient.id) }
+        buttonEditItem.setOnClickListener { onItemEdit(state.id) }
+        buttonRemoveItem.setOnClickListener { onItemRemove(state.id) }
     }
 }

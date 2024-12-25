@@ -4,8 +4,8 @@ sealed interface OnboardingEffect
 
 data object WarningEffect : OnboardingEffect
 
-data object NextEffect: OnboardingEffect
+data object NextPageEffect: OnboardingEffect
 
-data object PreviousEffect: OnboardingEffect
+data object PreviousPageEffect: OnboardingEffect
 
 data object SkipAllEffect: OnboardingEffect

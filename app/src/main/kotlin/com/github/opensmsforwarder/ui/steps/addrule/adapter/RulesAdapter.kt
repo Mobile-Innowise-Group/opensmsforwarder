@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.github.opensmsforwarder.databinding.ItemRuleBinding
-import com.github.opensmsforwarder.model.Rule
+import com.github.opensmsforwarder.domain.model.Rule
 
 class RulesAdapter(
     private val onItemEdit: (Rule) -> Unit,

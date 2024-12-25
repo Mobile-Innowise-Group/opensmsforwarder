@@ -19,7 +19,7 @@
         app:layout_constraintGuide_end="16dp" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/button_back"
+        android:id="@+id/back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/arrow_back"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/button_skip_all"
+        android:id="@+id/skip_all_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingVertical="8dp"
@@ -50,19 +50,19 @@
         app:layout_constraintTop_toTopOf="@id/step_label" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager"
+        android:id="@+id/onboarding_vp"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@id/check_box_acknowledge"
+        app:layout_constraintBottom_toTopOf="@id/acknowledge_ch_bx"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:layout_constraintTop_toBottomOf="@id/step_label" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/check_box_acknowledge"
+        android:id="@+id/acknowledge_ch_bx"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
@@ -79,7 +79,7 @@
         android:layout_height="16dp"
         android:layout_marginBottom="32dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@id/button_next"
+        app:layout_constraintBottom_toTopOf="@id/next_btn"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:tabBackground="@drawable/dots_selector"
@@ -88,7 +88,7 @@
         app:tabRippleColor="@null" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_next"
+        android:id="@+id/next_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"

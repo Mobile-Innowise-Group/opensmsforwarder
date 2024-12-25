@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.github.opensmsforwarder.analytics.AnalyticsEvents.HOME_SCREEN_START
 import com.github.opensmsforwarder.analytics.AnalyticsEvents.ONBOARDING_SCREEN_START
 import com.github.opensmsforwarder.analytics.AnalyticsTracker
-import com.github.opensmsforwarder.data.LocalSettingsRepository
+import com.github.opensmsforwarder.data.repository.LocalSettingsRepository
 import com.github.opensmsforwarder.navigation.Screens
 import com.github.terrakok.cicerone.Router
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,14 +19,17 @@ class MainViewModel @Inject constructor(
 
     fun onInit(containerChildCount: Int) {
         if (containerChildCount == 0) {
-            val startScreen = if (localSettingsRepository.isOnboardingCompleted()) {
-                analyticsTracker.trackEvent(HOME_SCREEN_START)
-                Screens.homeFragment()
-            } else {
-                analyticsTracker.trackEvent(ONBOARDING_SCREEN_START)
-                Screens.onboardingFragment()
+            when (localSettingsRepository.isOnboardingCompleted()) {
+                true -> {
+                    analyticsTracker.trackEvent(HOME_SCREEN_START)
+                    router.replaceScreen(Screens.homeFragment())
+                }
+
+                false -> {
+                    analyticsTracker.trackEvent(ONBOARDING_SCREEN_START)
+                    router.replaceScreen(Screens.onboardingFragment())
+                }
             }
-            router.replaceScreen(startScreen)
         }
     }
 }

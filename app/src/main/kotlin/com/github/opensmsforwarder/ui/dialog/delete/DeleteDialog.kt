@@ -53,12 +53,10 @@ class DeleteDialog : DialogFragment(R.layout.dialog_delete) {
         with(binding) {
             positiveBtn bindClicksTo {
                 dismiss()
-                listener?.onButtonDeleteClicked(getItemId())
+                listener?.onButtonRemoveClicked(getItemId())
             }
 
-            negativeBtn bindClicksTo {
-                dismiss()
-            }
+            negativeBtn bindClicksTo ::dismiss
         }
     }
 

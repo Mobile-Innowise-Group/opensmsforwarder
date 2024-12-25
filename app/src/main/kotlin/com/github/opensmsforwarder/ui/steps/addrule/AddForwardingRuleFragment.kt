@@ -2,13 +2,14 @@ package com.github.opensmsforwarder.ui.steps.addrule
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.opensmsforwarder.R
 import com.github.opensmsforwarder.databinding.FragmentAddForwardingRuleBinding
+import com.github.opensmsforwarder.extension.assistedViewModels
 import com.github.opensmsforwarder.extension.bindClicksTo
 import com.github.opensmsforwarder.extension.bindTextChangesTo
 import com.github.opensmsforwarder.extension.observeWithLifecycle
@@ -25,7 +26,9 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
     DeleteDialogListener, EditDialogListener {
 
     private val binding by viewBinding(FragmentAddForwardingRuleBinding::bind)
-    private val viewModel: AddForwardingRuleViewModel by viewModels()
+    private val viewModel by assistedViewModels<AddForwardingRuleViewModel, AddForwardingRuleViewModel.Factory> { factory ->
+        factory.create(requireArguments().getLong(ID_KEY))
+    }
     private val adapter by unsafeLazy {
         RulesAdapter(
             onItemEdit = { viewModel.onItemEditClicked(it) },
@@ -35,7 +38,6 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setAdapter()
         setListeners()
         setObservers()
@@ -51,37 +53,28 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
 
     private fun setListeners() {
         with(binding) {
-            finishBtn bindClicksTo viewModel::onFinishClicked
-            arrowBack bindClicksTo viewModel::onBackClicked
-            buttonAddRule bindClicksTo {
+            arrowBackIv bindClicksTo viewModel::onBackClicked
+            messagePatternEt bindTextChangesTo viewModel::onNewRuleEntered
+            buttonAddRuleBtn bindClicksTo {
                 viewModel.onAddRuleClicked(messagePatternEt.text.toString())
                 messagePatternEt.setText("")
             }
-            messagePatternEt bindTextChangesTo {
-                viewModel.onNewRuleEntered(it)
-            }
+            finishBtn bindClicksTo viewModel::onFinishClicked
         }
     }
 
     private fun setObservers() {
-        viewModel.viewState.observeWithLifecycle(viewLifecycleOwner) { state ->
-            renderState(state)
-        }
-
-        viewModel.viewEffect.observeWithLifecycle(viewLifecycleOwner) { effect ->
-            handleEffect(effect)
-        }
+        viewModel.viewState.observeWithLifecycle(viewLifecycleOwner, action = ::renderState)
+        viewModel.viewEffect.observeWithLifecycle(viewLifecycleOwner, action = ::handleEffect)
     }
 
     private fun renderState(state: AddForwardingRuleState) {
         with(binding) {
             adapter.submitList(state.rules)
-            rulesEmpty.isVisible = state.rules.isEmpty()
+            emptyTv.isVisible = state.rules.isEmpty()
             finishBtn.isEnabled = state.rules.isNotEmpty()
-            messagePatternLayout.error = state.errorMessage?.let {
-                getString(it)
-            }
-            buttonAddRule.isEnabled = state.isAddRuleButtonEnabled
+            messagePatternLayout.error = state.errorMessage?.let { getString(it) }
+            buttonAddRuleBtn.isEnabled = state.isAddRuleButtonEnabled
         }
     }
 
@@ -100,11 +93,10 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
                     .title(R.string.edit_rule_title)
                     .message(R.string.edit_rule_message, effect.rule.textRule)
                     .show(childFragmentManager, EditDialog.TAG)
-
         }
     }
 
-    override fun onButtonDeleteClicked(id: Long) {
+    override fun onButtonRemoveClicked(id: Long) {
         viewModel.onItemRemoved(id)
     }
 
@@ -118,4 +110,13 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
             newValue.isBlank() -> R.string.blank_rule_error
             else -> null
         }
+
+    companion object {
+        fun newInstance(id: Long): AddForwardingRuleFragment =
+            AddForwardingRuleFragment().apply {
+                arguments = bundleOf(ID_KEY to id)
+            }
+
+        private const val ID_KEY = "ID_KEY"
+    }
 }

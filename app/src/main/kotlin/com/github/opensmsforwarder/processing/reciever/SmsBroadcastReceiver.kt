@@ -10,7 +10,7 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.github.opensmsforwarder.extension.notificationsPermissionGranted
-import com.github.opensmsforwarder.processing.forwarding.ForwardingStarter
+import com.github.opensmsforwarder.processing.starter.ForwardingStarter
 
 class SmsBroadcastReceiver : BroadcastReceiver() {
 

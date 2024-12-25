@@ -22,7 +22,7 @@
         app:layout_constraintGuide_end="16dp" />
 
     <ImageView
-        android:id="@+id/arrowBack"
+        android:id="@+id/arrow_back_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/arrow_back"
@@ -38,7 +38,7 @@
         android:text="@string/step_3_from_3"
         android:textAlignment="center"
         android:textAppearance="@style/SmsTextAppearance.Bold.16"
-        app:layout_constraintBottom_toBottomOf="@id/arrowBack"
+        app:layout_constraintBottom_toBottomOf="@id/arrow_back_iv"
         app:layout_constraintEnd_toEndOf="@id/end_margin"
         app:layout_constraintStart_toStartOf="@id/start_margin"
         app:layout_constraintTop_toTopOf="parent" />
@@ -52,7 +52,7 @@
         android:textAppearance="@style/SmsTextAppearance.Bold.16"
         app:layout_constraintEnd_toEndOf="@id/end_margin"
         app:layout_constraintStart_toStartOf="@id/start_margin"
-        app:layout_constraintTop_toBottomOf="@id/arrowBack" />
+        app:layout_constraintTop_toBottomOf="@id/arrow_back_iv" />
 
     <TextView
         android:id="@+id/textDescription"
@@ -87,7 +87,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonAddRule"
+        android:id="@+id/button_add_rule_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -109,12 +109,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/end_margin"
         app:layout_constraintStart_toStartOf="@id/start_margin"
-        app:layout_constraintTop_toBottomOf="@id/buttonAddRule"
+        app:layout_constraintTop_toBottomOf="@id/button_add_rule_btn"
         tools:itemCount="10"
         tools:listitem="@layout/item_rule" />
 
     <TextView
-        android:id="@+id/rulesEmpty"
+        android:id="@+id/empty_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
