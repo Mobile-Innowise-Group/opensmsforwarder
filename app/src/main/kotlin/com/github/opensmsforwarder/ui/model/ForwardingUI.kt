@@ -20,5 +20,6 @@ data class ForwardingUI(
         forwardingType == ForwardingType.SMS && recipientPhone.isNotEmpty()
 
     val allStepsCompleted: Boolean
-        get() = ((isEmailBlockCompleted() && !senderEmail.isNullOrEmpty()) || isSmsBlockCompleted()) && atLeastOneRuleAdded
+        get() = ((isEmailBlockCompleted() && !senderEmail.isNullOrEmpty())
+                || isSmsBlockCompleted()) && atLeastOneRuleAdded
 }

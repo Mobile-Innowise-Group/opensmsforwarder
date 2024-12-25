@@ -23,7 +23,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forwarding_method) {
 
     private val binding by viewBinding(FragmentChooseForwardingMethodBinding::bind)
-    private val viewModel by assistedViewModels<ChooseForwardingMethodViewModel, ChooseForwardingMethodViewModel.Factory> { factory ->
+    private val viewModel: ChooseForwardingMethodViewModel by
+    assistedViewModels<ChooseForwardingMethodViewModel, ChooseForwardingMethodViewModel.Factory> { factory ->
         factory.create(requireArguments().getLong(ID_KEY))
     }
 

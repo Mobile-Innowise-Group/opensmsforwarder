@@ -17,6 +17,7 @@ sealed class Resources {
         override fun asString(context: Context): String = context.getString(resId)
     }
 
+    @Suppress("SpreadOperator")
     class VarArgStringResource(
         @StringRes val resId: Int,
         vararg val args: Any

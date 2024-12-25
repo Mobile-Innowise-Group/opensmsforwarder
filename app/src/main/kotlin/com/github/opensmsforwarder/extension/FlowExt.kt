@@ -24,11 +24,12 @@ inline fun <reified T> Flow<T>.observeWithLifecycle(
 
 inline fun <T> MutableStateFlow<T>.asStateFlowWithInitialAction(
     scope: CoroutineScope,
+    stopTimeoutMillis: Long = 5000,
     crossinline initAction: () -> Unit,
 ): StateFlow<T> =
     onStart { initAction() }
         .stateIn(
             scope,
-            SharingStarted.WhileSubscribed(5000L),
+            SharingStarted.WhileSubscribed(stopTimeoutMillis),
             value
         )

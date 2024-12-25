@@ -26,7 +26,8 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
     DeleteDialogListener, EditDialogListener {
 
     private val binding by viewBinding(FragmentAddForwardingRuleBinding::bind)
-    private val viewModel by assistedViewModels<AddForwardingRuleViewModel, AddForwardingRuleViewModel.Factory> { factory ->
+    private val viewModel: AddForwardingRuleViewModel by
+    assistedViewModels<AddForwardingRuleViewModel, AddForwardingRuleViewModel.Factory> { factory ->
         factory.create(requireArguments().getLong(ID_KEY))
     }
     private val adapter by unsafeLazy {

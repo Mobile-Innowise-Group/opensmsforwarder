@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 
 /**
  * AutoCancel previous launched coroutine's Job with specified name if a new one was launched again.
- * For collect() functions mostly, as they are suspend at the call site and job is not released until viewmodelScope is cleared.
+ * For collect() functions mostly, as they are suspend at the call site and job is not released
+ * until viewmodelScope is cleared.
  */
 fun ViewModel.launchAndCancelPrevious(
     coroutineName: String = "launchCancelable",
