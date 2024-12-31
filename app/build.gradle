@@ -16,11 +16,11 @@ plugins {
 }
 
 android {
-    namespace 'com.github.opensmsforwarder'
+    namespace 'org.open.smsforwarder'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.github.opensmsforwarder"
+        applicationId "org.open.smsforwarder"
         minSdk 26
         targetSdk 34
         versionCode 9
