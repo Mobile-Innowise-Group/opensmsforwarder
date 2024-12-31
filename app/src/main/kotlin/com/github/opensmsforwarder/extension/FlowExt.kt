@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 inline fun <reified T> Flow<T>.observeWithLifecycle(
     lifecycleOwner: LifecycleOwner,
-    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
+    minActiveState: Lifecycle.State = Lifecycle.State.RESUMED,
     noinline action: (T) -> Unit,
 ): Job = lifecycleOwner.lifecycleScope.launch {
     flowWithLifecycle(lifecycleOwner.lifecycle, minActiveState).collect(action)

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">OpenSMSForwarder</string>
-    <string name="permissions_error">You can\'t use the app until you grant the permissions.</string>
     <string name="enter_recipient_phone_hint">Recipient phone</string>
     <string name="enter_recipient_email">Recipient e-mail</string>
     <string name="start_new_forwarding">Start New Forwarding</string>
@@ -9,6 +8,7 @@
     <string name="enter_text_rule_pattern">Enter text rule</string>
     <string name="permissions_rationale_title">Why do you need to grant permissions?</string>
     <string name="permissions_rationale_message">SMS and notification permissions are needed for forwarding SMS.</string>
+    <string name="permission_description_permanently">Some of permissions are permanently denied. To use full app functionality Go to Settings and enable permissions manually.</string>
     <string name="empty" />
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -16,7 +16,7 @@
     <string name="add_rule_error">Pattern is already in the list</string>
     <string name="blank_rule_error">Pattern can\'t be blank</string>
     <string name="sms_send_error">Can\'t send sms to some recipients, please recheck steps</string>
-    <string name="go_to_settings"><u>Go to settings</u></string>
+    <string name="go_to_settings"><u>Go to Settings</u></string>
     <string name="item_recipient_title">Title:</string>
     <string name="item_recipient_fwd_type">Forwarding type:</string>
     <string name="item_recipient_phone">Recipient phone:</string>

@@ -47,7 +47,7 @@ class HomeViewModel @Inject constructor(
                 List<Forwarding>::mergeWithRules
             )
                 .collect { result ->
-                    _viewState.update { result }
+                    _viewState.update { it.copy(forwardings = result.forwardings) }
                 }
         }
     }
@@ -87,5 +87,13 @@ class HomeViewModel @Inject constructor(
     fun onPermissionsRationaleRequired() {
         analyticsTracker.trackEvent(PERMISSIONS_RATIONALE_DIALOG_NAVIGATED)
         _viewEffect.trySend(PermissionsRationalEffect)
+    }
+
+    fun onPermissionsGranted() {
+        _viewState.update { it.copy(needToShowPermissionPermanentInfo = false) }
+    }
+
+    fun onPermissionsPermanentlyDenied() {
+        _viewState.update { it.copy(needToShowPermissionPermanentInfo = true) }
     }
 }

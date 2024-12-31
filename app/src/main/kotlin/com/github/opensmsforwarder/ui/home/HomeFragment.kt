@@ -3,11 +3,17 @@ package com.github.opensmsforwarder.ui.home
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -25,7 +31,6 @@ import com.github.opensmsforwarder.extension.showOkDialog
 import com.github.opensmsforwarder.extension.unsafeLazy
 import com.github.opensmsforwarder.ui.dialog.delete.DeleteDialog
 import com.github.opensmsforwarder.ui.dialog.delete.DeleteDialogListener
-import com.github.opensmsforwarder.ui.dialog.permission.PermissionsDialog
 import com.github.opensmsforwarder.ui.home.adapter.HomeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -45,17 +50,20 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
         )
     }
 
-    private val permissionsResultLauncher =
+    private val permissions = mutableListOf<String>().apply {
+        add(Manifest.permission.RECEIVE_SMS)
+        add(Manifest.permission.SEND_SMS)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            add(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }.toTypedArray()
+
+    private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             when {
-                shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS) ||
-                        shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS) -> {
-                    showPermissionsRationaleDialog()
-                }
-
-                permissions[Manifest.permission.RECEIVE_SMS] != true ||
-                        permissions[Manifest.permission.SEND_SMS] != true -> navigateGoToSettingsDialog()
-
+                permissions.all { it.value } -> viewModel.onPermissionsGranted()
+                shouldShowRationale() -> viewModel.onPermissionsRationaleRequired()
+                else -> viewModel.onPermissionsPermanentlyDenied()
             }
         }
 
@@ -64,6 +72,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
         setAdapter()
         setListeners()
         setObservers()
+        setSpans()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        requestPermissions()
     }
 
     override fun onDestroyView() {
@@ -87,13 +101,31 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
         viewModel.viewEffect.observeWithLifecycle(viewLifecycleOwner, action = ::handleEffect)
     }
 
-    private fun renderState(state: HomeState) {
-        adapter.submitList(state.forwardings)
-        binding.powerManagementWarning.isVisible =
-            state.hasAtLeastOneCompletedItem() && batteryOptimizationDisabled()
-        binding.forwardings.isVisible = state.forwardings.isNotEmpty()
-        binding.emptyStateText.isVisible = state.forwardings.isEmpty()
+    private fun setSpans() {
+        val span = makeClickableSpan(
+            getString(R.string.permission_description_permanently),
+            getString(R.string.go_to_settings)
+        ) {
+            viewModel.onGoToSettingsRequired()
+        }
+        binding.permissionsPermanentlyDeniedTv.movementMethod = LinkMovementMethod.getInstance()
+        binding.permissionsPermanentlyDeniedTv.setText(span, TextView.BufferType.SPANNABLE)
     }
+
+    private fun renderState(state: HomeState) {
+        with(binding) {
+            adapter.submitList(state.forwardings)
+            powerManagementWarning.isVisible =
+                state.hasAtLeastOneCompletedItem() && batteryOptimizationDisabled()
+            forwardings.isVisible = state.forwardings.isNotEmpty()
+            emptyStateText.isVisible = state.forwardings.isEmpty()
+            permissionPermanentlyDeniedInfo.isVisible =
+                state.hasAtLeastOneCompletedItem() && state.needToShowPermissionPermanentInfo
+        }
+    }
+
+    private fun shouldShowRationale(): Boolean =
+        permissions.any(::shouldShowRequestPermissionRationale)
 
     override fun onButtonRemoveClicked(id: Long) {
         viewModel.onRemoveConfirmed(id)
@@ -127,10 +159,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
                     }
                 )
 
-            GoToSettingsEffect ->
-                PermissionsDialog().message(R.string.permissions_error)
-                    .positiveButton(R.string.go_to_settings)
-                    .show(childFragmentManager, PermissionsDialog.TAG)
+            GoToSettingsEffect -> startActivity(getSystemSettingsIntent())
 
             PermissionsRationalEffect ->
                 requireActivity().showOkDialog(
@@ -148,24 +177,41 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
         return !powerManager.isIgnoringBatteryOptimizations(requireContext().packageName)
     }
 
+    private fun getSystemSettingsIntent(): Intent =
+        Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts(URI_SCHEMA, requireActivity().packageName, null)
+        )
+
     private fun requestPermissions() {
         analyticsTracker.trackEvent(REQUEST_PERMISSIONS)
-        permissionsResultLauncher.launch(
-            mutableListOf<String>().apply {
-                add(Manifest.permission.RECEIVE_SMS)
-                add(Manifest.permission.SEND_SMS)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    add(Manifest.permission.POST_NOTIFICATIONS)
-                }
-            }.toTypedArray()
+        permissionLauncher.launch(permissions)
+    }
+
+    private fun makeClickableSpan(
+        text: String,
+        phrase: String,
+        listener: () -> Unit
+    ): SpannableString {
+        val spannableString = SpannableString(text)
+        val clickableSpan = object : ClickableSpan() {
+
+            override fun onClick(view: View) {
+                listener.invoke()
+            }
+        }
+        val start = text.indexOf(phrase)
+        val end = start + phrase.length
+        spannableString.setSpan(
+            clickableSpan,
+            start,
+            end,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
+        return spannableString
     }
 
-    private fun showPermissionsRationaleDialog() {
-        viewModel.onPermissionsRationaleRequired()
-    }
-
-    private fun navigateGoToSettingsDialog() {
-        viewModel.onGoToSettingsRequired()
+    companion object {
+        private const val URI_SCHEMA = "package"
     }
 }

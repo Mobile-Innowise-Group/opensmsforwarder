@@ -43,6 +43,30 @@
         app:layout_constraintEnd_toEndOf="@id/end_margin"
         tools:ignore="ContentDescription" />
 
+    <LinearLayout
+        android:id="@+id/permission_permanently_denied_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/info_panel_background"
+        android:gravity="center"
+        android:padding="10dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/end_margin"
+        app:layout_constraintStart_toStartOf="@id/start_margin"
+        app:layout_constraintTop_toBottomOf="@id/title_label"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/permissions_permanently_denied_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/permission_description_permanently"
+            android:textAppearance="@style/SmsTextAppearance.Regular.14"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/forwardings"
         android:layout_width="0dp"
@@ -51,7 +75,7 @@
         app:layout_constraintBottom_toTopOf="@id/start_new_forwarding_btn"
         app:layout_constraintEnd_toEndOf="@id/end_margin"
         app:layout_constraintStart_toStartOf="@id/start_margin"
-        app:layout_constraintTop_toBottomOf="@id/title_label"
+        app:layout_constraintTop_toBottomOf="@id/permission_permanently_denied_info"
         tools:itemCount="5"
         tools:listitem="@layout/item_recipient" />
 
