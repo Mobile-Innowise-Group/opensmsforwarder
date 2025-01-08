@@ -13,6 +13,8 @@ env:
   RELEASE_KEYSTORE_ALIAS: ${{ secrets.RELEASE_KEYSTORE_ALIAS }}
   RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
 
+  CLIENT_ID: ${{ secrets.CLIENT_ID }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,6 +31,9 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: ClientId
+        run: echo $CLIENT_ID
 
       - name: Run static code analysis
         run: ./gradlew detekt
