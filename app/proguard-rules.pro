@@ -45,3 +45,5 @@
 }
 
 -keep class org.open.smsforwarder.data.remote.dto.** { *; }
+-keep class * extends androidx.room.RoomDatabase
+-keep @androidx.room.Entity class *
