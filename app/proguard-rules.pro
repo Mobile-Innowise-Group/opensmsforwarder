@@ -43,3 +43,5 @@
 -keep class androidx.credentials.playservices.** {
   *;
 }
+
+-keep class org.open.smsforwarder.data.remote.dto.** { *; }
