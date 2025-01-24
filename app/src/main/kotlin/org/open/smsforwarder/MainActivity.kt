@@ -24,16 +24,24 @@ class MainActivity : AppCompatActivity() {
     lateinit var navigatorHolder: NavigatorHolder
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setUpSplashScreen()
+        super.onCreate(savedInstanceState)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    private fun setUpSplashScreen() {
         installSplashScreen().setOnExitAnimationListener { splashScreenProvider ->
             splashScreenProvider.playCustomSplashAnimation(
                 onAnimationEnded = {
                     viewModel.onInit(binding.container.childCount)
+                },
+                onError = { _ ->
+                    splashScreenProvider.remove()
+                    viewModel.onInit(binding.container.childCount)
                 }
             )
         }
-        super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
     }
 
     override fun onResume() {
