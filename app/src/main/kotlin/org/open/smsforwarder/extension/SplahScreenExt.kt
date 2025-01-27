@@ -18,7 +18,6 @@ fun SplashScreenViewProvider.playCustomSplashAnimation(
     defaultOffset: Long = 1000,
     onAnimationEnded: () -> Unit
 ) {
-
     val scaleAnimation: Animation = ScaleAnimation(
         fromX, toX,
         fromY, toY,
@@ -47,6 +46,12 @@ fun SplashScreenViewProvider.playCustomSplashAnimation(
         })
     }
 
-    this.iconView.startAnimation(scaleAnimation)
-    this.view.startAnimation(fadeOutAnimation)
+    runCatching {
+        this.iconView.startAnimation(scaleAnimation)
+        this.view.startAnimation(fadeOutAnimation)
+    }
+        .onFailure {
+            this.remove()
+            onAnimationEnded.invoke()
+        }
 }
