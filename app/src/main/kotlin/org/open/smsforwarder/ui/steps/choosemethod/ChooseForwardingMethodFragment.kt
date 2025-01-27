@@ -8,7 +8,6 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.open.smsforwarder.R
 import org.open.smsforwarder.databinding.FragmentChooseForwardingMethodBinding
-import org.open.smsforwarder.domain.model.Forwarding
 import org.open.smsforwarder.domain.model.ForwardingType
 import org.open.smsforwarder.extension.assistedViewModels
 import org.open.smsforwarder.extension.bindCheckChangesTo
@@ -49,13 +48,14 @@ class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forward
         viewLifecycleOwner.lifecycle.addObserver(viewModel)
     }
 
-    private fun renderState(state: Forwarding) {
+    private fun renderState(state: ChooseForwardingMethodState) {
         with(binding) {
-            nextBtn.isEnabled = state.forwardingType != null
+            nextBtn.isEnabled = state.isNextButtonEnabled
             titleEt.setTextIfChangedKeepState(state.title)
             emailRb.setValueIfChanged(state.isEmailForwardingType)
             smsRb.setValueIfChanged(state.isSmsForwardingType)
             smsInfoTv.setVisibilityIfChanged(state.isSmsForwardingType)
+            titleLayout.error = state.titleInputError?.asString(requireContext())
         }
     }
 
