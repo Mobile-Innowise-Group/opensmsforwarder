@@ -35,10 +35,6 @@ class MainActivity : AppCompatActivity() {
             splashScreenProvider.playCustomSplashAnimation(
                 onAnimationEnded = {
                     viewModel.onInit(binding.container.childCount)
-                },
-                onError = { _ ->
-                    splashScreenProvider.remove()
-                    viewModel.onInit(binding.container.childCount)
                 }
             )
         }

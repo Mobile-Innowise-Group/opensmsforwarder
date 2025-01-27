@@ -16,41 +16,42 @@ fun SplashScreenViewProvider.playCustomSplashAnimation(
     scaleAnimationDuration: Long = 1000,
     fadeoutAnimationDuration: Long = 500,
     defaultOffset: Long = 1000,
-    onError: (e: Exception) -> Unit,
     onAnimationEnded: () -> Unit
 ) {
-    try {
-        val scaleAnimation: Animation = ScaleAnimation(
-            fromX, toX,
-            fromY, toY,
-            Animation.RELATIVE_TO_SELF, pivotValue,
-            Animation.RELATIVE_TO_SELF, pivotValue
-        ).apply {
-            interpolator = AnticipateInterpolator(interpolatorTension)
-            repeatMode = Animation.REVERSE
-            repeatCount = 1
-            duration = scaleAnimationDuration
-        }
+    val scaleAnimation: Animation = ScaleAnimation(
+        fromX, toX,
+        fromY, toY,
+        Animation.RELATIVE_TO_SELF, pivotValue,
+        Animation.RELATIVE_TO_SELF, pivotValue
+    ).apply {
+        interpolator = AnticipateInterpolator(interpolatorTension)
+        repeatMode = Animation.REVERSE
+        repeatCount = 1
+        duration = scaleAnimationDuration
+    }
 
-        val fadeOutAnimation = AlphaAnimation(1f, 0f).apply {
-            startOffset = defaultOffset
-            duration = fadeoutAnimationDuration
-            setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation?) {}
+    val fadeOutAnimation = AlphaAnimation(1f, 0f).apply {
+        startOffset = defaultOffset
+        duration = fadeoutAnimationDuration
+        setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {}
 
-                override fun onAnimationEnd(animation: Animation?) {
-                    this@playCustomSplashAnimation.remove()
-                    onAnimationEnded.invoke()
-                }
+            override fun onAnimationEnd(animation: Animation?) {
+                this@playCustomSplashAnimation.remove()
+                onAnimationEnded.invoke()
+            }
 
-                override fun onAnimationRepeat(animation: Animation?) {}
+            override fun onAnimationRepeat(animation: Animation?) {}
 
-            })
-        }
+        })
+    }
 
+    runCatching {
         this.iconView.startAnimation(scaleAnimation)
         this.view.startAnimation(fadeOutAnimation)
-    } catch (e: Exception) {
-        onError(e)
     }
+        .onFailure {
+            this.remove()
+            onAnimationEnded.invoke()
+        }
 }
