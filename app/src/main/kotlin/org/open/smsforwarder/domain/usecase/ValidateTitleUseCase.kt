@@ -8,10 +8,10 @@ import javax.inject.Inject
 class ValidateTitleUseCase @Inject constructor() {
 
     fun execute(title: String): ValidationResult {
-        return if (title.isBlank()) {
+        return if (title.isNotEmpty() && title.trim().isEmpty()) {
             ValidationResult(
                 successful = false,
-                errorMessage = Resources.StringResource(R.string.error_title_is_blank)
+                errorMessage = Resources.StringResource(R.string.error_title_is_not_valid)
             )
         } else {
             ValidationResult(

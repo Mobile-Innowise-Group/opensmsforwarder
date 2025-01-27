@@ -14,5 +14,5 @@ data class ChooseForwardingMethodState(
 
     val isEmailForwardingType: Boolean get() = forwardingType != null && forwardingType == ForwardingType.EMAIL
 
-    val isNextButtonEnabled: Boolean get() = titleInputError == null && title.isNotBlank() && forwardingType != null
+    val isNextButtonEnabled: Boolean get() = titleInputError == null && forwardingType != null
 }

@@ -80,6 +80,6 @@ fun AddEmailDetailsState.toDomain() =
 fun ChooseForwardingMethodState.toDomain() =
     Forwarding(
         id = id,
-        title = title,
+        title = title.trim(),
         forwardingType = forwardingType,
     )
