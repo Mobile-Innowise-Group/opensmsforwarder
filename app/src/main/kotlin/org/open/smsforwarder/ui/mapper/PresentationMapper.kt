@@ -6,6 +6,7 @@ import org.open.smsforwarder.ui.home.HomeState
 import org.open.smsforwarder.ui.model.ForwardingUI
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails.AddEmailDetailsState
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addphonedetails.AddPhoneDetailsState
+import org.open.smsforwarder.ui.steps.choosemethod.ChooseForwardingMethodState
 
 fun Forwarding.toEmailDetailsPresentation(): AddEmailDetailsState {
     val signInTvVisible = isEmailForwardingType && senderEmail.isNullOrEmpty()
@@ -31,6 +32,13 @@ fun Forwarding.toPhoneDetailsPresentation(): AddPhoneDetailsState =
         title = title,
         forwardingType = forwardingType,
         recipientPhone = recipientPhone
+    )
+
+fun Forwarding.toChooseForwardingMethodPresentation(): ChooseForwardingMethodState =
+    ChooseForwardingMethodState(
+        id = id,
+        title = title,
+        forwardingType = forwardingType,
     )
 
 fun List<Forwarding>.mergeWithRules(rules: List<Rule>): HomeState {
@@ -67,4 +75,11 @@ fun AddEmailDetailsState.toDomain() =
         forwardingType = forwardingType,
         senderEmail = senderEmail,
         recipientEmail = recipientEmail
+    )
+
+fun ChooseForwardingMethodState.toDomain() =
+    Forwarding(
+        id = id,
+        title = title,
+        forwardingType = forwardingType,
     )
