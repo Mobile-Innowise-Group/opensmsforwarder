@@ -13,6 +13,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="submit">Submit</string>
     <string name="add_rule_error">Pattern is already in the list</string>
     <string name="blank_rule_error">Pattern can\'t be blank</string>
     <string name="sms_send_error">Can\'t send sms to some recipients, please recheck steps</string>
@@ -99,4 +100,9 @@
     <string name="forwarding_is_disabled_generic_failure_error">Forwarding is disabled.\nGeneric Failure Error</string>
     <string name="forwarded_messages">Forwarded messages</string>
     <string name="forwarded_messages_count">%1$s messages were forwarded in the last 24 hours</string>
+    <string name="feedback_heading">Submit feedback</string>
+    <string name="feedback_description">Fill out the form and we will be in touch</string>
+    <string name="feedback_email">Contact e-mail</string>
+    <string name="feedback_body">How can we help you?</string>
+    <string name="feedback_letter_subject">Feedback from %s</string>
 </resources>
