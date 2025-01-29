@@ -105,4 +105,7 @@
     <string name="feedback_email">Contact e-mail</string>
     <string name="feedback_body">How can we help you?</string>
     <string name="feedback_letter_subject">Feedback from %s</string>
+    <string name="feedback_success">Feedback successfully sent!</string>
+    <string name="feedback_failure">Something went wrong while sending feedback.</string>
+    <string name="feedback_error_blank_body">Feedback can not be blank</string>
 </resources>

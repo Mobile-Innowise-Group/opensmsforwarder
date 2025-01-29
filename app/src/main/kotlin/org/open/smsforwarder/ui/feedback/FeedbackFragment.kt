@@ -1,7 +1,5 @@
 package org.open.smsforwarder.ui.feedback
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -11,44 +9,57 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.open.smsforwarder.R
 import org.open.smsforwarder.databinding.FragmentFeedbackBinding
 import org.open.smsforwarder.extension.bindClicksTo
+import org.open.smsforwarder.extension.bindTextChangesTo
+import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.showToast
 
 @AndroidEntryPoint
 class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
 
     private val binding by viewBinding(FragmentFeedbackBinding::bind)
     private val viewModel: FeedbackViewModel by viewModels()
+    private var isFirstRender = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupClickListeners()
+        setListeners()
+        setObservers()
     }
 
-    private fun setupClickListeners() {
+    private fun setListeners() {
         with(binding) {
-            cancelBtn bindClicksTo viewModel::exit
+            cancelBtn bindClicksTo viewModel::onBackClick
+            emailInputField bindTextChangesTo viewModel::onEmailChanged
+            bodyInputField bindTextChangesTo viewModel::onBodyChanged
             submitBtn.setOnClickListener {
-                sendFeedbackLetter(emailInputField.text.toString(), bodyInputField.text.toString())
+                viewModel.onSubmitClick(
+                    emailInputField.text.toString(),
+                    bodyInputField.text.toString()
+                ) { success ->
+                    displayResult(success)
+                }
             }
         }
     }
 
-    private fun sendFeedbackLetter(email: String, body: String) {
-        val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse(EMAIL_URI)
-            putExtra(Intent.EXTRA_EMAIL, arrayOf(SUPPORT_EMAIL))
-            putExtra(
-                Intent.EXTRA_SUBJECT, getString(
-                    R.string.feedback_letter_subject,
-                    email
-                )
-            )
-            putExtra(Intent.EXTRA_TEXT, body)
-        }
-        startActivity(emailIntent)
+    private fun setObservers() {
+        viewModel.viewState.observeWithLifecycle(viewLifecycleOwner, action = ::renderState)
     }
 
-    companion object {
-        const val SUPPORT_EMAIL = "support.smsforwarder@innowise.com"
-        const val EMAIL_URI = "mailto:"
+    private fun renderState(state: FeedbackState) {
+        with(binding) {
+            submitBtn.isEnabled = !isFirstRender && state.submitButtonEnabled
+            layoutEmailInputField.error = state.emailInputError?.asString(requireContext())
+            layoutBodyInputField.error = state.bodyInputError?.asString(requireContext())
+        }
+        isFirstRender = false
+    }
+
+    private fun displayResult(success: Boolean) {
+        if (success) {
+            showToast(R.string.feedback_success)
+        } else {
+            showToast(R.string.feedback_failure)
+        }
     }
 }
