@@ -37,6 +37,7 @@ class FeedbackViewModel @Inject constructor(
         val emailValidationResult = validateEmailUseCase.execute(email)
         _viewState.update {
             it.copy(
+                emailInput = email,
                 emailInputError = emailValidationResult.errorMessage
             )
         }
@@ -45,6 +46,7 @@ class FeedbackViewModel @Inject constructor(
     fun onBodyChanged(body: String) {
         _viewState.update { state ->
             state.copy(
+                bodyInput = body,
                 bodyInputError = if (body.isBlank()) {
                     Resources.StringResource(R.string.feedback_error_blank_body)
                 } else {

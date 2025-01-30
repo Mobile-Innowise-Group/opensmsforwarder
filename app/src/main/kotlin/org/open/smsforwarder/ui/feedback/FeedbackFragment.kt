@@ -18,7 +18,6 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
 
     private val binding by viewBinding(FragmentFeedbackBinding::bind)
     private val viewModel: FeedbackViewModel by viewModels()
-    private var isFirstRender = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,11 +47,10 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
 
     private fun renderState(state: FeedbackState) {
         with(binding) {
-            submitBtn.isEnabled = !isFirstRender && state.submitButtonEnabled
+            submitBtn.isEnabled = state.submitButtonEnabled
             layoutEmailInputField.error = state.emailInputError?.asString(requireContext())
             layoutBodyInputField.error = state.bodyInputError?.asString(requireContext())
         }
-        isFirstRender = false
     }
 
     private fun displayResult(success: Boolean) {

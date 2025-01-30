@@ -3,6 +3,7 @@ package org.open.smsforwarder.data.repository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
+import org.open.smsforwarder.BuildConfig
 import javax.inject.Inject
 
 class FeedbackRepository @Inject constructor() {
@@ -13,7 +14,7 @@ class FeedbackRepository @Inject constructor() {
                 if (authTask.isSuccessful) {
                     val user = firebaseAuth.currentUser
                     val database = Firebase.database
-                    val myRef = database.getReference(DB_PATH).child(user?.uid ?: "")
+                    val myRef = database.getReference(BuildConfig.FEEDBACK_DB_PATH).child(user?.uid ?: "")
 
                     val feedbackData = mapOf(EMAIL_FIELD_NAME to email, BODY_FIELD_NAME to body)
                     myRef.setValue(feedbackData)
@@ -27,7 +28,6 @@ class FeedbackRepository @Inject constructor() {
     }
 
     companion object {
-        const val DB_PATH = "feedback"
         const val EMAIL_FIELD_NAME = "email"
         const val BODY_FIELD_NAME = "body"
     }
