@@ -63,6 +63,7 @@ android {
             buildConfigField "String", "CLIENT_ID", "\"${apikeyProperties['CLIENT_ID']}\""
             buildConfigField "String", "CLIENT_SECRET", "\"${apikeyProperties['CLIENT_SECRET']}\""
             buildConfigField "String", "REDIRECT_URI", "\"${apikeyProperties['REDIRECT_URI']}\""
+            buildConfigField "String", "FEEDBACK_DB_PATH", "\"feedback_debug\""
         }
 
         release {
@@ -79,6 +80,7 @@ android {
             buildConfigField "String", "CLIENT_ID", "\"${System.getenv("CLIENT_ID")}\""
             buildConfigField "String", "CLIENT_SECRET", "\"${System.getenv("CLIENT_SECRET")}\""
             buildConfigField "String", "REDIRECT_URI", "\"${System.getenv("REDIRECT_URI")}\""
+            buildConfigField "String", "FEEDBACK_DB_PATH", "\"feedback\""
         }
     }
 
@@ -136,6 +138,8 @@ dependencies {
     // Room
     implementation 'androidx.room:room-runtime:2.6.1'
     implementation 'androidx.room:room-ktx:2.6.1'
+    implementation 'com.google.firebase:firebase-auth-ktx:23.1.0'
+    implementation 'com.google.firebase:firebase-database-ktx:21.0.0'
     ksp "androidx.room:room-compiler:2.6.1"
 
     // Hilt
