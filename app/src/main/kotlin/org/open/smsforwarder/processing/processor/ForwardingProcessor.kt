@@ -19,7 +19,7 @@ class ForwardingProcessor @Inject constructor(
     private val authRepository: AuthRepository
 ) {
 
-    suspend fun process(messages: Array<String>) {
+    suspend fun process(messages: Array<String>, historyEntityId: Long? = null) {
         val rules = rulesRepository.getRules()
         if (rules.isEmpty()) return
 
@@ -38,10 +38,10 @@ class ForwardingProcessor @Inject constructor(
                 forwarders[recipient.forwardingType]
                     ?.execute(recipient, message)
                     ?.onSuccess {
-                        updateForwardingStatus(recipient, message, "")
+                        updateForwardingStatus(recipient, message, "", historyEntityId)
                     }
                     ?.onFailure { error ->
-                        updateForwardingStatus(recipient, message, error.message.orEmpty())
+                        updateForwardingStatus(recipient, message, error.message.orEmpty(), historyEntityId)
                         if (error is TokenRevokedException || error is RefreshTokenException) {
                             authRepository.signOut(recipient)
                         }
@@ -53,7 +53,8 @@ class ForwardingProcessor @Inject constructor(
     private suspend fun updateForwardingStatus(
         forwarding: Forwarding,
         message: String,
-        errorText: String
+        errorText: String,
+        historyEntityId: Long?
     ) {
         forwardingRepository.insertOrUpdateForwarding(
             forwarding.copy(error = errorText)
@@ -61,7 +62,8 @@ class ForwardingProcessor @Inject constructor(
         historyRepository.insertOrUpdateForwardedSms(
             forwardingId = forwarding.id,
             message = message,
-            isForwardingSuccessful = errorText.isEmpty()
+            isForwardingSuccessful = errorText.isEmpty(),
+            historyEntityId = historyEntityId
         )
     }
 }
