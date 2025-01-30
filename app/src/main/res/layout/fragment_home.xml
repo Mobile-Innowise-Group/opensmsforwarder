@@ -40,7 +40,18 @@
         android:src="@drawable/ic_warning"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/title_label"
-        app:layout_constraintEnd_toEndOf="@id/end_margin"
+        app:layout_constraintEnd_toStartOf="@id/sms_history"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/sms_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:src="@drawable/ic_sms_history"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/title_label"
+        app:layout_constraintEnd_toEndOf="@+id/end_margin"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
