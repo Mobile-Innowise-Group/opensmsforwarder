@@ -47,6 +47,7 @@
     <string name="error_phone_number_is_not_valid">Phone number is not valid</string>
     <string name="error_email_is_not_valid">Email is not valid</string>
     <string name="error_email_is_blank">Email can not be blank</string>
+    <string name="error_generic_is_blank">Field can not be blank</string>
     <string name="error_google_sign_in">Unable to sign in to account</string>
     <string name="error_google_sign_out">Unable to sign out from account</string>
     <string name="sign_in_with_google">Sign in with Google</string>
@@ -107,5 +108,4 @@
     <string name="feedback_letter_subject">Feedback from %s</string>
     <string name="feedback_success">Feedback successfully sent!</string>
     <string name="feedback_failure">Something went wrong while sending feedback.</string>
-    <string name="feedback_error_blank_body">Feedback can not be blank</string>
 </resources>

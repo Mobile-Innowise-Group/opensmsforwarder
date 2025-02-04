@@ -80,7 +80,7 @@ android {
             buildConfigField "String", "CLIENT_ID", "\"${System.getenv("CLIENT_ID")}\""
             buildConfigField "String", "CLIENT_SECRET", "\"${System.getenv("CLIENT_SECRET")}\""
             buildConfigField "String", "REDIRECT_URI", "\"${System.getenv("REDIRECT_URI")}\""
-            buildConfigField "String", "FEEDBACK_DB_PATH", "\"feedback\""
+            buildConfigField "String", "FEEDBACK_DB_PATH", "\"${System.getenv("FEEDBACK_DB_PATH")}\""
         }
     }
 

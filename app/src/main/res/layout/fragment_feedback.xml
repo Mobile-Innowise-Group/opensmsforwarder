@@ -28,7 +28,7 @@
             android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layout_email_input_field"
+            android:id="@+id/email_et_layout"
             style="@style/SmsEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email_input_field"
+                android:id="@+id/email_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/feedback_email"
@@ -46,14 +46,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layout_body_input_field"
+            android:id="@+id/body_et_layout"
             style="@style/SmsEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/body_input_field"
+                android:id="@+id/body_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="top|start"

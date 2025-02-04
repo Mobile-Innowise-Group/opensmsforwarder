@@ -27,37 +27,35 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
 
     private fun setListeners() {
         with(binding) {
-            cancelBtn bindClicksTo viewModel::onBackClick
-            emailInputField bindTextChangesTo viewModel::onEmailChanged
-            bodyInputField bindTextChangesTo viewModel::onBodyChanged
+            cancelBtn bindClicksTo viewModel::onBackClicked
+            emailEt bindTextChangesTo viewModel::onEmailChanged
+            bodyEt bindTextChangesTo viewModel::onBodyChanged
             submitBtn.setOnClickListener {
-                viewModel.onSubmitClick(
-                    emailInputField.text.toString(),
-                    bodyInputField.text.toString()
-                ) { success ->
-                    displayResult(success)
-                }
+                viewModel.onSubmitClicked(
+                    emailEt.text.toString(),
+                    bodyEt.text.toString()
+                )
             }
         }
     }
 
     private fun setObservers() {
         viewModel.viewState.observeWithLifecycle(viewLifecycleOwner, action = ::renderState)
+        viewModel.viewEffect.observeWithLifecycle(viewLifecycleOwner, action = ::handleEffect)
     }
 
     private fun renderState(state: FeedbackState) {
         with(binding) {
             submitBtn.isEnabled = state.submitButtonEnabled
-            layoutEmailInputField.error = state.emailInputError?.asString(requireContext())
-            layoutBodyInputField.error = state.bodyInputError?.asString(requireContext())
+            emailEtLayout.error = state.emailInputError?.asString(requireContext())
+            bodyEtLayout.error = state.bodyInputError?.asString(requireContext())
         }
     }
 
-    private fun displayResult(success: Boolean) {
-        if (success) {
-            showToast(R.string.feedback_success)
-        } else {
-            showToast(R.string.feedback_failure)
+    private fun handleEffect(effect: FeedbackEffect) {
+        when (effect) {
+            is DisplaySubmitResultEffect ->
+                showToast(effect.message)
         }
     }
 }
