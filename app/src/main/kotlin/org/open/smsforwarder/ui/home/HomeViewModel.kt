@@ -60,6 +60,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun onSmsHistoryClicked() {
+        router.navigateTo(Screens.forwardingHistoryFragment())
+    }
+
     fun onItemEditClicked(id: Long) {
         router.navigateTo(Screens.chooseForwardingMethodFragment(id))
     }
