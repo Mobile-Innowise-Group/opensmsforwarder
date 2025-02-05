@@ -34,9 +34,7 @@ class ForwardingHistoryFragment : Fragment(R.layout.fragment_forwarding_history)
     }
 
     private fun setUpListeners() {
-        with(binding) {
-            arrowBackIv bindClicksTo viewModel::onBackClicked
-        }
+        binding.arrowBackIv bindClicksTo viewModel::onBackClicked
     }
 
     private fun setObservers() {
