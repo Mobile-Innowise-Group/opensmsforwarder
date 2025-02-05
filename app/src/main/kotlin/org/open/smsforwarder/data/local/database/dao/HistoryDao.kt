@@ -23,22 +23,10 @@ interface HistoryDao {
     )
     suspend fun getForwardedMessagesCountLast24Hours(): Int
 
-    @Query(
-        """
-        SELECT *
-        FROM $FORWARDING_HISTORY_TABLE
-    """
-    )
-    fun getForwardedMessagesFlow(): Flow<List<HistoryEntity>>
+    @Query("SELECT * FROM $FORWARDING_HISTORY_TABLE")
+    fun getForwardingHistoryFlow(): Flow<List<HistoryEntity>>
 
-
-    @Query(
-        """
-        SELECT *
-        FROM $FORWARDING_HISTORY_TABLE
-        WHERE $ID = :id
-    """
-    )
-    suspend fun getForwardedMessageById(id: Long): HistoryEntity?
+    @Query(" SELECT * FROM $FORWARDING_HISTORY_TABLE WHERE $ID = :id")
+    suspend fun getForwardingHistoryById(id: Long): HistoryEntity?
 
 }

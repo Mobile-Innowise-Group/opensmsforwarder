@@ -1,5 +1,7 @@
 package org.open.smsforwarder.processing.processor
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.open.smsforwarder.data.remote.interceptor.RefreshTokenException
 import org.open.smsforwarder.data.remote.interceptor.TokenRevokedException
 import org.open.smsforwarder.data.repository.AuthRepository
@@ -8,6 +10,7 @@ import org.open.smsforwarder.data.repository.HistoryRepository
 import org.open.smsforwarder.data.repository.RulesRepository
 import org.open.smsforwarder.domain.model.Forwarding
 import org.open.smsforwarder.domain.model.ForwardingType
+import org.open.smsforwarder.domain.model.History
 import org.open.smsforwarder.processing.forwarder.Forwarder
 import javax.inject.Inject
 
@@ -19,7 +22,7 @@ class ForwardingProcessor @Inject constructor(
     private val authRepository: AuthRepository
 ) {
 
-    suspend fun process(messages: Array<String>, historyEntityId: Long? = null) {
+    suspend fun process(messages: Array<String>) {
         val rules = rulesRepository.getRules()
         if (rules.isEmpty()) return
 
@@ -38,32 +41,68 @@ class ForwardingProcessor @Inject constructor(
                 forwarders[recipient.forwardingType]
                     ?.execute(recipient, message)
                     ?.onSuccess {
-                        updateForwardingStatus(recipient, message, "", historyEntityId)
+                        updateForwardingAndCreateHistory(recipient, message, "")
                     }
                     ?.onFailure { error ->
-                        updateForwardingStatus(recipient, message, error.message.orEmpty(), historyEntityId)
-                        if (error is TokenRevokedException || error is RefreshTokenException) {
-                            authRepository.signOut(recipient)
-                        }
+                        updateForwardingAndCreateHistory(recipient, message, error.message.orEmpty())
+                        handleTokenErrors(error, recipient)
                     }
             }
         }
     }
 
-    private suspend fun updateForwardingStatus(
+    suspend fun retryForwarding(historyItem: History) {
+        withContext(Dispatchers.IO) {
+            historyItem.let { history ->
+                forwardingRepository.getForwardingById(history.forwardingId)?.let { recipient ->
+                    forwarders[recipient.forwardingType]
+                        ?.execute(recipient, history.message)
+                        ?.onSuccess {
+                            updateForwardingAndHistory(recipient, history, "")
+                        }
+                        ?.onFailure { error ->
+                            updateForwardingAndHistory(recipient, history, error.message.orEmpty())
+                            handleTokenErrors(error, recipient)
+                        }
+                }
+            }
+        }
+    }
+
+    private suspend fun handleTokenErrors(error: Throwable, recipient: Forwarding) {
+        if (error is TokenRevokedException || error is RefreshTokenException) {
+            authRepository.signOut(recipient)
+        }
+    }
+
+    private suspend fun updateForwardingAndHistory(
         forwarding: Forwarding,
-        message: String,
-        errorText: String,
-        historyEntityId: Long?
+        history: History,
+        errorText: String
     ) {
         forwardingRepository.insertOrUpdateForwarding(
             forwarding.copy(error = errorText)
         )
-        historyRepository.insertOrUpdateForwardedSms(
+        historyRepository.updateForwardedSms(
+            history.copy(
+                isForwardingSuccessful = errorText.isEmpty(),
+                date = System.currentTimeMillis()
+            )
+        )
+    }
+
+    private suspend fun updateForwardingAndCreateHistory(
+        forwarding: Forwarding,
+        message: String,
+        errorText: String,
+    ) {
+        forwardingRepository.insertOrUpdateForwarding(
+            forwarding.copy(error = errorText)
+        )
+        historyRepository.insertForwardedSms(
             forwardingId = forwarding.id,
             message = message,
             isForwardingSuccessful = errorText.isEmpty(),
-            historyEntityId = historyEntityId
         )
     }
 }

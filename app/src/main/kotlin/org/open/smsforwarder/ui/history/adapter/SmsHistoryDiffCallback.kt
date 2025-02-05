@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import org.open.smsforwarder.ui.model.HistoryUI
 
 class SmsHistoryDiffCallback : DiffUtil.ItemCallback<HistoryUI>() {
+
     override fun areItemsTheSame(oldItem: HistoryUI, newItem: HistoryUI) =
         oldItem.id == newItem.id
 

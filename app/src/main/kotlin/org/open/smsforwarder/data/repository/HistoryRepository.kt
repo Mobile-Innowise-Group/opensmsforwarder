@@ -8,6 +8,7 @@ import kotlinx.coroutines.withContext
 import org.open.smsforwarder.data.local.database.dao.HistoryDao
 import org.open.smsforwarder.data.local.database.entity.HistoryEntity
 import org.open.smsforwarder.data.mapper.Mapper
+import org.open.smsforwarder.data.mapper.toData
 import org.open.smsforwarder.data.mapper.toDomain
 import org.open.smsforwarder.domain.model.History
 import javax.inject.Inject
@@ -20,8 +21,7 @@ class HistoryRepository @Inject constructor(
         historyDao.getForwardedMessagesCountLast24Hours()
     }
 
-    suspend fun insertOrUpdateForwardedSms(
-        historyEntityId: Long?,
+    suspend fun insertForwardedSms(
         forwardingId: Long,
         message: String,
         isForwardingSuccessful: Boolean
@@ -29,7 +29,6 @@ class HistoryRepository @Inject constructor(
         withContext(Dispatchers.IO) {
             historyDao.upsertForwardedSms(
                 mapper.toHistoryEntity(
-                    id = historyEntityId ?: 0L,
                     forwardingId = forwardingId,
                     time = System.currentTimeMillis(),
                     message = message,
@@ -39,14 +38,21 @@ class HistoryRepository @Inject constructor(
         }
     }
 
-    fun getForwardedMessagesFlow(): Flow<List<History>> =
-        historyDao.getForwardedMessagesFlow()
+    suspend fun updateForwardedSms(history: History) {
+        withContext(Dispatchers.IO) {
+            historyDao.upsertForwardedSms(history.toData())
+        }
+    }
+
+    fun getForwardingHistoryFlow(): Flow<List<History>> =
+        historyDao
+            .getForwardingHistoryFlow()
             .distinctUntilChanged()
             .map { historyEntity -> historyEntity.map(HistoryEntity::toDomain) }
 
 
-    suspend fun getForwardedMessageById(id: Long): History? =
+    suspend fun getForwardingHistoryById(id: Long): History? =
         withContext(Dispatchers.IO) {
-            historyDao.getForwardedMessageById(id)?.toDomain()
+            historyDao.getForwardingHistoryById(id)?.toDomain()
         }
 }

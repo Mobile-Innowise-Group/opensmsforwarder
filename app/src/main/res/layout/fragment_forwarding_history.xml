@@ -35,7 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/sms_history_title"
+        android:text="@string/forwarding_history_title"
         android:textAppearance="@style/SmsTextAppearance.Bold.16"
         android:textAlignment="center"
         app:layout_constraintStart_toEndOf="@id/arrow_back_iv"

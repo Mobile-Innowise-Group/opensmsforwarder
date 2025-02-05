@@ -1,7 +1,7 @@
 package org.open.smsforwarder.navigation
 
 import com.github.terrakok.cicerone.androidx.FragmentScreen
-import org.open.smsforwarder.ui.history.SmsHistoryFragment
+import org.open.smsforwarder.ui.history.ForwardingHistoryFragment
 import org.open.smsforwarder.ui.home.HomeFragment
 import org.open.smsforwarder.ui.onboarding.OnboardingFragment
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails.AddEmailDetailsFragment
@@ -26,5 +26,5 @@ object Screens {
 
     fun onboardingFragment() = FragmentScreen { OnboardingFragment() }
 
-    fun smsHistoryFragment() = FragmentScreen { SmsHistoryFragment() }
+    fun forwardingHistoryFragment() = FragmentScreen { ForwardingHistoryFragment() }
 }

@@ -51,3 +51,12 @@ fun Rule.toData(): RuleEntity =
         forwardingId = forwardingId,
         rule = textRule
     )
+
+fun History.toData(): HistoryEntity =
+    HistoryEntity(
+        id = id,
+        forwardingId = forwardingId,
+        date = date,
+        message = message,
+        isForwardingSuccessful = isForwardingSuccessful
+    )

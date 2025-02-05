@@ -24,11 +24,11 @@ class SmsHistoryViewHolder(
         }
 
         if (model.isForwardingSuccessful == true) {
-            status.text = context.getString(R.string.history_item_status_success)
+            status.text = context.getString(R.string.forwarding_history_item_status_success)
             status.setTextColor(context.getColor(R.color.green))
             retry.visibility = View.GONE
         } else {
-            status.text = context.getString(R.string.history_item_status_fail)
+            status.text = context.getString(R.string.forwarding_history_item_status_fail)
             status.setTextColor(context.getColor(R.color.red))
             retry.visibility = View.VISIBLE
         }

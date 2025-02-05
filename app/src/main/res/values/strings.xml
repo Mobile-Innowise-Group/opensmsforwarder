@@ -99,11 +99,11 @@
     <string name="forwarding_is_disabled_generic_failure_error">Forwarding is disabled.\nGeneric Failure Error</string>
     <string name="forwarded_messages">Forwarded messages</string>
     <string name="forwarded_messages_count">%1$s messages were forwarded in the last 24 hours</string>
-    <string name="history_item_date">Date:</string>
-    <string name="history_item_status">Status</string>
-    <string name="history_item_message">Message:</string>
-    <string name="history_item_status_success">Success</string>
-    <string name="history_item_status_fail">Fail</string>
-    <string name="sms_history_title">Sms history</string>
-    <string name="sms_history_retrying">Retrying…</string>
+    <string name="forwarding_history_item_date">Date:</string>
+    <string name="forwarding_history_item_status">Status</string>
+    <string name="forwarding_history_item_message">Message:</string>
+    <string name="forwarding_history_item_status_success">Success</string>
+    <string name="forwarding_history_item_status_fail">Fail</string>
+    <string name="forwarding_history_title">Sms history</string>
+    <string name="forwarding_history_retrying">Retrying…</string>
 </resources>

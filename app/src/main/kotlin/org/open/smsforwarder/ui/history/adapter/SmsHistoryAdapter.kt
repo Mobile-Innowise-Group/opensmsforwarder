@@ -9,6 +9,7 @@ import org.open.smsforwarder.ui.model.HistoryUI
 class SmsHistoryAdapter(
     private val onRetry: (Long) -> Unit
 ): ListAdapter<HistoryUI, SmsHistoryViewHolder>(SmsHistoryDiffCallback()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SmsHistoryViewHolder {
         val binding = ItemHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SmsHistoryViewHolder(binding, onRetry)

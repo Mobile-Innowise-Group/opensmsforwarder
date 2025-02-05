@@ -2,24 +2,24 @@ package org.open.smsforwarder.ui.history
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.open.smsforwarder.R
-import org.open.smsforwarder.databinding.FragmentSmsHistoryBinding
+import org.open.smsforwarder.databinding.FragmentForwardingHistoryBinding
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.showToast
 import org.open.smsforwarder.extension.unsafeLazy
 import org.open.smsforwarder.ui.history.adapter.SmsHistoryAdapter
 
 @AndroidEntryPoint
-class SmsHistoryFragment : Fragment(R.layout.fragment_sms_history) {
+class ForwardingHistoryFragment : Fragment(R.layout.fragment_forwarding_history) {
 
-    private val binding by viewBinding(FragmentSmsHistoryBinding::bind)
-    private val viewModel: SmsHistoryViewModel by viewModels()
+    private val binding by viewBinding(FragmentForwardingHistoryBinding::bind)
+    private val viewModel: ForwardingHistoryViewModel by viewModels()
     private val adapter by unsafeLazy {
         SmsHistoryAdapter(
             onRetry = viewModel::onRetryClicked
@@ -46,7 +46,7 @@ class SmsHistoryFragment : Fragment(R.layout.fragment_sms_history) {
         }
     }
 
-    private fun renderState(state: SmsHistoryState) {
+    private fun renderState(state: ForwardingHistoryState) {
         adapter.submitList(state.historyItems)
         with(binding) {
             emptyStateText.isVisible = state.historyItems.isEmpty()
@@ -54,14 +54,10 @@ class SmsHistoryFragment : Fragment(R.layout.fragment_sms_history) {
         }
     }
 
-    private fun handleEffect(effect: SmsHistoryEffect) {
+    private fun handleEffect(effect: ForwardingHistoryEffect) {
         when (effect) {
-            is SmsHistoryEffect.RetryEffect -> {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.sms_history_retrying),
-                    Toast.LENGTH_SHORT
-                ).show()
+            is ForwardingHistoryEffect.RetryEffect -> {
+                showToast(R.string.forwarding_history_retrying)
             }
         }
     }
