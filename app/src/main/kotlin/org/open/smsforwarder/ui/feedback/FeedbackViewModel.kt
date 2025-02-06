@@ -1,6 +1,7 @@
 package org.open.smsforwarder.ui.feedback
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.github.terrakok.cicerone.Router
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.open.smsforwarder.R
 import org.open.smsforwarder.data.repository.FeedbackRepository
 import org.open.smsforwarder.domain.usecase.ValidateBlankFieldUseCase
@@ -29,18 +31,21 @@ class FeedbackViewModel @Inject constructor(
     private val _viewEffect: Channel<FeedbackEffect> = Channel(Channel.BUFFERED)
     val viewEffect: Flow<FeedbackEffect> = _viewEffect.receiveAsFlow()
 
-    fun onBackClicked() = router.exit()
+    fun onBackClicked() {
+        router.exit()
+    }
 
     fun onSubmitClicked(
         email: String,
         body: String,
     ) {
-        feedbackRepository.sendFeedback(email, body) { success ->
-            if (success) {
-                _viewEffect.trySend(DisplaySubmitResultEffect(R.string.feedback_success))
-            } else {
-                _viewEffect.trySend(DisplaySubmitResultEffect(R.string.feedback_failure))
+        viewModelScope.launch {
+            val result = feedbackRepository.sendFeedback(email, body)
+            val messageRes = when (result) {
+               true -> R.string.feedback_success
+               false -> R.string.feedback_failure
             }
+            _viewEffect.trySend(SubmitResultEffect(messageRes))
             router.exit()
         }
     }

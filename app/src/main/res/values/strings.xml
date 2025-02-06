@@ -101,7 +101,7 @@
     <string name="forwarding_is_disabled_generic_failure_error">Forwarding is disabled.\nGeneric Failure Error</string>
     <string name="forwarded_messages">Forwarded messages</string>
     <string name="forwarded_messages_count">%1$s messages were forwarded in the last 24 hours</string>
-    <string name="feedback_heading">Submit feedback</string>
+    <string name="feedback_heading">Feedback</string>
     <string name="feedback_description">Fill out the form and we will be in touch</string>
     <string name="feedback_email">Contact e-mail</string>
     <string name="feedback_body">How can we help you?</string>

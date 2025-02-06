@@ -28,23 +28,23 @@
         android:layout_marginTop="16dp"
         android:text="@string/sms_recipients"
         android:textAppearance="@style/SmsTextAppearance.Bold.16"
-        app:layout_constraintEnd_toStartOf="@id/power_management_warning"
+        app:layout_constraintEnd_toStartOf="@id/power_management_warning_iv"
         app:layout_constraintStart_toStartOf="@id/start_margin"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/power_management_warning"
+        android:id="@+id/power_management_warning_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:src="@drawable/ic_warning"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/title_label"
-        app:layout_constraintEnd_toStartOf="@id/feedback"
+        app:layout_constraintEnd_toStartOf="@id/feedback_iv"
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/feedback"
+        android:id="@+id/feedback_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="6dp"

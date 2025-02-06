@@ -54,8 +54,8 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
 
     private fun handleEffect(effect: FeedbackEffect) {
         when (effect) {
-            is DisplaySubmitResultEffect ->
-                showToast(effect.message)
+            is SubmitResultEffect ->
+                showToast(effect.messageRes)
         }
     }
 }

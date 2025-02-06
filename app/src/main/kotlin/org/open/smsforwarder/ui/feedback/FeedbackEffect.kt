@@ -4,4 +4,4 @@ import androidx.annotation.StringRes
 
 sealed interface FeedbackEffect
 
-data class DisplaySubmitResultEffect(@StringRes val message: Int) : FeedbackEffect
+data class SubmitResultEffect(@StringRes val messageRes: Int) : FeedbackEffect

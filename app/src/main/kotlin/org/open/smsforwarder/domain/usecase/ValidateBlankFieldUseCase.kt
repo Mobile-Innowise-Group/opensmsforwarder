@@ -7,14 +7,12 @@ import javax.inject.Inject
 
 class ValidateBlankFieldUseCase @Inject constructor() {
 
-    fun execute(field: String?): ValidationResult {
-        return if (field.isNullOrBlank()) {
-            ValidationResult(
-                successful = false,
-                errorMessage = Resources.StringResource(R.string.error_generic_is_blank)
-            )
-        } else {
-            ValidationResult(successful = true)
-        }
+    fun execute(field: String?): ValidationResult = if (field.isNullOrBlank()) {
+        ValidationResult(
+            successful = false,
+            errorMessage = Resources.StringResource(R.string.error_generic_is_blank)
+        )
+    } else {
+        ValidationResult(successful = true)
     }
 }
