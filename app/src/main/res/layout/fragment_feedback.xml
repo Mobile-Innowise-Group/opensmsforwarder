@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/CustomDialogStroke"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="10dp">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/medium">
 
         <TextView
             android:id="@+id/heading"
@@ -23,7 +23,7 @@
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/medium"
             android:text="@string/feedback_description"
             android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant" />
 
@@ -32,7 +32,7 @@
             style="@style/SmsEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/medium"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -70,7 +70,7 @@
             style="@style/SmsMaterialButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/tiny"
             android:enabled="false"
             android:text="@string/submit" />
 
@@ -79,7 +79,7 @@
             style="@style/SmsCancelMaterialButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/medium"
             android:text="@string/cancel" />
     </androidx.appcompat.widget.LinearLayoutCompat>
-</com.google.android.material.card.MaterialCardView>
+</ScrollView>
