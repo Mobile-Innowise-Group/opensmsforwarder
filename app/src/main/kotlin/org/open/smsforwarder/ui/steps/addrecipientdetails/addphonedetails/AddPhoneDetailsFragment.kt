@@ -11,6 +11,7 @@ import org.open.smsforwarder.databinding.FragmentAddPhoneDetailsBinding
 import org.open.smsforwarder.extension.assistedViewModels
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindTextChangesTo
+import org.open.smsforwarder.extension.getErrorMessage
 import org.open.smsforwarder.extension.observeWithLifecycle
 import org.open.smsforwarder.extension.setTextIfChangedKeepState
 
@@ -44,7 +45,7 @@ class AddPhoneDetailsFragment : Fragment(R.layout.fragment_add_phone_details) {
     private fun renderState(state: AddPhoneDetailsState) {
         with(binding) {
             recipientPhoneEt.setTextIfChangedKeepState(state.recipientPhone)
-            recipientPhoneLayout.error = state.inputError?.asString(requireContext())
+            recipientPhoneLayout.error = state.inputErrorType?.getErrorMessage(requireContext())
             nextBtn.isEnabled = state.nextButtonEnabled
         }
     }

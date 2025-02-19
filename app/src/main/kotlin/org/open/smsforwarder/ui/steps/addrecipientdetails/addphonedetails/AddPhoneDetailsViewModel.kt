@@ -58,7 +58,7 @@ class AddPhoneDetailsViewModel @AssistedInject constructor(
         _viewState.update {
             it.copy(
                 recipientPhone = phoneNumber,
-                inputError = phoneValidationResult.errorMessage
+                inputErrorType = phoneValidationResult.errorType
             )
         }
     }

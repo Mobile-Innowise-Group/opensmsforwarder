@@ -1,7 +1,7 @@
 package org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails
 
+import org.open.smsforwarder.domain.ValidationError
 import org.open.smsforwarder.domain.model.ForwardingType
-import org.open.smsforwarder.utils.Resources
 
 data class AddEmailDetailsState(
     val id: Long = 0,
@@ -13,8 +13,8 @@ data class AddEmailDetailsState(
     val sigInBtnVisible: Boolean = false,
     val signOutBtnVisible: Boolean = false,
     val recipientEmail: String = "",
-    val inputError: Resources.StringProvider? = null
+    val inputErrorType: ValidationError? = null
 ) {
     val nextButtonEnabled =
-        inputError == null && !senderEmail.isNullOrEmpty() && recipientEmail.isNotBlank()
+        inputErrorType == null && !senderEmail.isNullOrEmpty() && recipientEmail.isNotBlank()
 }

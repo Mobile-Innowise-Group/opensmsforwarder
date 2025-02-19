@@ -55,7 +55,7 @@ class FeedbackViewModel @Inject constructor(
         _viewState.update {
             it.copy(
                 emailInput = email,
-                emailInputError = emailValidationResult.errorMessage
+                emailInputErrorType = emailValidationResult.errorType
             )
         }
     }
@@ -65,7 +65,7 @@ class FeedbackViewModel @Inject constructor(
         _viewState.update { state ->
             state.copy(
                 bodyInput = body,
-                bodyInputError = bodyValidationResult.errorMessage
+                bodyInputErrorType = bodyValidationResult.errorType
             )
         }
     }

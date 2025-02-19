@@ -10,6 +10,7 @@ import org.open.smsforwarder.R
 import org.open.smsforwarder.databinding.FragmentFeedbackBinding
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindTextChangesTo
+import org.open.smsforwarder.extension.getErrorMessage
 import org.open.smsforwarder.extension.observeWithLifecycle
 import org.open.smsforwarder.extension.showToast
 
@@ -47,8 +48,8 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
     private fun renderState(state: FeedbackState) {
         with(binding) {
             submitBtn.isEnabled = state.submitButtonEnabled
-            emailEtLayout.error = state.emailInputError?.asString(requireContext())
-            bodyEtLayout.error = state.bodyInputError?.asString(requireContext())
+            emailEtLayout.error = state.emailInputErrorType?.getErrorMessage(requireContext())
+            bodyEtLayout.error = state.bodyInputErrorType?.getErrorMessage(requireContext())
         }
     }
 
