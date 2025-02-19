@@ -87,7 +87,7 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
         _viewState.update {
             it.copy(
                 recipientEmail = email,
-                inputError = emailValidationResult.errorMessage
+                inputErrorType = emailValidationResult.errorType
             )
         }
     }

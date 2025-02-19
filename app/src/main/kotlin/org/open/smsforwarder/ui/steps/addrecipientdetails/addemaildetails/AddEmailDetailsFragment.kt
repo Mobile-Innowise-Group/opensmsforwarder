@@ -12,6 +12,7 @@ import org.open.smsforwarder.databinding.FragmentAddEmailDetailsBinding
 import org.open.smsforwarder.extension.assistedViewModels
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindTextChangesTo
+import org.open.smsforwarder.extension.getErrorMessage
 import org.open.smsforwarder.extension.observeWithLifecycle
 import org.open.smsforwarder.extension.setTextIfChanged
 import org.open.smsforwarder.extension.setTextIfChangedKeepState
@@ -62,7 +63,7 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
             signOutBtn.setVisibilityIfChanged(state.signOutBtnVisible)
             recipientEmailEt.setTextIfChangedKeepState(state.recipientEmail)
             nextBtn.isEnabled = state.nextButtonEnabled
-            recipientEmailLayout.error = state.inputError?.asString(requireContext())
+            recipientEmailLayout.error = state.inputErrorType?.getErrorMessage(requireContext())
         }
     }
 

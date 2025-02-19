@@ -1,9 +1,8 @@
 package org.open.smsforwarder.domain.usecase
 
-import org.open.smsforwarder.R
 import org.open.smsforwarder.domain.EmailValidator
+import org.open.smsforwarder.domain.ValidationError
 import org.open.smsforwarder.domain.ValidationResult
-import org.open.smsforwarder.utils.Resources
 import javax.inject.Inject
 
 class ValidateEmailUseCase @Inject constructor(
@@ -14,13 +13,13 @@ class ValidateEmailUseCase @Inject constructor(
         if (email.isBlank()) {
             return ValidationResult(
                 successful = false,
-                errorMessage = Resources.StringResource(R.string.error_email_is_blank)
+                errorType = ValidationError.BLANK_EMAIL
             )
         }
         return if (!emailValidator.isValid(email)) {
             ValidationResult(
                 successful = false,
-                errorMessage = Resources.StringResource(R.string.error_email_is_not_valid)
+                errorType = ValidationError.INVALID_EMAIL
             )
         } else {
             ValidationResult(successful = true)
