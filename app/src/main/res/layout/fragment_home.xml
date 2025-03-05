@@ -40,6 +40,17 @@
         android:src="@drawable/ic_warning"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/title_label"
+        app:layout_constraintEnd_toStartOf="@id/feedback_iv"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/feedback_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:src="@drawable/ic_feedback"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/title_label"
         app:layout_constraintEnd_toEndOf="@id/end_margin"
         tools:ignore="ContentDescription" />
 
