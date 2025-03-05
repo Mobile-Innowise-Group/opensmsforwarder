@@ -96,8 +96,4 @@ class HomeViewModel @Inject constructor(
     fun onPermissionsPermanentlyDenied() {
         _viewState.update { it.copy(needToShowPermissionPermanentInfo = true) }
     }
-
-    fun onFeedbackClicked() {
-        router.navigateTo(Screens.feedbackFragment())
-    }
 }

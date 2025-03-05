@@ -92,11 +92,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
     }
 
     private fun setListeners() {
-        with(binding) {
-            powerManagementWarningIv bindClicksTo viewModel::onBatteryOptimizationWarningClicked
-            feedbackIv bindClicksTo viewModel::onFeedbackClicked
-            startNewForwardingBtn bindClicksTo viewModel::onNewForwardingClicked
-        }
+        binding.powerManagementWarningIv bindClicksTo viewModel::onBatteryOptimizationWarningClicked
+        binding.startNewForwardingBtn bindClicksTo viewModel::onNewForwardingClicked
     }
 
     private fun setObservers() {
