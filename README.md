@@ -8,7 +8,7 @@ You can create a set of forwarding rules that will act as a filter for all incom
 We want to make it clear for users (who are here developers in fact) having the source code to see how the app works and there is no other things behind the scenes. Also no ads, no paid content:)
 
 # Demo
-<img height="500" src="https://github.com/Mobile-Innowise-Group/opensmsforwarder/assets/79689735/da1993c5-6f02-4404-a07b-5b75b35f66ef" />
+https://github.com/user-attachments/assets/f0dd9f18-e87e-4542-a415-05f4f17ab73f
 
 <h1>Tech stack <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg" height="20" width="20" /> </h1>
 

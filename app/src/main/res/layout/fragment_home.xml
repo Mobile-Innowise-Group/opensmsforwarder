@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:src="@drawable/ic_feedback"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/title_label"
         app:layout_constraintEnd_toEndOf="@id/end_margin"
         tools:ignore="ContentDescription" />
