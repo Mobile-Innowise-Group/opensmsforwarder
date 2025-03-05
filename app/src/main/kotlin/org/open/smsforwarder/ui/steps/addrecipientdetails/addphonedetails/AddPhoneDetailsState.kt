@@ -9,9 +9,9 @@ data class AddPhoneDetailsState(
     val title: String = "",
     val forwardingType: ForwardingType? = null,
     val recipientPhone: String = "",
-    val inputError: Resources.StringProvider? = null,
+    val inputErrorProvider: Resources.StringProvider? = null,
     val rules: List<Rule> = emptyList()
 ) {
 
-    val nextButtonEnabled = inputError == null && recipientPhone.isNotBlank()
+    val nextButtonEnabled = (inputErrorProvider == null) && (recipientPhone.isNotBlank())
 }
