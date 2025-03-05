@@ -17,6 +17,7 @@ import org.open.smsforwarder.analytics.AnalyticsTracker
 import org.open.smsforwarder.data.repository.ForwardingRepository
 import org.open.smsforwarder.domain.usecase.ValidatePhoneUseCase
 import org.open.smsforwarder.extension.asStateFlowWithInitialAction
+import org.open.smsforwarder.extension.getErrorStringProvider
 import org.open.smsforwarder.extension.launchAndCancelPrevious
 import org.open.smsforwarder.navigation.Screens
 import org.open.smsforwarder.ui.mapper.toDomain
@@ -58,7 +59,7 @@ class AddPhoneDetailsViewModel @AssistedInject constructor(
         _viewState.update {
             it.copy(
                 recipientPhone = phoneNumber,
-                inputError = phoneValidationResult.errorMessage
+                inputErrorProvider = phoneValidationResult.errorType?.getErrorStringProvider()
             )
         }
     }

@@ -62,7 +62,7 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
             signOutBtn.setVisibilityIfChanged(state.signOutBtnVisible)
             recipientEmailEt.setTextIfChangedKeepState(state.recipientEmail)
             nextBtn.isEnabled = state.nextButtonEnabled
-            recipientEmailLayout.error = state.inputError?.asString(requireContext())
+            recipientEmailLayout.error = state.inputErrorProvider?.asString(requireContext())
         }
     }
 

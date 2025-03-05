@@ -13,8 +13,8 @@ data class AddEmailDetailsState(
     val sigInBtnVisible: Boolean = false,
     val signOutBtnVisible: Boolean = false,
     val recipientEmail: String = "",
-    val inputError: Resources.StringProvider? = null
+    val inputErrorProvider: Resources.StringProvider? = null
 ) {
     val nextButtonEnabled =
-        inputError == null && !senderEmail.isNullOrEmpty() && recipientEmail.isNotBlank()
+        (inputErrorProvider == null) && !senderEmail.isNullOrEmpty() && recipientEmail.isNotBlank()
 }
