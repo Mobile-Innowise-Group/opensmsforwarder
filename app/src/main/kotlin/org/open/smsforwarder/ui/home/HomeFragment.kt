@@ -92,7 +92,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
     }
 
     private fun setListeners() {
-        binding.powerManagementWarning bindClicksTo viewModel::onBatteryOptimizationWarningClicked
+        binding.powerManagementWarningIv bindClicksTo viewModel::onBatteryOptimizationWarningClicked
         binding.startNewForwardingBtn bindClicksTo viewModel::onNewForwardingClicked
     }
 
@@ -115,7 +115,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
     private fun renderState(state: HomeState) {
         with(binding) {
             adapter.submitList(state.forwardings)
-            powerManagementWarning.isVisible =
+            powerManagementWarningIv.isVisible =
                 state.hasAtLeastOneCompletedItem() && batteryOptimizationDisabled()
             forwardings.isVisible = state.forwardings.isNotEmpty()
             emptyStateText.isVisible = state.forwardings.isEmpty()
