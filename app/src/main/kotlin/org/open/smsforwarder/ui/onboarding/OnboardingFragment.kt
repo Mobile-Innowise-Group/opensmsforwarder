@@ -16,6 +16,7 @@ import org.open.smsforwarder.extension.observeWithLifecycle
 import org.open.smsforwarder.extension.showOkDialog
 import org.open.smsforwarder.extension.unsafeLazy
 import org.open.smsforwarder.ui.onboarding.OnboardingState.Companion.slides
+import org.open.smsforwarder.ui.onboarding.adapter.OnboardingPagerTransformer
 import org.open.smsforwarder.ui.onboarding.adapter.OnboardingSliderAdapter
 import org.open.smsforwarder.utils.ButtonFillAnimator
 
@@ -38,6 +39,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
     private fun setupView() {
         with(binding) {
             adapter.setData(slides)
+            onboardingVp.setPageTransformer(OnboardingPagerTransformer())
             onboardingVp.adapter = adapter
             TabLayoutMediator(dotsIndicator, onboardingVp) { _, _ -> }.attach()
             buttonFillAnimator = ButtonFillAnimator(
