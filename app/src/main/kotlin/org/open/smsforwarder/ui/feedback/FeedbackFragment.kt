@@ -47,8 +47,8 @@ class FeedbackFragment : Fragment(R.layout.fragment_feedback) {
     private fun renderState(state: FeedbackState) {
         with(binding) {
             submitBtn.isEnabled = state.submitButtonEnabled
-            emailEtLayout.error = state.emailInputError?.asString(requireContext())
-            bodyEtLayout.error = state.bodyInputError?.asString(requireContext())
+            emailEtLayout.error = state.emailInputErrorProvider?.asString(requireContext())
+            bodyEtLayout.error = state.bodyInputErrorProvider?.asString(requireContext())
         }
     }
 
