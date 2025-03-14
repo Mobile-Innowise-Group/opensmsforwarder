@@ -108,6 +108,7 @@
     <string name="forwarding_history_item_status_fail">Fail</string>
     <string name="forwarding_history_title">Sms history</string>
     <string name="forwarding_history_retrying">Retrying…</string>
+    <string name="forwarding_history_empty">There is no forwarded messages yet</string>
     <string name="feedback_heading">Feedback</string>
     <string name="feedback_description">Fill out the form and we will be in touch</string>
     <string name="feedback_email">Contact e-mail</string>

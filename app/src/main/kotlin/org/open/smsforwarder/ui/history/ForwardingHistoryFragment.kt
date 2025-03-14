@@ -47,8 +47,8 @@ class ForwardingHistoryFragment : Fragment(R.layout.fragment_forwarding_history)
     private fun renderState(state: ForwardingHistoryState) {
         adapter.submitList(state.historyItems)
         with(binding) {
-            emptyStateText.isVisible = state.historyItems.isEmpty()
-            historyItems.isVisible = state.historyItems.isNotEmpty()
+            emptyStateText.isVisible = state.isEmptyStateTextVisible
+            historyItems.isVisible = state.isHistoryItemsVisible
         }
     }
 
