@@ -24,6 +24,7 @@ import org.open.smsforwarder.data.repository.AuthRepository
 import org.open.smsforwarder.data.repository.ForwardingRepository
 import org.open.smsforwarder.domain.usecase.ValidateEmailUseCase
 import org.open.smsforwarder.extension.asStateFlowWithInitialAction
+import org.open.smsforwarder.extension.getErrorStringProvider
 import org.open.smsforwarder.extension.launchAndCancelPrevious
 import org.open.smsforwarder.helper.GoogleSignInHelper
 import org.open.smsforwarder.navigation.Screens
@@ -87,7 +88,7 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
         _viewState.update {
             it.copy(
                 recipientEmail = email,
-                inputError = emailValidationResult.errorMessage
+                inputErrorProvider = emailValidationResult.errorType?.getErrorStringProvider()
             )
         }
     }

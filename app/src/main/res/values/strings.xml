@@ -13,6 +13,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="submit">Submit</string>
     <string name="add_rule_error">Pattern is already in the list</string>
     <string name="blank_rule_error">Pattern can\'t be blank</string>
     <string name="sms_send_error">Can\'t send sms to some recipients, please recheck steps</string>
@@ -46,6 +47,7 @@
     <string name="error_phone_number_is_not_valid">Phone number is not valid</string>
     <string name="error_email_is_not_valid">Email is not valid</string>
     <string name="error_email_is_blank">Email can not be blank</string>
+    <string name="error_generic_is_blank">Field can not be blank</string>
     <string name="error_google_sign_in">Unable to sign in to account</string>
     <string name="error_google_sign_out">Unable to sign out from account</string>
     <string name="sign_in_with_google">Sign in with Google</string>
@@ -106,4 +108,11 @@
     <string name="forwarding_history_item_status_fail">Fail</string>
     <string name="forwarding_history_title">Sms history</string>
     <string name="forwarding_history_retrying">Retrying…</string>
+    <string name="feedback_heading">Feedback</string>
+    <string name="feedback_description">Fill out the form and we will be in touch</string>
+    <string name="feedback_email">Contact e-mail</string>
+    <string name="feedback_body">How can we help you?</string>
+    <string name="feedback_letter_subject">Feedback from %s</string>
+    <string name="feedback_success">Feedback successfully sent!</string>
+    <string name="feedback_failure">Something went wrong while sending feedback.</string>
 </resources>

@@ -44,7 +44,7 @@ class AddPhoneDetailsFragment : Fragment(R.layout.fragment_add_phone_details) {
     private fun renderState(state: AddPhoneDetailsState) {
         with(binding) {
             recipientPhoneEt.setTextIfChangedKeepState(state.recipientPhone)
-            recipientPhoneLayout.error = state.inputError?.asString(requireContext())
+            recipientPhoneLayout.error = state.inputErrorProvider?.asString(requireContext())
             nextBtn.isEnabled = state.nextButtonEnabled
         }
     }
