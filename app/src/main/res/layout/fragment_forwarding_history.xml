@@ -46,7 +46,6 @@
         android:id="@+id/empty_state_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="256dp"
         android:gravity="center_horizontal"
         android:padding="16dp"
         android:text="@string/forwarding_history_empty"
@@ -54,6 +53,7 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_label" />
 
     <androidx.recyclerview.widget.RecyclerView
