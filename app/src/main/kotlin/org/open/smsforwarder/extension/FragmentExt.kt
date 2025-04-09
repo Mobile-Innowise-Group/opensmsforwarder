@@ -11,6 +11,10 @@ fun Fragment.showToast(@StringRes messageResId: Int) {
     Toast.makeText(requireContext(), getString(messageResId), Toast.LENGTH_LONG).show()
 }
 
+fun Fragment.showToast(message: String) {
+    Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+}
+
 inline fun <reified VM : ViewModel, VMF> Fragment.assistedViewModels(
     crossinline block: (VMF) -> VM
 ): Lazy<VM> =

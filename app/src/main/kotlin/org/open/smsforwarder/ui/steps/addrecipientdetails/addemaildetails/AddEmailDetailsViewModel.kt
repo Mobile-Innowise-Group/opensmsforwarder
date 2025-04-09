@@ -1,12 +1,14 @@
 package org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails
 
-import android.app.Activity
-import androidx.activity.result.ActivityResult
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialResponse
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.terrakok.cicerone.Router
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -26,7 +28,6 @@ import org.open.smsforwarder.domain.usecase.ValidateEmailUseCase
 import org.open.smsforwarder.extension.asStateFlowWithInitialAction
 import org.open.smsforwarder.extension.getErrorStringProvider
 import org.open.smsforwarder.extension.launchAndCancelPrevious
-import org.open.smsforwarder.helper.GoogleSignInHelper
 import org.open.smsforwarder.navigation.Screens
 import org.open.smsforwarder.ui.mapper.toDomain
 import org.open.smsforwarder.ui.mapper.toEmailDetailsPresentation
@@ -36,11 +37,15 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
     @Assisted private val id: Long,
     private val forwardingRepository: ForwardingRepository,
     private val authRepository: AuthRepository,
-    private val googleSignInHelper: GoogleSignInHelper,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val analyticsTracker: AnalyticsTracker,
     private val router: Router,
 ) : ViewModel(), DefaultLifecycleObserver {
+
+    /**
+     * In-memory cache for logged user's email
+     */
+    private var email: String? = null
 
     private var _viewState = MutableStateFlow(AddEmailDetailsState())
     val viewState = _viewState.asStateFlowWithInitialAction(viewModelScope) { loadData() }
@@ -68,7 +73,21 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
     }
 
     fun onSignInClicked() {
-        _viewEffect.trySend(GoogleSignInViewEffect(signInIntent = googleSignInHelper.signInIntent))
+        _viewEffect.trySend(GoogleSignInViewEffect)
+    }
+
+    fun handleSignIn(block: suspend () -> Result<GetCredentialResponse>) {
+        viewModelScope.launch {
+            block()
+                .onSuccess { credentialsResponse ->
+                    handleCredentialResponse(credentialsResponse)
+                }
+                .onFailure { error ->
+                    _viewEffect.trySend(
+                        GoogleSignInErrorViewEffect(R.string.error_get_credentials_template, error)
+                    )
+                }
+        }
     }
 
     fun onSignOutClicked() {
@@ -93,37 +112,27 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
         }
     }
 
-    fun onSignInResultReceived(result: ActivityResult) {
-        if (result.resultCode == Activity.RESULT_OK) {
-            viewModelScope.launch {
-                googleSignInHelper
-                    .getGoogleSignInAccount(data = result.data)
-                    .onSuccess { googleAccount ->
-                        authRepository
-                            .exchangeAuthCodeForTokensAnd(googleAccount.serverAuthCode)
-                            .onSuccess { response ->
-                                val recipient = viewState.value.copy(
-                                    senderEmail = googleAccount.email
-                                )
-                                forwardingRepository.insertOrUpdateForwarding(recipient.toDomain())
-                                authRepository.saveTokens(
-                                    viewState.value.id,
-                                    response.accessToken,
-                                    response.refreshToken
-                                )
-                            }
-                            .onFailure {
-                                _viewEffect.trySend(
-                                    GoogleSignInErrorViewEffect(R.string.error_google_sign_in)
-                                )
-                            }
-                    }
-                    .onFailure {
-                        _viewEffect.trySend(
-                            GoogleSignInErrorViewEffect(R.string.error_google_sign_in)
-                        )
-                    }
-            }
+
+    fun exchangeTokens(serverAuth: String) {
+        viewModelScope.launch {
+            authRepository
+                .exchangeAuthCodeForTokensAnd(serverAuth)
+                .onSuccess { response ->
+                    val recipient = viewState.value.copy(
+                        senderEmail = email
+                    )
+                    forwardingRepository.insertOrUpdateForwarding(recipient.toDomain())
+                    authRepository.saveTokens(
+                        viewState.value.id,
+                        response.accessToken,
+                        response.refreshToken
+                    )
+                }
+                .onFailure { error ->
+                    _viewEffect.trySend(
+                        GoogleSignInErrorViewEffect(R.string.error_authorization_template, error)
+                    )
+                }
         }
     }
 
@@ -134,6 +143,24 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
 
     fun onBackClicked() {
         router.exit()
+    }
+
+    private fun handleCredentialResponse(credentialResponse: GetCredentialResponse) {
+        when (val credential = credentialResponse.credential) {
+            is CustomCredential -> {
+                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                    try {
+                        val googleIdTokenCredential =
+                            GoogleIdTokenCredential.createFrom(credential.data)
+                        email = googleIdTokenCredential.id
+                    } catch (e: GoogleIdTokenParsingException) {
+                        _viewEffect.trySend(
+                            GoogleSignInErrorViewEffect(R.string.error_get_credentials_template, e)
+                        )
+                    }
+                }
+            }
+        }
     }
 
     @AssistedFactory

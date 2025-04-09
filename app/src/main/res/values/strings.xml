@@ -53,6 +53,8 @@
     <string name="error_generic_is_blank">Field can not be blank</string>
     <string name="error_google_sign_in">Unable to sign in to account</string>
     <string name="error_google_sign_out">Unable to sign out from account</string>
+    <string name="error_authorization_template">Authorization flow failed due to %s</string>
+    <string name="error_get_credentials_template">Obtain credentials failed due to %s</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="sign_in_to_email">Sign in to your gmail account to be able to forward messages on your behalf*</string>
     <string name="signed_in_as">You are signed in as:\n%s</string>

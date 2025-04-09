@@ -1,14 +1,12 @@
 package org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails
 
-import android.content.Intent
 import androidx.annotation.StringRes
 
 sealed interface AddEmailDetailsViewEffect
 
-data class GoogleSignInViewEffect(
-    val signInIntent: Intent? = null
-) : AddEmailDetailsViewEffect
+data object GoogleSignInViewEffect : AddEmailDetailsViewEffect
 
 data class GoogleSignInErrorViewEffect(
-    @StringRes val errorMessage: Int? = null
+    @StringRes val errorMessageRes: Int? = null,
+    val error: Throwable? = null
 ) : AddEmailDetailsViewEffect

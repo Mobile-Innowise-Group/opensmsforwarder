@@ -34,6 +34,7 @@ class GoogleSignInModule {
 
     @Provides
     fun provideSignInHelper(
-        googleSignInClient: GoogleSignInClient,
+        googleSignInClient: GoogleSignInClient
     ): GoogleSignInHelper = GoogleSignInHelper(googleSignInClient)
+
 }
