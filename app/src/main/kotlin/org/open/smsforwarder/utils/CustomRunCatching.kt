@@ -14,7 +14,7 @@ suspend fun <T, R> T.runCatchingWithCancellation(block: suspend T.() -> R): Resu
         Result.success(block())
     } catch (e: CancellationException) {
         throw e
-    } catch (e: Throwable) {
+    } catch (e: Exception) {
         Result.failure(e)
     }
 }
