@@ -9,6 +9,7 @@ import kotlinx.coroutines.CancellationException
  * catch any Throwable exception, excluding [CancellationException], that was thrown from the
  * block function execution and encapsulating it as a failure.
  */
+@Suppress("TooGenericExceptionCaught")
 suspend fun <T, R> T.runCatchingWithCancellation(block: suspend T.() -> R): Result<R> {
     return try {
         Result.success(block())
