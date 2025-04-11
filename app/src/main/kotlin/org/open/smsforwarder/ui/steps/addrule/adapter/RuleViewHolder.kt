@@ -1,6 +1,7 @@
 package org.open.smsforwarder.ui.steps.addrule.adapter
 
 import androidx.recyclerview.widget.RecyclerView
+import org.open.smsforwarder.R
 import org.open.smsforwarder.databinding.ItemRuleBinding
 import org.open.smsforwarder.domain.model.Rule
 
@@ -11,8 +12,15 @@ class RuleViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(rule: Rule) = with(binding) {
+        val context = itemView.context
         buttonEditItem.setOnClickListener { onItemEdit(rule) }
+        buttonEditItem.contentDescription =
+            context.getString(R.string.dialog_edit_rule_title) + context.getString(R.string.space) + rule.textRule
         buttonRemoveItem.setOnClickListener { onItemRemove(rule) }
+        buttonRemoveItem.contentDescription =
+            context.getString(R.string.dialog_delete_rule_title) + context.getString(R.string.space) + rule.textRule
         ruleTv.text = rule.textRule
+        ruleTv.contentDescription =
+            context.getString(R.string.rule) + context.getString(R.string.space) + rule.textRule
     }
 }

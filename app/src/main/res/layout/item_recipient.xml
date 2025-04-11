@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="@string/item_recipient_fwd_type"
-        android:textAppearance="@style/SmsTextAppearance.Medium.12.Gray"
+        android:textAppearance="@style/SmsTextAppearance.Medium.12.Subsidiary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title" />
 
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="@string/item_recipient_phone"
-        android:textAppearance="@style/SmsTextAppearance.Medium.12.Gray"
+        android:textAppearance="@style/SmsTextAppearance.Medium.12.Subsidiary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/forwarding_type" />
 
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="@string/item_recipient_email"
-        android:textAppearance="@style/SmsTextAppearance.Medium.12.Gray"
+        android:textAppearance="@style/SmsTextAppearance.Medium.12.Subsidiary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/forwarding_type" />
 
@@ -101,7 +101,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textAppearance="@style/SmsTextAppearance.Medium.12.Red"
+        android:textAppearance="@style/SmsTextAppearance.Medium.12.Error"
         app:layout_constraintEnd_toStartOf="@id/button_edit_item"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier"
@@ -111,9 +111,12 @@
         android:id="@+id/button_edit_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         android:background="@drawable/image_button_background"
         android:paddingHorizontal="14dp"
         android:paddingVertical="13dp"
+        android:contentDescription="@string/edit_forwarding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_edit"
@@ -123,10 +126,13 @@
         android:id="@+id/button_remove_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         android:layout_marginTop="22dp"
         android:background="@drawable/image_button_background"
         android:paddingHorizontal="14dp"
         android:paddingVertical="13dp"
+        android:contentDescription="@string/delete_forwarding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_edit_item"
         app:srcCompat="@drawable/ic_remove"

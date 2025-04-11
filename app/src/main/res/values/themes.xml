@@ -14,6 +14,9 @@
         <item name="colorOnSecondaryFixed">@color/text_disabled_light</item>
         <item name="colorOnSurfaceVariant">@color/platinum</item>
         <item name="colorSplashBackground">@color/light_blue</item>
+        <item name="colorSubsidiary">@color/gray</item>
+        <item name="colorError">@color/red</item>
+        <item name="colorSuccess">@color/green</item>
     </style>
 
     <style name="Theme.Forwarder" parent="Base.Theme.Forwarder" />
@@ -35,10 +38,10 @@
         <item name="boxCornerRadiusTopEnd">8dp</item>
         <item name="boxCornerRadiusTopStart">8dp</item>
         <item name="endIconMode">clear_text</item>
-        <item name="boxStrokeErrorColor">@color/red</item>
-        <item name="errorIconTint">@color/red</item>
-        <item name="errorTextColor">@color/red</item>
-        <item name="helperTextTextColor">@color/red</item>
+        <item name="boxStrokeErrorColor">?attr/colorError</item>
+        <item name="errorIconTint">?attr/colorError</item>
+        <item name="errorTextColor">?attr/colorError</item>
+        <item name="helperTextTextColor">?attr/colorError</item>
         <item name="cursorErrorColor">?attr/colorOnPrimary</item>
         <item name="hintEnabled">false</item>
         <item name="cursorColor">?attr/colorOnPrimary</item>

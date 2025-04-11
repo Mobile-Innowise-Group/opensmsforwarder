@@ -2,6 +2,7 @@ package org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails
 
 import android.os.Bundle
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -35,6 +36,12 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
         setObservers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.step2.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+        binding.step2.requestFocus()
     }
 
     private fun setListeners() {

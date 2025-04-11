@@ -2,6 +2,7 @@ package org.open.smsforwarder.ui.steps.choosemethod
 
 import android.os.Bundle
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -32,6 +33,12 @@ class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forward
         super.onViewCreated(view, savedInstanceState)
         setListeners()
         setObservers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.step1.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+        binding.step1.requestFocus()
     }
 
     private fun setListeners() {

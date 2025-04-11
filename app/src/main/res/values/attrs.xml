@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="colorSplashBackground" format="color" />
+    <attr name="colorSubsidiary" format="color" />
+    <attr name="colorSuccess" format="color" />
 </resources>

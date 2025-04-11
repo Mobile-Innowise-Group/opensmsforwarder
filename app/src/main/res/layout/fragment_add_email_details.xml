@@ -25,20 +25,13 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="16dp" />
 
-        <ImageView
-            android:id="@+id/arrow_back_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/arrow_back"
-            app:layout_constraintStart_toStartOf="@id/start_margin"
-            app:layout_constraintTop_toTopOf="@id/step2" />
-
         <TextView
             android:id="@+id/step2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/step_2_from_3"
+            android:importantForAccessibility="yes"
             android:textAlignment="center"
             android:textAppearance="@style/SmsTextAppearance.Bold.16"
             app:layout_constraintBottom_toBottomOf="@id/arrow_back_iv"
@@ -46,13 +39,26 @@
             app:layout_constraintStart_toStartOf="@id/start_margin"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/arrow_back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:accessibilityTraversalAfter="@id/step2"
+            android:contentDescription="@string/back"
+            android:src="@drawable/arrow_back"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toTopOf="@id/step2" />
+
         <TextView
             android:id="@+id/sign_in_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/sign_in_to_email"
-            android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant"
+            android:textAppearance="@style/SmsTextAppearance.Regular.14.Subsidiary"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
             app:layout_constraintTop_toBottomOf="@id/arrow_back_iv" />
@@ -64,7 +70,7 @@
             android:layout_marginTop="32dp"
             android:text="@string/signed_in_as"
             android:textAppearance="@style/SmsTextAppearance.Regular.14"
-            android:textColor="@color/green"
+            android:textColor="?attr/colorSuccess"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
@@ -131,9 +137,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:errorEnabled="true"
-            app:errorIconTint="@color/red"
-            app:errorTextColor="@color/red"
-            app:helperTextTextColor="@color/red"
+            app:errorIconTint="?attr/colorError"
+            app:errorTextColor="?attr/colorError"
+            app:helperTextTextColor="?attr/colorError"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
             app:layout_constraintTop_toBottomOf="@id/enter_email_tv"
@@ -144,6 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:hint="@string/enter_email_hint"
+                android:textColorHint="?attr/colorSubsidiary"
                 android:imeOptions="actionDone"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>

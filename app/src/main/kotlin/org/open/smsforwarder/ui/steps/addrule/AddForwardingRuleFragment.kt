@@ -2,6 +2,7 @@ package org.open.smsforwarder.ui.steps.addrule
 
 import android.os.Bundle
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -44,6 +45,12 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
         setObservers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.step3.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+        binding.step3.requestFocus()
+    }
+
     private fun setAdapter() {
         with(binding) {
             rulesRv.adapter = adapter
@@ -74,6 +81,7 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
             adapter.submitList(state.rules)
             emptyTv.isVisible = state.rules.isEmpty()
             finishBtn.isEnabled = state.rules.isNotEmpty()
+            rulesRv.isVisible = state.rules.isNotEmpty()
             messagePatternLayout.error = state.errorMessage?.let { getString(it) }
             buttonAddRuleBtn.isEnabled = state.isAddRuleButtonEnabled
         }

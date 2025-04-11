@@ -13,6 +13,7 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -78,6 +79,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
     override fun onStart() {
         super.onStart()
         requestPermissions()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.titleLabel.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+        binding.titleLabel.requestFocus()
     }
 
     override fun onDestroyView() {
