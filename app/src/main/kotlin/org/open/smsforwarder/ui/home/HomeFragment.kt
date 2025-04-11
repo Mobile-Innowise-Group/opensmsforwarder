@@ -71,8 +71,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
-        setListeners()
-        setObservers()
+        setListenersAndObservers()
         setSpans()
     }
 
@@ -98,15 +97,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
-    private fun setListeners() {
+    private fun setListenersAndObservers() {
         with(binding) {
             powerManagementWarningIv bindClicksTo viewModel::onBatteryOptimizationWarningClicked
             feedbackIv bindClicksTo viewModel::onFeedbackClicked
             startNewForwardingBtn bindClicksTo viewModel::onNewForwardingClicked
         }
-    }
-
-    private fun setObservers() {
         viewModel.viewState.observeWithLifecycle(viewLifecycleOwner, action = ::renderState)
         viewModel.viewEffect.observeWithLifecycle(viewLifecycleOwner, action = ::handleEffect)
     }
