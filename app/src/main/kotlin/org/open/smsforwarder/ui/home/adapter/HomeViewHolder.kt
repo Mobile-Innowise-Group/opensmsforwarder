@@ -12,29 +12,29 @@ class HomeViewHolder(
     private val onItemRemove: (Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(state: ForwardingUI) = with(binding) {
+    fun bind(item: ForwardingUI) = with(binding) {
         val context = itemView.context
-        title.isVisible = state.title.isNotBlank()
-        title.text = state.title
+        title.isVisible = item.title.isNotBlank()
+        title.text = item.title
         title.contentDescription =
-            context.getString(R.string.forwarding) + context.getString(R.string.space) + state.title
-        forwardingType.text = state.forwardingType?.value
-        phoneGroup.isVisible = state.isSmsBlockCompleted()
-        recipientPhoneEt.text = state.recipientPhone
-        emailGroup.isVisible = state.isEmailBlockCompleted()
-        email.text = state.recipientEmail
-        error.isVisible = !state.allStepsCompleted || state.error.isNotEmpty()
+            context.getString(R.string.forwarding_named, item.title)
+        forwardingType.text = item.forwardingType?.value
+        phoneGroup.isVisible = item.isSmsBlockCompleted()
+        recipientPhoneEt.text = item.recipientPhone
+        emailGroup.isVisible = item.isEmailBlockCompleted()
+        email.text = item.recipientEmail
+        error.isVisible = !item.allStepsCompleted || item.error.isNotEmpty()
         error.text = when {
-            !state.allStepsCompleted -> context.getString(R.string.steps_are_not_completed_error)
-            state.error.isNotEmpty() -> state.error
+            !item.allStepsCompleted -> context.getString(R.string.steps_are_not_completed_error)
+            item.error.isNotEmpty() -> item.error
             else -> null
         }
 
-        buttonEditItem.setOnClickListener { onItemEdit(state.id) }
+        buttonEditItem.setOnClickListener { onItemEdit(item.id) }
         buttonEditItem.contentDescription =
-            context.getString(R.string.edit_forwarding) + context.getString(R.string.space) + state.title
-        buttonRemoveItem.setOnClickListener { onItemRemove(state.id) }
+            context.getString(R.string.edit_forwarding_named, item.title)
+        buttonRemoveItem.setOnClickListener { onItemRemove(item.id) }
         buttonRemoveItem.contentDescription =
-            context.getString(R.string.delete_forwarding) + context.getString(R.string.space) + state.title
+            context.getString(R.string.delete_forwarding_named, item.title)
     }
 }

@@ -102,6 +102,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
             powerManagementWarningIv bindClicksTo viewModel::onBatteryOptimizationWarningClicked
             feedbackIv bindClicksTo viewModel::onFeedbackClicked
             startNewForwardingBtn bindClicksTo viewModel::onNewForwardingClicked
+            binding.forwardingHistory bindClicksTo viewModel::onSmsHistoryClicked
         }
         viewModel.viewState.observeWithLifecycle(viewLifecycleOwner, action = ::renderState)
         viewModel.viewEffect.observeWithLifecycle(viewLifecycleOwner, action = ::handleEffect)

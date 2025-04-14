@@ -11,16 +11,16 @@ class RuleViewHolder(
     private val onItemRemove: (Rule) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(rule: Rule) = with(binding) {
+    fun bind(item: Rule) = with(binding) {
         val context = itemView.context
-        buttonEditItem.setOnClickListener { onItemEdit(rule) }
+        buttonEditItem.setOnClickListener { onItemEdit(item) }
         buttonEditItem.contentDescription =
-            context.getString(R.string.dialog_edit_rule_title) + context.getString(R.string.space) + rule.textRule
-        buttonRemoveItem.setOnClickListener { onItemRemove(rule) }
+            context.getString(R.string.edit_rule_named, item.textRule)
+        buttonRemoveItem.setOnClickListener { onItemRemove(item) }
         buttonRemoveItem.contentDescription =
-            context.getString(R.string.dialog_delete_rule_title) + context.getString(R.string.space) + rule.textRule
-        ruleTv.text = rule.textRule
+            context.getString(R.string.delete_rule_named, item.textRule)
+        ruleTv.text = item.textRule
         ruleTv.contentDescription =
-            context.getString(R.string.rule) + context.getString(R.string.space) + rule.textRule
+            context.getString(R.string.rule_named, item.textRule)
     }
 }

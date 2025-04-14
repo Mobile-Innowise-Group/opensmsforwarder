@@ -38,30 +38,38 @@ class ForwardingProcessor @Inject constructor(
                 forwarders[recipient.forwardingType]
                     ?.execute(recipient, message)
                     ?.onSuccess {
-                        updateForwardingStatus(recipient, message, "")
+                        postProcessForwarding(recipient, message, "")
                     }
                     ?.onFailure { error ->
-                        updateForwardingStatus(recipient, message, error.message.orEmpty())
-                        if (error is TokenRevokedException || error is RefreshTokenException) {
-                            authRepository.signOut(recipient)
-                        }
+                        postProcessForwarding(
+                            recipient,
+                            message,
+                            error.message.orEmpty()
+                        )
+                        handleTokenErrors(error, recipient)
                     }
             }
         }
     }
 
-    private suspend fun updateForwardingStatus(
+    private suspend fun postProcessForwarding(
         forwarding: Forwarding,
         message: String,
-        errorText: String
+        errorText: String,
     ) {
         forwardingRepository.insertOrUpdateForwarding(
             forwarding.copy(error = errorText)
         )
-        historyRepository.insertOrUpdateForwardedSms(
+        historyRepository.insertForwardedSms(
             forwardingId = forwarding.id,
             message = message,
-            isForwardingSuccessful = errorText.isEmpty()
+            isForwardingSuccessful = errorText.isEmpty(),
         )
+    }
+
+    private suspend fun handleTokenErrors(error: Throwable, recipient: Forwarding) {
+        if (error is TokenRevokedException || error is RefreshTokenException) {
+            authRepository.signOut(recipient)
+        }
     }
 }
