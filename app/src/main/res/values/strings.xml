@@ -114,7 +114,7 @@
     <string name="forwarding_is_disabled_generic_failure_error">Forwarding is disabled.\nGeneric Failure Error</string>
     <string name="forwarded_messages">Forwarded messages</string>
     <string name="forwarded_messages_count">%1$s messages were forwarded in the last 24 hours</string>
-    <string name="forwarding_history_item_content_description">Forwarded message number %s\n</string>
+    <string name="forwarding_history_item_date_content_description">Forwarded message number %s\nDate:</string>
     <string name="forwarding_history_item_date">Date:</string>
     <string name="forwarding_history_item_status">Status</string>
     <string name="forwarding_history_item_message">Message:</string>
