@@ -10,9 +10,9 @@ class RuleViewHolder(
     private val onItemRemove: (Rule) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(rule: Rule) = with(binding) {
-        buttonEditItem.setOnClickListener { onItemEdit(rule) }
-        buttonRemoveItem.setOnClickListener { onItemRemove(rule) }
-        ruleTv.text = rule.textRule
+    fun bind(item: Rule) = with(binding) {
+        buttonEditItem.setOnClickListener { onItemEdit(item) }
+        buttonRemoveItem.setOnClickListener { onItemRemove(item) }
+        ruleTv.text = item.textRule
     }
 }
