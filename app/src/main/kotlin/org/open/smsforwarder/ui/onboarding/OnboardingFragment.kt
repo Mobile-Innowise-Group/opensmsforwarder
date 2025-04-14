@@ -2,7 +2,6 @@ package org.open.smsforwarder.ui.onboarding
 
 import android.os.Bundle
 import android.view.View
-import android.view.accessibility.AccessibilityEvent
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,6 +13,7 @@ import org.open.smsforwarder.databinding.FragmentOnboardingBinding
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindPageChangesTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.showOkDialog
 import org.open.smsforwarder.extension.unsafeLazy
 import org.open.smsforwarder.ui.onboarding.OnboardingState.Companion.slides
@@ -37,14 +37,9 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
         setupObservers()
     }
 
-    override fun onResume() {
-        super.onResume()
-        setLabelFocus()
-    }
-
-    private fun setLabelFocus() {
-        binding.stepLabel.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
-        binding.stepLabel.requestFocus()
+    override fun onStart() {
+        super.onStart()
+        binding.stepLabel.setAccessibilityFocus()
     }
 
     private fun setupView() {
@@ -89,7 +84,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
             backBtn.isVisible = onboardingState.currentStep >= 2
             stepLabel.text = getString(R.string.onboarding_step_label, onboardingState.currentStep)
             stepLabel.contentDescription =
-                getString(R.string.onboarding_title) + getString(R.string.comma) + stepLabel.text
+                getString(R.string.onboarding_title_content_description, stepLabel.text)
             skipAllBtn.isVisible = !onboardingState.isLastSlide
             nextBtn.text = getString(onboardingState.nextButtonRes)
             acknowledgeChBx.isVisible = onboardingState.isLastSlide
@@ -109,17 +104,17 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
 
             NextPageEffect -> {
                 binding.onboardingVp.currentItem++
-                setLabelFocus()
+                binding.stepLabel.setAccessibilityFocus()
             }
 
             PreviousPageEffect -> {
                 binding.onboardingVp.currentItem--
-                setLabelFocus()
+                binding.stepLabel.setAccessibilityFocus()
             }
 
             SkipAllEffect -> {
                 binding.onboardingVp.currentItem = adapter.itemCount - 1
-                setLabelFocus()
+                binding.stepLabel.setAccessibilityFocus()
             }
         }
     }

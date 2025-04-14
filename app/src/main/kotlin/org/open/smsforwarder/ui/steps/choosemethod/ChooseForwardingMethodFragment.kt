@@ -16,6 +16,7 @@ import org.open.smsforwarder.extension.bindCheckChangesTo
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindTextChangesTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.setTextIfChangedKeepState
 import org.open.smsforwarder.extension.setValueIfChanged
 import org.open.smsforwarder.extension.setVisibilityIfChanged
@@ -35,10 +36,9 @@ class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forward
         setObservers()
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.step1.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
-        binding.step1.requestFocus()
+    override fun onStart() {
+        super.onStart()
+        binding.step1.setAccessibilityFocus()
     }
 
     private fun setListeners() {

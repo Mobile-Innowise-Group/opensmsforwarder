@@ -14,6 +14,7 @@ import org.open.smsforwarder.extension.assistedViewModels
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindTextChangesTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.setTextIfChanged
 import org.open.smsforwarder.extension.setTextIfChangedKeepState
 import org.open.smsforwarder.extension.setVisibilityIfChanged
@@ -38,10 +39,9 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
         setObservers()
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.step2.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
-        binding.step2.requestFocus()
+    override fun onStart() {
+        super.onStart()
+        binding.step2.setAccessibilityFocus()
     }
 
     private fun setListeners() {

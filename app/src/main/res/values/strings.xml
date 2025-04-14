@@ -10,8 +10,6 @@
     <string name="permissions_rationale_message">SMS and notification permissions are needed for forwarding SMS.</string>
     <string name="permission_description_permanently">Some of permissions are permanently denied. To use full app functionality Go to Settings and enable permissions manually.</string>
     <string name="empty" />
-    <string name="space"> </string>
-    <string name="comma">, </string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
@@ -33,6 +31,7 @@
     <string name="step_2_from_3">Forwarding step 2 of 3</string>
     <string name="step_3_from_3">Forwarding step 3 of 3</string>
     <string name="forwarding">Forwarding</string>
+    <string name="forwarding_named">Forwarding %s</string>
     <string name="forwarding_title">Forwarding Title</string>
     <string name="add_recipient">Add recipient</string>
     <string name="add_forwarding_rule">Add forwarding rules</string>
@@ -62,6 +61,9 @@
     <string name="please_select_forwarding_method_message">Please, select forwarding method</string>
     <string name="forwarding_method">Choose forwarding method*</string>
     <string name="rule">Rule</string>
+    <string name="rule_named">Rule %s</string>
+    <string name="edit_rule_named">Edit rule %s</string>
+    <string name="delete_rule_named">Delete rule %s</string>
     <string name="dialog_delete_rule_title">Delete rule</string>
     <string name="dialog_delete_rule_message">The rule \"%s\" will be deleted.</string>
     <string name="dialog_edit_rule_title">Change rule</string>
@@ -76,7 +78,9 @@
     <string name="delete_message">The rule \"%s\" will be deleted.</string>
     <string name="delete">Delete</string>
     <string name="delete_forwarding">Delete forwarding</string>
+    <string name="delete_forwarding_named">Delete forwarding %s</string>
     <string name="edit_forwarding">Edit forwarding</string>
+    <string name="edit_forwarding_named">Edit forwarding %s</string>
     <string name="edit_rule_message">The rule \"%s\" will be changed to</string>
     <string name="edit_rule_title">Change rule</string>
     <string name="add_recipient_email">Recipient email*</string>
@@ -84,7 +88,7 @@
     <string name="battery_save_warning_button">Warning: app can be stopped by your device\'s power settings.</string>
     <string name="battery_save_warning_title">Make app an exemptions from Power Management</string>
     <string name="battery_save_warning_message">In order for app to work when device is not active for a long time,\nplease, make it an exemption from Power Management features</string>
-    <string name="onboarding_title">How to use app</string>
+    <string name="onboarding_title_content_description">How to use the app, %s</string>
     <string name="onboarding_fragment_finish">Finish</string>
     <string name="onboarding_fragment_next">Next</string>
     <string name="onboarding_skip_all">Skip all</string>
@@ -110,6 +114,7 @@
     <string name="forwarding_is_disabled_generic_failure_error">Forwarding is disabled.\nGeneric Failure Error</string>
     <string name="forwarded_messages">Forwarded messages</string>
     <string name="forwarded_messages_count">%1$s messages were forwarded in the last 24 hours</string>
+    <string name="forwarding_history_item_content_description">Forwarded message number %s\n</string>
     <string name="forwarding_history_item_date">Date:</string>
     <string name="forwarding_history_item_status">Status</string>
     <string name="forwarding_history_item_message">Message:</string>

@@ -11,6 +11,7 @@ import org.open.smsforwarder.R
 import org.open.smsforwarder.databinding.FragmentForwardingHistoryBinding
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.unsafeLazy
 import org.open.smsforwarder.ui.history.adapter.HistoryAdapter
 
@@ -26,6 +27,11 @@ class HistoryFragment : Fragment(R.layout.fragment_forwarding_history) {
         setUpAdapter()
         setUpListeners()
         setObservers()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.titleLabel.setAccessibilityFocus()
     }
 
     private fun setUpListeners() {

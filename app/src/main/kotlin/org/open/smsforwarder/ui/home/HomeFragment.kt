@@ -29,6 +29,7 @@ import org.open.smsforwarder.analytics.AnalyticsTracker
 import org.open.smsforwarder.databinding.FragmentHomeBinding
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.showOkDialog
 import org.open.smsforwarder.extension.unsafeLazy
 import org.open.smsforwarder.ui.dialog.delete.DeleteDialog
@@ -71,19 +72,15 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
-        setListenersAndObservers()
+        setListeners()
+        setObservers()
         setSpans()
     }
 
     override fun onStart() {
         super.onStart()
+        binding.titleLabel.setAccessibilityFocus()
         requestPermissions()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.titleLabel.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
-        binding.titleLabel.requestFocus()
     }
 
     override fun onDestroyView() {
@@ -97,13 +94,16 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
-    private fun setListenersAndObservers() {
+    private fun setListeners() {
         with(binding) {
             powerManagementWarningIv bindClicksTo viewModel::onBatteryOptimizationWarningClicked
             feedbackIv bindClicksTo viewModel::onFeedbackClicked
             startNewForwardingBtn bindClicksTo viewModel::onNewForwardingClicked
             binding.forwardingHistory bindClicksTo viewModel::onSmsHistoryClicked
         }
+    }
+
+    private fun setObservers() {
         viewModel.viewState.observeWithLifecycle(viewLifecycleOwner, action = ::renderState)
         viewModel.viewEffect.observeWithLifecycle(viewLifecycleOwner, action = ::handleEffect)
     }

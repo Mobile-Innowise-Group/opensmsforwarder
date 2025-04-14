@@ -61,12 +61,14 @@
         android:id="@+id/forwarding_history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/forwarding_history_title"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         android:padding="6dp"
         android:src="@drawable/ic_forwarding_history"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/title_label"
-        app:layout_constraintEnd_toEndOf="@id/end_margin"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/end_margin" />
 
     <LinearLayout
         android:id="@+id/permission_permanently_denied_info"

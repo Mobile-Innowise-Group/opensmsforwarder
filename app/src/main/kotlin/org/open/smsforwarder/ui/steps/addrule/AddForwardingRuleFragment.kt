@@ -15,6 +15,7 @@ import org.open.smsforwarder.extension.assistedViewModels
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindTextChangesTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.unsafeLazy
 import org.open.smsforwarder.ui.dialog.delete.DeleteDialog
 import org.open.smsforwarder.ui.dialog.delete.DeleteDialogListener
@@ -45,10 +46,9 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
         setObservers()
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.step3.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
-        binding.step3.requestFocus()
+    override fun onStart() {
+        super.onStart()
+        binding.step3.setAccessibilityFocus()
     }
 
     private fun setAdapter() {
