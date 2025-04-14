@@ -11,20 +11,15 @@ import org.open.smsforwarder.R
 import org.open.smsforwarder.databinding.FragmentForwardingHistoryBinding
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.observeWithLifecycle
-import org.open.smsforwarder.extension.showToast
 import org.open.smsforwarder.extension.unsafeLazy
-import org.open.smsforwarder.ui.history.adapter.SmsHistoryAdapter
+import org.open.smsforwarder.ui.history.adapter.HistoryAdapter
 
 @AndroidEntryPoint
-class ForwardingHistoryFragment : Fragment(R.layout.fragment_forwarding_history) {
+class HistoryFragment : Fragment(R.layout.fragment_forwarding_history) {
 
     private val binding by viewBinding(FragmentForwardingHistoryBinding::bind)
-    private val viewModel: ForwardingHistoryViewModel by viewModels()
-    private val adapter by unsafeLazy {
-        SmsHistoryAdapter(
-            onRetry = viewModel::onRetryClicked
-        )
-    }
+    private val viewModel: HistoryViewModel by viewModels()
+    private val adapter by unsafeLazy { HistoryAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,26 +33,13 @@ class ForwardingHistoryFragment : Fragment(R.layout.fragment_forwarding_history)
     }
 
     private fun setObservers() {
-        viewModel.apply {
-            viewState.observeWithLifecycle(viewLifecycleOwner, action = ::renderState)
-            viewEffect.observeWithLifecycle(viewLifecycleOwner, action = ::handleEffect)
-        }
+        viewModel.viewState.observeWithLifecycle(viewLifecycleOwner, action = ::renderState)
     }
 
-    private fun renderState(state: ForwardingHistoryState) {
+    private fun renderState(state: HistoryState) {
         adapter.submitList(state.historyItems)
-        with(binding) {
-            emptyStateText.isVisible = state.isEmptyStateTextVisible
-            historyItems.isVisible = state.isHistoryItemsVisible
-        }
-    }
-
-    private fun handleEffect(effect: ForwardingHistoryEffect) {
-        when (effect) {
-            is ForwardingHistoryEffect.RetryEffect -> {
-                showToast(R.string.forwarding_history_retrying)
-            }
-        }
+        binding.emptyStateText.isVisible = state.isEmptyStateTextVisible
+        binding.historyItems.isVisible = state.isHistoryItemsVisible
     }
 
     private fun setUpAdapter() {

@@ -1,7 +1,5 @@
 package org.open.smsforwarder.processing.processor
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.open.smsforwarder.data.remote.interceptor.RefreshTokenException
 import org.open.smsforwarder.data.remote.interceptor.TokenRevokedException
 import org.open.smsforwarder.data.repository.AuthRepository
@@ -10,7 +8,6 @@ import org.open.smsforwarder.data.repository.HistoryRepository
 import org.open.smsforwarder.data.repository.RulesRepository
 import org.open.smsforwarder.domain.model.Forwarding
 import org.open.smsforwarder.domain.model.ForwardingType
-import org.open.smsforwarder.domain.model.History
 import org.open.smsforwarder.processing.forwarder.Forwarder
 import javax.inject.Inject
 
@@ -41,57 +38,21 @@ class ForwardingProcessor @Inject constructor(
                 forwarders[recipient.forwardingType]
                     ?.execute(recipient, message)
                     ?.onSuccess {
-                        updateForwardingAndCreateHistory(recipient, message, "")
+                        postProcessForwarding(recipient, message, "")
                     }
                     ?.onFailure { error ->
-                        updateForwardingAndCreateHistory(recipient, message, error.message.orEmpty())
+                        postProcessForwarding(
+                            recipient,
+                            message,
+                            error.message.orEmpty()
+                        )
                         handleTokenErrors(error, recipient)
                     }
             }
         }
     }
 
-    suspend fun retryForwarding(historyItem: History) {
-        withContext(Dispatchers.IO) {
-            historyItem.let { history ->
-                forwardingRepository.getForwardingById(history.forwardingId)?.let { recipient ->
-                    forwarders[recipient.forwardingType]
-                        ?.execute(recipient, history.message)
-                        ?.onSuccess {
-                            updateForwardingAndHistory(recipient, history, "")
-                        }
-                        ?.onFailure { error ->
-                            updateForwardingAndHistory(recipient, history, error.message.orEmpty())
-                            handleTokenErrors(error, recipient)
-                        }
-                }
-            }
-        }
-    }
-
-    private suspend fun handleTokenErrors(error: Throwable, recipient: Forwarding) {
-        if (error is TokenRevokedException || error is RefreshTokenException) {
-            authRepository.signOut(recipient)
-        }
-    }
-
-    private suspend fun updateForwardingAndHistory(
-        forwarding: Forwarding,
-        history: History,
-        errorText: String
-    ) {
-        forwardingRepository.insertOrUpdateForwarding(
-            forwarding.copy(error = errorText)
-        )
-        historyRepository.updateForwardedSms(
-            history.copy(
-                isForwardingSuccessful = errorText.isEmpty(),
-                date = System.currentTimeMillis()
-            )
-        )
-    }
-
-    private suspend fun updateForwardingAndCreateHistory(
+    private suspend fun postProcessForwarding(
         forwarding: Forwarding,
         message: String,
         errorText: String,
@@ -104,5 +65,11 @@ class ForwardingProcessor @Inject constructor(
             message = message,
             isForwardingSuccessful = errorText.isEmpty(),
         )
+    }
+
+    private suspend fun handleTokenErrors(error: Throwable, recipient: Forwarding) {
+        if (error is TokenRevokedException || error is RefreshTokenException) {
+            authRepository.signOut(recipient)
+        }
     }
 }

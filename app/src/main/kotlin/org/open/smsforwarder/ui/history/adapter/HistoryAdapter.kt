@@ -6,16 +6,14 @@ import androidx.recyclerview.widget.ListAdapter
 import org.open.smsforwarder.databinding.ItemHistoryBinding
 import org.open.smsforwarder.ui.model.HistoryUI
 
-class SmsHistoryAdapter(
-    private val onRetry: (Long) -> Unit
-): ListAdapter<HistoryUI, SmsHistoryViewHolder>(SmsHistoryDiffCallback()) {
+class HistoryAdapter : ListAdapter<HistoryUI, HistoryViewHolder>(SmsHistoryDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SmsHistoryViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val binding = ItemHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return SmsHistoryViewHolder(binding, onRetry)
+        return HistoryViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: SmsHistoryViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 }

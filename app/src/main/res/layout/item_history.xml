@@ -35,10 +35,10 @@
         android:id="@+id/status_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/forwarding_history_item_status"
         android:layout_marginEnd="24dp"
+        android:text="@string/forwarding_history_item_status"
         android:textAppearance="@style/SmsTextAppearance.Medium.12.Gray"
-        app:layout_constraintEnd_toStartOf="@id/retry"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -47,8 +47,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:textAppearance="@style/SmsTextAppearance.Medium.12"
-        app:layout_constraintTop_toBottomOf="@id/status_label"
         app:layout_constraintStart_toStartOf="@id/status_label"
+        app:layout_constraintTop_toBottomOf="@id/status_label"
         tools:text="@string/forwarding_history_item_status_success"
         tools:textColor="@color/green" />
 
@@ -70,18 +70,6 @@
         android:textAppearance="@style/SmsTextAppearance.Medium.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/message_label"
-        tools:text="@tools:sample/lorem"/>
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/retry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/image_button_background"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_refresh"
-        app:tint="?attr/colorOnPrimary" />
+        tools:text="@tools:sample/lorem" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

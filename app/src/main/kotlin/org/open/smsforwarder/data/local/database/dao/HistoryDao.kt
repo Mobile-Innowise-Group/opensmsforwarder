@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import org.open.smsforwarder.data.local.database.entity.HistoryEntity
 import org.open.smsforwarder.data.local.database.entity.HistoryEntity.Companion.DATE
 import org.open.smsforwarder.data.local.database.entity.HistoryEntity.Companion.FORWARDING_HISTORY_TABLE
-import org.open.smsforwarder.data.local.database.entity.HistoryEntity.Companion.ID
 
 @Dao
 interface HistoryDao {
@@ -23,10 +22,6 @@ interface HistoryDao {
     )
     suspend fun getForwardedMessagesCountLast24Hours(): Int
 
-    @Query("SELECT * FROM $FORWARDING_HISTORY_TABLE")
+    @Query("SELECT * FROM $FORWARDING_HISTORY_TABLE ORDER BY $DATE DESC")
     fun getForwardingHistoryFlow(): Flow<List<HistoryEntity>>
-
-    @Query(" SELECT * FROM $FORWARDING_HISTORY_TABLE WHERE $ID = :id")
-    suspend fun getForwardingHistoryById(id: Long): HistoryEntity?
-
 }
