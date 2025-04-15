@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:minWidth="48dp"
         android:minHeight="48dp"
-        android:padding="8dp"
+        android:padding="14dp"
         android:src="@drawable/arrow_back"
         android:contentDescription="@string/back"
         app:layout_constraintBottom_toBottomOf="@id/step_label"

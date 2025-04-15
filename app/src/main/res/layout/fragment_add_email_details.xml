@@ -29,7 +29,6 @@
             android:id="@+id/step2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="@string/step_2_from_3"
             android:importantForAccessibility="yes"
             android:textAlignment="center"
@@ -37,7 +36,7 @@
             app:layout_constraintBottom_toBottomOf="@id/arrow_back_iv"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
             app:layout_constraintStart_toStartOf="@id/start_margin"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/arrow_back_iv" />
 
         <ImageView
             android:id="@+id/arrow_back_iv"
@@ -45,12 +44,13 @@
             android:layout_height="wrap_content"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            android:padding="8dp"
+            android:padding="14dp"
+            android:layout_marginTop="16dp"
             android:accessibilityTraversalAfter="@id/step2"
             android:contentDescription="@string/back"
             android:src="@drawable/arrow_back"
             app:layout_constraintStart_toStartOf="@id/start_margin"
-            app:layout_constraintTop_toTopOf="@id/step2" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/sign_in_tv"
