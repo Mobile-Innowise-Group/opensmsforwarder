@@ -2,6 +2,7 @@ package org.open.smsforwarder.ui.onboarding.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import org.open.smsforwarder.databinding.ItemOnboardingSlideBinding
 

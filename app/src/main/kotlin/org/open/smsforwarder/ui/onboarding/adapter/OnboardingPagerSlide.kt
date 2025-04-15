@@ -6,5 +6,5 @@ import androidx.annotation.StringRes
 data class OnboardingPagerSlide(
     @StringRes val titleId: Int,
     @StringRes val subtitleId: Int,
-    @DrawableRes val imageId: Int,
+    @DrawableRes val imageId: Int
 )
