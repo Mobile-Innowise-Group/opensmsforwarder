@@ -23,13 +23,13 @@
 
     <TextView
         android:id="@+id/title_label"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/forwarding_history_title"
         android:textAppearance="@style/SmsTextAppearance.Bold.16"
         android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@id/arrow_back_iv"
+        app:layout_constraintStart_toEndOf="@id/start_margin"
         app:layout_constraintEnd_toStartOf="@id/end_margin"
         app:layout_constraintTop_toTopOf="parent" />
 
