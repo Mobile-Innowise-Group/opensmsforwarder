@@ -19,7 +19,7 @@ data class OnboardingState(
                 OnboardingPagerSlide(
                     titleId = R.string.onboarding_step_1_heading,
                     subtitleId = R.string.onboarding_step_1_description,
-                    hasImage = false,
+                    imageId = R.drawable.logo,
                 ),
                 OnboardingPagerSlide(
                     titleId = R.string.onboarding_step_2_heading,

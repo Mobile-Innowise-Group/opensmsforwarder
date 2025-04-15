@@ -35,8 +35,7 @@ class SliderViewHolder(private val binding: ItemOnboardingSlideBinding) :
         with(binding) {
             textTitle.text = root.context.getString(slide.titleId)
             textSubtitle.text = root.context.getString(slide.subtitleId)
-            image.isVisible = slide.hasImage
-            slide.imageId?.let { image.setImageResource(it) }
+            image.setImageResource(slide.imageId)
         }
     }
 }

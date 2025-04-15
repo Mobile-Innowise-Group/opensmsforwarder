@@ -93,14 +93,14 @@
     <string name="onboarding_fragment_next">Next</string>
     <string name="onboarding_skip_all">Skip all</string>
     <string name="onboarding_step_label">Step %1$d</string>
-    <string name="onboarding_step_1_heading">Welcome to Open SMS Forwarder!</string>
+    <string name="onboarding_step_1_heading">Welcome to\nOpen SMS Forwarder!</string>
     <string name="onboarding_step_1_description">Thank you for choosing our application.\nIn the next steps we’ll explain you how to use the app in just a few easy steps.</string>
     <string name="onboarding_step_2_heading">Choose forwarding method</string>
     <string name="onboarding_step_2_description">Select what type of forwarding you prefer to use. You can forward your incoming SMS messages through email or SMS.</string>
     <string name="onboarding_step_3_heading">Provide recipient details</string>
-    <string name="onboarding_step_3_description">Provide the recipient\'s email or phone number.</string>
+    <string name="onboarding_step_3_description">1. Sign in with your Google Account. This is necessary to enable email forwarding on your behalf. \n2. Provide email or phone number of forwarding recipient. Messages will be forwarded to this address.</string>
     <string name="onboarding_step_4_heading">Add forwarding rules</string>
-    <string name="onboarding_step_4_description">Define the keywords that the SMS must contain to be eligible for forwarding.</string>
+    <string name="onboarding_step_4_description">1. Enter the keyword that the SMS must contain to be eligible for forwarding.\n2. Submit it with "Add Rule" button.\n\nAfter this, the forwarding setup is complete.</string>
     <string name="privacy_info_heading">Privacy info</string>
     <string name="privacy_info_description">Be cautious — scammers may trick you into sharing details to intercept your SMS. This app is not distributed by banks or public organizations and is for personal use only. Download it exclusively from Google Play.</string>
     <string name="risk_agreement_text">I acknowledge the potential risks and agree to proceed</string>
