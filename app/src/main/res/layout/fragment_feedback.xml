@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium"
             android:text="@string/feedback_description"
-            android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant" />
+            android:textAppearance="@style/SmsTextAppearance.Regular.14.Subsidiary" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_et_layout"

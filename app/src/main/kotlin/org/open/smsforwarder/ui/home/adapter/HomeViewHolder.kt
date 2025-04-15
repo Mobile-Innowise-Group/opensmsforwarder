@@ -16,6 +16,8 @@ class HomeViewHolder(
         val context = itemView.context
         title.isVisible = item.title.isNotBlank()
         title.text = item.title
+        title.contentDescription =
+            context.getString(R.string.forwarding_named, item.title)
         forwardingType.text = item.forwardingType?.value
         phoneGroup.isVisible = item.isSmsBlockCompleted()
         recipientPhoneEt.text = item.recipientPhone
@@ -29,6 +31,10 @@ class HomeViewHolder(
         }
 
         buttonEditItem.setOnClickListener { onItemEdit(item.id) }
+        buttonEditItem.contentDescription =
+            context.getString(R.string.edit_forwarding_named, item.title)
         buttonRemoveItem.setOnClickListener { onItemRemove(item.id) }
+        buttonRemoveItem.contentDescription =
+            context.getString(R.string.delete_forwarding_named, item.title)
     }
 }

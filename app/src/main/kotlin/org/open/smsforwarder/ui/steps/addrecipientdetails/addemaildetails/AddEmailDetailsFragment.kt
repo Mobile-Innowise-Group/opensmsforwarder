@@ -2,6 +2,7 @@ package org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails
 
 import android.os.Bundle
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import org.open.smsforwarder.extension.assistedViewModels
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindTextChangesTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.setTextIfChanged
 import org.open.smsforwarder.extension.setTextIfChangedKeepState
 import org.open.smsforwarder.extension.setVisibilityIfChanged
@@ -35,6 +37,11 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
         setObservers()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.step2.setAccessibilityFocus()
     }
 
     private fun setListeners() {

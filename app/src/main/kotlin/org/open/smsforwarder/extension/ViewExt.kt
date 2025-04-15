@@ -1,6 +1,7 @@
 package org.open.smsforwarder.extension
 
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.TextView
@@ -32,4 +33,9 @@ fun RadioButton.setValueIfChanged(newValue: Boolean) {
     if (oldValue != newValue) {
         isChecked = newValue
     }
+}
+
+fun View.setAccessibilityFocus() {
+    this.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+    this.requestFocus()
 }

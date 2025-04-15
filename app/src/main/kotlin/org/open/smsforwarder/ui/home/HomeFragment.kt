@@ -13,6 +13,7 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -28,6 +29,7 @@ import org.open.smsforwarder.analytics.AnalyticsTracker
 import org.open.smsforwarder.databinding.FragmentHomeBinding
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.showOkDialog
 import org.open.smsforwarder.extension.unsafeLazy
 import org.open.smsforwarder.ui.dialog.delete.DeleteDialog
@@ -77,6 +79,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
 
     override fun onStart() {
         super.onStart()
+        binding.titleLabel.setAccessibilityFocus()
         requestPermissions()
     }
 

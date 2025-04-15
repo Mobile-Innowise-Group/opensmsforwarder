@@ -2,6 +2,7 @@ package org.open.smsforwarder.ui.steps.addrecipientdetails.addphonedetails
 
 import android.os.Bundle
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -12,6 +13,7 @@ import org.open.smsforwarder.extension.assistedViewModels
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindTextChangesTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.setTextIfChangedKeepState
 
 @AndroidEntryPoint
@@ -26,6 +28,11 @@ class AddPhoneDetailsFragment : Fragment(R.layout.fragment_add_phone_details) {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
         setObservers()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.step2.setAccessibilityFocus()
     }
 
     private fun setListeners() {

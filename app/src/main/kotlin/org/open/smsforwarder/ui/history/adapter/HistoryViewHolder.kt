@@ -12,6 +12,10 @@ class HistoryViewHolder(
 
     fun bind(item: HistoryUI) = with(binding) {
         val context = itemView.context
+        dateLabel.contentDescription = context.getString(
+            R.string.forwarding_history_item_date_content_description,
+            item.id.toString()
+        )
         date.text = item.date.toDateTime()
         message.text = item.message
 
