@@ -17,19 +17,24 @@ data class OnboardingState(
         val slides: List<OnboardingPagerSlide> by unsafeLazy {
             listOf(
                 OnboardingPagerSlide(
-                    titleId = R.string.onboarding_first_step_heading,
-                    subtitleId = R.string.onboarding_first_step_description,
-                    imageId = R.drawable.step_1,
+                    titleId = R.string.onboarding_step_1_heading,
+                    subtitleId = R.string.onboarding_step_1_description,
+                    hasImage = false,
                 ),
                 OnboardingPagerSlide(
-                    titleId = R.string.onboarding_second_step_heading,
-                    subtitleId = R.string.onboarding_second_step_description,
-                    imageId = R.drawable.step_2,
+                    titleId = R.string.onboarding_step_2_heading,
+                    subtitleId = R.string.onboarding_step_2_description,
+                    imageId = R.drawable.onboarding_step_2,
                 ),
                 OnboardingPagerSlide(
-                    titleId = R.string.onboarding_third_step_heading,
-                    subtitleId = R.string.onboarding_third_step_description,
-                    imageId = R.drawable.step_3,
+                    titleId = R.string.onboarding_step_3_heading,
+                    subtitleId = R.string.onboarding_step_3_description,
+                    imageId = R.drawable.onboarding_step_3,
+                ),
+                OnboardingPagerSlide(
+                    titleId = R.string.onboarding_step_4_heading,
+                    subtitleId = R.string.onboarding_step_4_description,
+                    imageId = R.drawable.onboarding_step_4,
                 ),
                 OnboardingPagerSlide(
                     titleId = R.string.privacy_info_heading,

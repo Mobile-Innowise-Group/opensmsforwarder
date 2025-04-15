@@ -2,6 +2,7 @@ package org.open.smsforwarder.ui.onboarding.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import org.open.smsforwarder.databinding.ItemOnboardingSlideBinding
 
@@ -34,7 +35,8 @@ class SliderViewHolder(private val binding: ItemOnboardingSlideBinding) :
         with(binding) {
             textTitle.text = root.context.getString(slide.titleId)
             textSubtitle.text = root.context.getString(slide.subtitleId)
-            image.setImageResource(slide.imageId)
+            image.isVisible = slide.hasImage
+            slide.imageId?.let { image.setImageResource(it) }
         }
     }
 }
