@@ -19,7 +19,7 @@ class RuleViewHolder(
         buttonRemoveItem.setOnClickListener { onItemRemove(item) }
         buttonRemoveItem.contentDescription =
             context.getString(R.string.delete_rule_named, item.textRule)
-        ruleTv.text = context.getString(R.string.delete_rule_named, item.textRule)
+        ruleTv.text = item.textRule
         ruleTv.contentDescription = context.getString(R.string.rule_named, item.textRule)
     }
 }
