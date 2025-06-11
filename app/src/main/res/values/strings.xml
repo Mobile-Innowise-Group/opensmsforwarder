@@ -51,7 +51,7 @@
     <string name="error_email_is_not_valid">Email is not valid</string>
     <string name="error_email_is_blank">Email can not be blank</string>
     <string name="error_generic_is_blank">Field can not be blank</string>
-    <string name="error_google_sign_in">Unable to sign in to account</string>
+    <string name="error_google_sign_in">Failed to sign in with Google</string>
     <string name="error_google_sign_out">Unable to sign out from account</string>
     <string name="error_authorization_template">Authorization flow failed due to %s</string>
     <string name="error_get_credentials_template">Obtain credentials failed due to %s</string>
@@ -96,7 +96,7 @@
     <string name="onboarding_skip_all">Skip all</string>
     <string name="onboarding_step_label">Step %1$d</string>
     <string name="onboarding_step_1_heading">Welcome to\nOpen SMS Forwarder!</string>
-    <string name="onboarding_step_1_description">Thank you for choosing our application.\nIn the next steps we’ll explain you how to use the app in just a few easy steps.</string>
+    <string name="onboarding_step_1_description">Thank you for choosing our application.\nIn the next steps we will explain you how to use the app in just a few easy steps.</string>
     <string name="onboarding_step_2_heading">Choose forwarding method</string>
     <string name="onboarding_step_2_description">Select what type of forwarding you prefer to use. You can forward your incoming SMS messages through email or SMS.</string>
     <string name="onboarding_step_3_heading">Provide recipient details</string>
@@ -134,4 +134,8 @@
     <string name="feedback_letter_subject">Feedback from %s</string>
     <string name="feedback_success">Feedback successfully sent!</string>
     <string name="feedback_failure">Something went wrong while sending feedback.</string>
+    <string name="error_sign_in_cancelled">Sign in was cancelled</string>
+    <string name="error_network">Network error occurred. Please check your connection</string>
+    <string name="error_sign_in_in_progress">Sign in is already in progress</string>
+    <string name="error_sign_in_failed">Sign in failed. Please try again</string>
 </resources>

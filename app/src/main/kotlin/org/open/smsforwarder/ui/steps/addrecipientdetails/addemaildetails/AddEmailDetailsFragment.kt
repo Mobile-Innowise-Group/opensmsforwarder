@@ -33,6 +33,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import android.util.Log
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 
 
 @AndroidEntryPoint
@@ -57,6 +58,24 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
                         viewModel.exchangeTokens(serverAuthCode, email)
                     } else {
                         showToast(R.string.error_google_sign_in)
+                    }
+                } catch (e: ApiException) {
+                    when (e.statusCode) {
+                        GoogleSignInStatusCodes.SIGN_IN_CANCELLED -> {
+                            showToast(R.string.error_sign_in_cancelled)
+                        }
+                        GoogleSignInStatusCodes.NETWORK_ERROR -> {
+                            showToast(R.string.error_network)
+                        }
+                        GoogleSignInStatusCodes.SIGN_IN_CURRENTLY_IN_PROGRESS -> {
+                            showToast(R.string.error_sign_in_in_progress)
+                        }
+                        GoogleSignInStatusCodes.SIGN_IN_FAILED -> {
+                            showToast(R.string.error_sign_in_failed)
+                        }
+                        else -> {
+                            showToast(getString(R.string.error_google_sign_in) + ": " + e.message)
+                        }
                     }
                 } catch (e: Exception) {
                     showToast(getString(R.string.error_google_sign_in) + ": " + (e.message ?: e.toString()))
