@@ -3,14 +3,15 @@ package org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.IntentSenderRequest
-import android.view.accessibility.AccessibilityEvent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
+import com.google.android.gms.common.api.ApiException
 import dagger.hilt.android.AndroidEntryPoint
 import org.open.smsforwarder.R
 import org.open.smsforwarder.databinding.FragmentAddEmailDetailsBinding
@@ -23,17 +24,7 @@ import org.open.smsforwarder.extension.setTextIfChanged
 import org.open.smsforwarder.extension.setTextIfChangedKeepState
 import org.open.smsforwarder.extension.setVisibilityIfChanged
 import org.open.smsforwarder.extension.showToast
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.android.gms.common.api.ApiException
-import android.provider.Settings
-import android.content.Intent
 import javax.inject.Inject
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import android.util.Log
-import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 
 
 @AndroidEntryPoint
@@ -44,7 +35,8 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
         factory.create(requireArguments().getLong(ID_KEY))
     }
 
-    @Inject lateinit var googleSignInClient: GoogleSignInClient
+    @Inject
+    lateinit var googleSignInClient: GoogleSignInClient
 
     private val signInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -64,15 +56,19 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
                         GoogleSignInStatusCodes.SIGN_IN_CANCELLED -> {
                             showToast(R.string.error_sign_in_cancelled)
                         }
+
                         GoogleSignInStatusCodes.NETWORK_ERROR -> {
                             showToast(R.string.error_network)
                         }
+
                         GoogleSignInStatusCodes.SIGN_IN_CURRENTLY_IN_PROGRESS -> {
                             showToast(R.string.error_sign_in_in_progress)
                         }
+
                         GoogleSignInStatusCodes.SIGN_IN_FAILED -> {
                             showToast(R.string.error_sign_in_failed)
                         }
+
                         else -> {
                             showToast(getString(R.string.error_google_sign_in) + ": " + e.message)
                         }
@@ -99,7 +95,11 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
     }
 
     private fun startGoogleSignIn() {
-        signInLauncher.launch(googleSignInClient.signInIntent)
+        // Sign out first to force account selection
+        googleSignInClient.signOut().addOnCompleteListener {
+            val signInIntent = googleSignInClient.signInIntent
+            signInLauncher.launch(signInIntent)
+        }
     }
 
     private fun setListeners() {
