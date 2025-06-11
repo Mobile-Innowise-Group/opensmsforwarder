@@ -1,14 +1,10 @@
 package org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails
 
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialResponse
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.terrakok.cicerone.Router
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -76,24 +72,13 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
         _viewEffect.trySend(GoogleSignInViewEffect)
     }
 
-    fun handleSignIn(block: suspend () -> Result<GetCredentialResponse>) {
-        viewModelScope.launch {
-            block()
-                .onSuccess { credentialsResponse ->
-                    handleCredentialResponse(credentialsResponse)
-                }
-                .onFailure { error ->
-                    _viewEffect.trySend(
-                        GoogleSignInErrorViewEffect(R.string.error_get_credentials_template, error)
-                    )
-                }
-        }
-    }
-
     fun onSignOutClicked() {
         viewModelScope.launch {
             authRepository
                 .signOut(viewState.value.toDomain())
+                .onSuccess {
+                    _viewState.update { it.copy(senderEmail = null) }
+                }
                 .onFailure {
                     _viewEffect.trySend(
                         GoogleSignInErrorViewEffect(R.string.error_google_sign_out)
@@ -112,21 +97,19 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
         }
     }
 
-
-    fun exchangeTokens(serverAuth: String) {
+    fun exchangeTokens(serverAuth: String, email: String) {
         viewModelScope.launch {
             authRepository
                 .exchangeAuthCodeForTokensAnd(serverAuth)
                 .onSuccess { response ->
-                    val recipient = viewState.value.copy(
-                        senderEmail = email
-                    )
+                    val recipient = viewState.value.copy(senderEmail = email)
                     forwardingRepository.insertOrUpdateForwarding(recipient.toDomain())
                     authRepository.saveTokens(
                         viewState.value.id,
                         response.accessToken,
                         response.refreshToken
                     )
+                    _viewState.update { it.copy(senderEmail = email) }
                 }
                 .onFailure { error ->
                     _viewEffect.trySend(
@@ -143,24 +126,6 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
 
     fun onBackClicked() {
         router.exit()
-    }
-
-    private fun handleCredentialResponse(credentialResponse: GetCredentialResponse) {
-        when (val credential = credentialResponse.credential) {
-            is CustomCredential -> {
-                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                    try {
-                        val googleIdTokenCredential =
-                            GoogleIdTokenCredential.createFrom(credential.data)
-                        email = googleIdTokenCredential.id
-                    } catch (e: GoogleIdTokenParsingException) {
-                        _viewEffect.trySend(
-                            GoogleSignInErrorViewEffect(R.string.error_get_credentials_template, e)
-                        )
-                    }
-                }
-            }
-        }
     }
 
     @AssistedFactory

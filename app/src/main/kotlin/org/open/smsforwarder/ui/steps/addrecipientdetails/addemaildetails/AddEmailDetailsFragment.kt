@@ -1,8 +1,6 @@
 package org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails
 
 import android.app.Activity
-import android.app.PendingIntent
-import android.content.IntentSender.SendIntentException
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResult
@@ -10,13 +8,9 @@ import androidx.activity.result.IntentSenderRequest
 import android.view.accessibility.AccessibilityEvent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
-import androidx.credentials.CredentialManager
-import androidx.credentials.GetCredentialRequest
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.google.android.gms.auth.api.identity.AuthorizationResult
 import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.tasks.Task
 import dagger.hilt.android.AndroidEntryPoint
 import org.open.smsforwarder.R
 import org.open.smsforwarder.databinding.FragmentAddEmailDetailsBinding
@@ -29,8 +23,16 @@ import org.open.smsforwarder.extension.setTextIfChanged
 import org.open.smsforwarder.extension.setTextIfChangedKeepState
 import org.open.smsforwarder.extension.setVisibilityIfChanged
 import org.open.smsforwarder.extension.showToast
-import org.open.smsforwarder.utils.runCatchingWithCancellation
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.common.api.ApiException
+import android.provider.Settings
+import android.content.Intent
 import javax.inject.Inject
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import android.util.Log
 
 
 @AndroidEntryPoint
@@ -41,18 +43,27 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
         factory.create(requireArguments().getLong(ID_KEY))
     }
 
-    @Inject
-    lateinit var credentialManager: CredentialManager
+    @Inject lateinit var googleSignInClient: GoogleSignInClient
 
-    @Inject
-    lateinit var credentialRequest: GetCredentialRequest
-
-    @Inject
-    lateinit var authorizationResult: Task<AuthorizationResult>
-
-    private val sigInLauncher =
-        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-            handleResult(result)
+    private val signInLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                try {
+                    val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                    val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
+                    val serverAuthCode = account.serverAuthCode
+                    val email = account.email
+                    if (serverAuthCode != null && email != null) {
+                        viewModel.exchangeTokens(serverAuthCode, email)
+                    } else {
+                        showToast(R.string.error_google_sign_in)
+                    }
+                } catch (e: Exception) {
+                    showToast(getString(R.string.error_google_sign_in) + ": " + (e.message ?: e.toString()))
+                }
+            } else {
+                showToast(R.string.error_google_sign_in)
+            }
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,25 +77,15 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
         binding.step2.setAccessibilityFocus()
     }
 
-    private fun handleResult(result: ActivityResult) {
-        if (result.resultCode == Activity.RESULT_OK) {
-            val authorizationResult: AuthorizationResult =
-                Identity.getAuthorizationClient(requireActivity()).getAuthorizationResultFromIntent(
-                    result.data
-                )
-            val authServer = authorizationResult.serverAuthCode
-            authServer?.let { viewModel.exchangeTokens(it) }
-        } else {
-            //TODO add more suitable way of the handling CANCELLED scenario
-            showToast(R.string.error_google_sign_in)
-        }
+    private fun startGoogleSignIn() {
+        signInLauncher.launch(googleSignInClient.signInIntent)
     }
 
     private fun setListeners() {
         with(binding) {
             arrowBackIv bindClicksTo viewModel::onBackClicked
             recipientEmailEt bindTextChangesTo viewModel::onEmailChanged
-            signInBtn bindClicksTo viewModel::onSignInClicked
+            signInBtn bindClicksTo { startGoogleSignIn() }
             signOutBtn bindClicksTo viewModel::onSignOutClicked
             nextBtn bindClicksTo viewModel::onNextClicked
         }
@@ -124,64 +125,7 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
     }
 
     private fun handleSignInEffect() {
-        tryToSignOut {
-            viewModel.handleSignIn {
-                runCatchingWithCancellation {
-                    credentialManager.getCredential(requireActivity(), credentialRequest)
-                }
-                    .onSuccess {
-                        finishAuthorizationFlow()
-                    }
-                    .onFailure {
-                        showToast(
-                            getString(
-                                R.string.error_get_credentials_template,
-                                it.message
-                            )
-                        )
-                    }
-            }
-        }
-    }
-
-    private fun finishAuthorizationFlow() {
-        authorizationResult.addOnSuccessListener { authorizationResult ->
-            val pendingIntent: PendingIntent? =
-                authorizationResult.pendingIntent
-            try {
-                pendingIntent?.intentSender?.let {
-                    sigInLauncher.launch(
-                        IntentSenderRequest.Builder(it).build()
-                    )
-                }
-            } catch (e: SendIntentException) {
-                showToast(
-                    getString(
-                        R.string.error_authorization_template,
-                        e.message
-                    )
-                )
-            }
-        }
-            .addOnFailureListener {
-                showToast(
-                    getString(
-                        R.string.error_authorization_template,
-                        it.message
-                    )
-                )
-            }
-    }
-
-    private fun tryToSignOut(block: () -> Unit) {
-        Identity.getSignInClient(requireActivity())
-            .signOut()
-            .addOnCompleteListener {
-                block()
-            }
-            .addOnFailureListener { e: Exception? ->
-                showToast(R.string.error_google_sign_out)
-            }
+        // This method is now empty as the logic has been moved to the ViewModel
     }
 
     companion object {
