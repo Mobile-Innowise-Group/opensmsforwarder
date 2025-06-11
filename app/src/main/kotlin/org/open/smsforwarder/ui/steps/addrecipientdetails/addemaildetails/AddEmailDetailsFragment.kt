@@ -77,8 +77,10 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
                             showToast(getString(R.string.error_google_sign_in) + ": " + e.message)
                         }
                     }
-                } catch (e: Exception) {
-                    showToast(getString(R.string.error_google_sign_in) + ": " + (e.message ?: e.toString()))
+                } catch (e: IllegalStateException) {
+                    showToast(getString(R.string.error_google_sign_in) + ": " + e.message)
+                } catch (e: SecurityException) {
+                    showToast(getString(R.string.error_google_sign_in) + ": " + e.message)
                 }
             } else {
                 showToast(R.string.error_google_sign_in)
