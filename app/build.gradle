@@ -29,6 +29,7 @@ android {
         android.buildFeatures.buildConfig true
         buildConfigField "String", "OAUTH_BASE_URL", "\"https://oauth2.googleapis.com/\""
         buildConfigField "String", "API_BASE_URL", "\"https://www.googleapis.com/\""
+        buildConfigField "String", "TELEGRAM_API_BASE_URL", "\"https://api.telegram.org/\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

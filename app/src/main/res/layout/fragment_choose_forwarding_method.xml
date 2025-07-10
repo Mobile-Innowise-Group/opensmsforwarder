@@ -133,6 +133,18 @@
                 android:textAppearance="@style/SmsTextAppearance.Regular.14.Subsidiary"
                 android:visibility="gone"
                 tools:visibility="visible" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/telegram_rb"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/radio_button_background"
+                android:text="@string/telegram"
+                android:textAppearance="@style/SmsTextAppearance.Regular.16"
+                android:textColor="@drawable/radio_button_text_colors"
+                app:buttonTint="@drawable/radio_color_state_list" />
+
         </RadioGroup>
 
         <com.google.android.material.button.MaterialButton

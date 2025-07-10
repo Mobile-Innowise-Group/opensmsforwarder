@@ -9,17 +9,25 @@ data class ForwardingUI(
     val senderEmail: String? = null,
     val recipientPhone: String = "",
     val recipientEmail: String = "",
+    val telegramApiToken: String = "",
+    val telegramChatId: String = "",
     val error: String = "",
     val atLeastOneRuleAdded: Boolean = true
 ) {
 
     fun isEmailBlockCompleted() =
-        forwardingType == ForwardingType.EMAIL && recipientEmail.isNotEmpty()
+        forwardingType == ForwardingType.EMAIL && recipientEmail.isNotEmpty() && !senderEmail.isNullOrEmpty()
 
     fun isSmsBlockCompleted() =
         forwardingType == ForwardingType.SMS && recipientPhone.isNotEmpty()
 
     val allStepsCompleted: Boolean
-        get() = ((isEmailBlockCompleted() && !senderEmail.isNullOrEmpty())
-                || isSmsBlockCompleted()) && atLeastOneRuleAdded
+        get() = (isEmailBlockCompleted()
+                || isSmsBlockCompleted()
+                || isTelegramBlockCompleted())
+                && atLeastOneRuleAdded
+
+    private fun isTelegramBlockCompleted(): Boolean =
+        forwardingType == ForwardingType.TELEGRAM
+                && telegramApiToken.isNotBlank() && telegramChatId.isNotBlank()
 }

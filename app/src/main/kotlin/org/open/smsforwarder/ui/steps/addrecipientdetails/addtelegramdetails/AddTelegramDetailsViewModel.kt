@@ -1,4 +1,4 @@
-package org.open.smsforwarder.ui.steps.addrecipientdetails.addphonedetails
+package org.open.smsforwarder.ui.steps.addrecipientdetails.addtelegramdetails
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -12,27 +12,24 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.open.smsforwarder.analytics.AnalyticsEvents.RECIPIENT_CREATION_STEP2_NEXT_CLICKED
-import org.open.smsforwarder.analytics.AnalyticsTracker
 import org.open.smsforwarder.data.repository.ForwardingRepository
-import org.open.smsforwarder.domain.usecase.ValidatePhoneUseCase
+import org.open.smsforwarder.domain.usecase.ValidateBlankFieldUseCase
 import org.open.smsforwarder.extension.asStateFlowWithInitialAction
 import org.open.smsforwarder.extension.getStringProvider
 import org.open.smsforwarder.extension.launchAndCancelPrevious
 import org.open.smsforwarder.navigation.Screens
 import org.open.smsforwarder.ui.mapper.toDomain
-import org.open.smsforwarder.ui.mapper.toPhoneDetailsUi
+import org.open.smsforwarder.ui.mapper.toTelegramDetailsUi
 
-@HiltViewModel(assistedFactory = AddPhoneDetailsViewModel.Factory::class)
-class AddPhoneDetailsViewModel @AssistedInject constructor(
+@HiltViewModel(assistedFactory = AddTelegramDetailsViewModel.Factory::class)
+class AddTelegramDetailsViewModel @AssistedInject constructor(
     @Assisted private val id: Long,
     private val forwardingRepository: ForwardingRepository,
-    private val validatePhoneUseCase: ValidatePhoneUseCase,
+    private val validateBlankFieldUseCase: ValidateBlankFieldUseCase,
     private val router: Router,
-    private val analyticsTracker: AnalyticsTracker,
 ) : ViewModel(), DefaultLifecycleObserver {
 
-    private var _viewState = MutableStateFlow(AddPhoneDetailsState())
+    private var _viewState = MutableStateFlow(AddTelegramDetailsState())
     val viewState = _viewState.asStateFlowWithInitialAction(viewModelScope) { loadData() }
 
     override fun onPause(owner: LifecycleOwner) {
@@ -48,24 +45,33 @@ class AddPhoneDetailsViewModel @AssistedInject constructor(
                 .getForwardingByIdFlow(id)
                 .collect { forwarding ->
                     _viewState.update {
-                        forwarding.toPhoneDetailsUi()
+                        forwarding.toTelegramDetailsUi()
                     }
                 }
         }
     }
 
-    fun onPhoneChanged(phoneNumber: String) {
-        val phoneValidationResult = validatePhoneUseCase.execute(phoneNumber)
+    fun onTelegramApiTokenChanged(apiToken: String) {
+        val apiTokenValidationResult = validateBlankFieldUseCase.execute(apiToken)
         _viewState.update {
             it.copy(
-                recipientPhone = phoneNumber,
-                inputErrorProvider = phoneValidationResult.errorType?.getStringProvider()
+                telegramApiToken = apiToken,
+                inputErrorApiToken = apiTokenValidationResult.errorType?.getStringProvider()
+            )
+        }
+    }
+
+    fun onTelegramChatIdChanged(chatId: String) {
+        val chatIdValidationResult = validateBlankFieldUseCase.execute(chatId)
+        _viewState.update {
+            it.copy(
+                telegramChatId = chatId,
+                inputErrorChatId = chatIdValidationResult.errorType?.getStringProvider()
             )
         }
     }
 
     fun onNextClicked() {
-        analyticsTracker.trackEvent(RECIPIENT_CREATION_STEP2_NEXT_CLICKED)
         router.navigateTo(Screens.addForwardingRuleFragment(id))
     }
 
@@ -75,6 +81,6 @@ class AddPhoneDetailsViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(id: Long): AddPhoneDetailsViewModel
+        fun create(id: Long): AddTelegramDetailsViewModel
     }
 }

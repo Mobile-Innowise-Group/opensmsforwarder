@@ -8,8 +8,9 @@ import org.open.smsforwarder.ui.model.ForwardingUI
 import org.open.smsforwarder.ui.model.HistoryUI
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails.AddEmailDetailsState
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addphonedetails.AddPhoneDetailsState
+import org.open.smsforwarder.ui.steps.addrecipientdetails.addtelegramdetails.AddTelegramDetailsState
 
-fun Forwarding.toEmailDetailsPresentation(): AddEmailDetailsState {
+fun Forwarding.toEmailDetailsUi(): AddEmailDetailsState {
     val signInTvVisible = isEmailForwardingType && senderEmail.isNullOrEmpty()
     val senderEmailVisible = !senderEmail.isNullOrEmpty() && isEmailForwardingType
     val sigInBtnVisible = senderEmail.isNullOrEmpty() && isEmailForwardingType
@@ -27,12 +28,29 @@ fun Forwarding.toEmailDetailsPresentation(): AddEmailDetailsState {
     )
 }
 
-fun Forwarding.toPhoneDetailsPresentation(): AddPhoneDetailsState =
+fun Forwarding.toPhoneDetailsUi(): AddPhoneDetailsState =
     AddPhoneDetailsState(
         id = id,
         title = title,
         forwardingType = forwardingType,
         recipientPhone = recipientPhone
+    )
+
+fun Forwarding.toTelegramDetailsUi(): AddTelegramDetailsState =
+    AddTelegramDetailsState(
+        id = id,
+        title = title,
+        forwardingType = forwardingType,
+        telegramApiToken = telegramApiToken,
+        telegramChatId = telegramChatId,
+    )
+
+fun History.toHistoryUi() =
+    HistoryUI(
+        id = id,
+        date = date,
+        message = message,
+        isForwardingSuccessful = isForwardingSuccessful
     )
 
 fun List<Forwarding>.mergeWithRules(rules: List<Rule>): HomeState {
@@ -45,6 +63,8 @@ fun List<Forwarding>.mergeWithRules(rules: List<Rule>): HomeState {
                 forwardingType = forwarding.forwardingType,
                 senderEmail = forwarding.senderEmail,
                 recipientPhone = forwarding.recipientPhone,
+                telegramApiToken = forwarding.telegramApiToken,
+                telegramChatId = forwarding.telegramChatId,
                 recipientEmail = forwarding.recipientEmail,
                 error = forwarding.error,
                 atLeastOneRuleAdded = rules.any { forwarding.id == it.forwardingId }
@@ -62,6 +82,15 @@ fun AddPhoneDetailsState.toDomain() =
         recipientPhone = recipientPhone
     )
 
+fun AddTelegramDetailsState.toDomain() =
+    Forwarding(
+        id = id,
+        title = title,
+        forwardingType = forwardingType,
+        telegramApiToken = telegramApiToken,
+        telegramChatId = telegramChatId,
+    )
+
 fun AddEmailDetailsState.toDomain() =
     Forwarding(
         id = id,
@@ -69,12 +98,4 @@ fun AddEmailDetailsState.toDomain() =
         forwardingType = forwardingType,
         senderEmail = senderEmail,
         recipientEmail = recipientEmail
-    )
-
-fun History.toHistoryUi() =
-    HistoryUI(
-        id = id,
-        date = date,
-        message = message,
-        isForwardingSuccessful = isForwardingSuccessful
     )

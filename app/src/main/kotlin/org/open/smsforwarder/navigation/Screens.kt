@@ -7,6 +7,7 @@ import org.open.smsforwarder.ui.onboarding.OnboardingFragment
 import org.open.smsforwarder.ui.feedback.FeedbackFragment
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails.AddEmailDetailsFragment
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addphonedetails.AddPhoneDetailsFragment
+import org.open.smsforwarder.ui.steps.addrecipientdetails.addtelegramdetails.AddTelegramDetailsFragment
 import org.open.smsforwarder.ui.steps.addrule.AddForwardingRuleFragment
 import org.open.smsforwarder.ui.steps.choosemethod.ChooseForwardingMethodFragment
 
@@ -21,6 +22,9 @@ object Screens {
 
     fun addEmailDetailsFragment(id: Long) =
         FragmentScreen { AddEmailDetailsFragment.newInstance(id) }
+
+    fun addTelegramDetailsFragment(id: Long) =
+        FragmentScreen { AddTelegramDetailsFragment.newInstance(id) }
 
     fun addForwardingRuleFragment(id: Long) =
         FragmentScreen { AddForwardingRuleFragment.newInstance(id) }

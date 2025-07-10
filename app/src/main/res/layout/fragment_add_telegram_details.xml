@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp" />
+
+        <ImageView
+            android:id="@+id/arrow_back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:accessibilityTraversalAfter="@id/step2"
+            android:contentDescription="@string/back"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:padding="14dp"
+            android:src="@drawable/arrow_back"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/step2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/step_2_from_3"
+            android:textAlignment="center"
+            android:textAppearance="@style/SmsTextAppearance.Bold.16"
+            app:layout_constraintBottom_toBottomOf="@id/arrow_back_iv"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/telegram_api_token_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/telegram_api_token"
+            android:textAppearance="@style/SmsTextAppearance.Bold.16"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/step2" />
+
+        <ImageView
+            android:id="@+id/telegram_api_token_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="32dp"
+            android:contentDescription="@string/telegram_api_token_info"
+            android:src="@drawable/info_ic"
+            app:layout_constraintBottom_toBottomOf="@id/telegram_api_token_tv"
+            app:layout_constraintStart_toEndOf="@id/telegram_api_token_tv"
+            app:layout_constraintTop_toBottomOf="@id/step2" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/telegram_api_token_layout"
+            style="@style/SmsEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/telegram_api_token_tv">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/telegram_api_token_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_telegram_api_token_hint"
+                android:imeOptions="actionNext"
+                android:inputType="textMultiLine"
+                android:maxLines="3"
+                android:textColorHint="?attr/colorSubsidiary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/telegram_chat_id_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/telegram_chat_id"
+            android:textAppearance="@style/SmsTextAppearance.Bold.16"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/telegram_api_token_layout" />
+
+        <ImageView
+            android:id="@+id/telegram_chat_id_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="32dp"
+            android:contentDescription="@string/telegram_chat_id_info"
+            android:src="@drawable/info_ic"
+            app:layout_constraintBottom_toBottomOf="@id/telegram_chat_id_tv"
+            app:layout_constraintStart_toEndOf="@id/telegram_chat_id_tv"
+            app:layout_constraintTop_toBottomOf="@id/telegram_api_token_layout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/telegram_chat_id_layout"
+            style="@style/SmsEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/telegram_chat_id_tv">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/telegram_chat_id_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_telegram_chat_id_hint"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:textColorHint="?attr/colorSubsidiary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_btn"
+            style="@style/SmsMaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:text="@string/next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toBottomOf="@id/telegram_chat_id_layout"
+            app:layout_constraintVertical_bias="1.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
