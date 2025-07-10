@@ -25,10 +25,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checking out branch
+      - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Setup Java (JDK)
+      - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'oracle'
@@ -66,7 +68,13 @@ jobs:
         run: ./gradlew build
 
       - name: Check Room integrity
-        run: git diff --exit-code -- app/schemas
+        run: |
+          if git diff --quiet HEAD^ -- app/schemas/; then
+            echo "✅ No schema change"
+          else
+            echo "❌ Room schema has changed. Bump database version, add migration from xxx to xxx and don't forget to write instrumentation test"
+            exit 1
+          fi
 
       - name: Run unit tests
         run: ./gradlew test

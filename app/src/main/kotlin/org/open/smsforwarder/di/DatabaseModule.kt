@@ -14,28 +14,34 @@ import org.open.smsforwarder.data.local.database.dao.ForwardingDao
 import org.open.smsforwarder.data.local.database.dao.HistoryDao
 import org.open.smsforwarder.data.local.database.dao.RulesDao
 import org.open.smsforwarder.data.local.database.migration.MIGRATION_1_2
+import org.open.smsforwarder.data.local.database.migration.RoomMigrationChecker
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 class DatabaseModule {
 
+    private val migrations = listOf(
+        MIGRATION_1_2
+    )
+
     @Provides
     @Singleton
+    @Suppress("SpreadOperator")
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
-        val db = Room
+        if (BuildConfig.DEBUG) {
+            RoomMigrationChecker.validateMigrations(appContext, migrations)
+        }
+
+        val database = Room
             .databaseBuilder(
                 appContext,
                 AppDatabase::class.java,
-                DATABASE_NAME
+                AppDatabase.DATABASE_NAME
             )
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(*migrations.toTypedArray())
             .build()
-
-        if (BuildConfig.DEBUG) {
-            db.openHelper.writableDatabase // use to crash early if migration is missing
-        }
-        return db
+        return database
     }
 
     @Provides
@@ -54,8 +60,4 @@ class DatabaseModule {
     @Singleton
     fun provideForwardingHistoryDao(database: AppDatabase): HistoryDao =
         database.historyDao()
-
-    private companion object {
-        const val DATABASE_NAME = "sms_forwarder"
-    }
 }
