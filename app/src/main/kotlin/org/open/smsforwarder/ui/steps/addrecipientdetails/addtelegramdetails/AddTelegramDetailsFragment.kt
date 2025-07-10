@@ -19,7 +19,8 @@ import org.open.smsforwarder.extension.showTooltip
 class AddTelegramDetailsFragment : Fragment(R.layout.fragment_add_telegram_details) {
 
     private val binding by viewBinding(FragmentAddTelegramDetailsBinding::bind)
-    private val viewModel by assistedViewModels<AddTelegramDetailsViewModel, AddTelegramDetailsViewModel.Factory> { factory ->
+    private val viewModel by
+    assistedViewModels<AddTelegramDetailsViewModel, AddTelegramDetailsViewModel.Factory> { factory ->
         factory.create(requireArguments().getLong(ID_KEY))
     }
 

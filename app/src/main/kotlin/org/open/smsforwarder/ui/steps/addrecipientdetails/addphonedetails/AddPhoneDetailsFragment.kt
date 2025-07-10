@@ -20,7 +20,8 @@ import org.open.smsforwarder.extension.setTextIfChangedKeepState
 class AddPhoneDetailsFragment : Fragment(R.layout.fragment_add_phone_details) {
 
     private val binding by viewBinding(FragmentAddPhoneDetailsBinding::bind)
-    private val viewModel by assistedViewModels<AddPhoneDetailsViewModel, AddPhoneDetailsViewModel.Factory> { factory ->
+    private val viewModel by
+    assistedViewModels<AddPhoneDetailsViewModel, AddPhoneDetailsViewModel.Factory> { factory ->
         factory.create(requireArguments().getLong(ID_KEY))
     }
 
