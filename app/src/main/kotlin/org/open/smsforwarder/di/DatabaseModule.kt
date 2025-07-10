@@ -7,11 +7,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import org.open.smsforwarder.BuildConfig
 import org.open.smsforwarder.data.local.database.AppDatabase
 import org.open.smsforwarder.data.local.database.dao.AuthTokenDao
 import org.open.smsforwarder.data.local.database.dao.ForwardingDao
 import org.open.smsforwarder.data.local.database.dao.HistoryDao
 import org.open.smsforwarder.data.local.database.dao.RulesDao
+import org.open.smsforwarder.data.local.database.migration.MIGRATION_1_2
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -20,12 +22,21 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase =
-        Room.databaseBuilder(
-            appContext,
-            AppDatabase::class.java,
-            DATABASE_NAME
-        ).build()
+    fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
+        val db = Room
+            .databaseBuilder(
+                appContext,
+                AppDatabase::class.java,
+                DATABASE_NAME
+            )
+            .addMigrations(MIGRATION_1_2)
+            .build()
+
+        if (BuildConfig.DEBUG) {
+            db.openHelper.writableDatabase // use to crash early if migration is missing
+        }
+        return db
+    }
 
     @Provides
     @Singleton

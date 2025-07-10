@@ -19,8 +19,6 @@ class HomeViewHolder(
         title.contentDescription =
             context.getString(R.string.forwarding_named, item.title)
         forwardingType.text = item.forwardingType?.value
-        phoneGroup.isVisible = item.isSmsBlockCompleted()
-        recipientPhoneEt.text = item.recipientPhone
         emailGroup.isVisible = item.isEmailBlockCompleted()
         email.text = item.recipientEmail
         error.isVisible = !item.allStepsCompleted || item.error.isNotEmpty()
@@ -30,11 +28,11 @@ class HomeViewHolder(
             else -> null
         }
 
-        buttonEditItem.setOnClickListener { onItemEdit(item.id) }
-        buttonEditItem.contentDescription =
+        editItemBtn.setOnClickListener { onItemEdit(item.id) }
+        editItemBtn.contentDescription =
             context.getString(R.string.edit_forwarding_named, item.title)
-        buttonRemoveItem.setOnClickListener { onItemRemove(item.id) }
-        buttonRemoveItem.contentDescription =
+        removeItemBtn.setOnClickListener { onItemRemove(item.id) }
+        removeItemBtn.contentDescription =
             context.getString(R.string.delete_forwarding_named, item.title)
     }
 }

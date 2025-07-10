@@ -60,7 +60,6 @@ class ChooseForwardingMethodViewModel @AssistedInject constructor(
     fun onNextClicked() {
         viewState.value.forwardingType?.let { forwardingType ->
             val screenToNavigate = when (forwardingType) {
-                ForwardingType.SMS -> Screens.addPhoneDetailsFragment(id)
                 ForwardingType.EMAIL -> Screens.addEmailDetailsFragment(id)
                 ForwardingType.TELEGRAM -> Screens.addTelegramDetailsFragment(id)
             }

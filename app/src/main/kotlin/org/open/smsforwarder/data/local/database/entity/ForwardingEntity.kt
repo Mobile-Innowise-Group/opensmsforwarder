@@ -22,9 +22,6 @@ data class ForwardingEntity(
     @ColumnInfo(name = SENDER_EMAIL)
     val senderEmail: String? = null,
 
-    @ColumnInfo(name = RECIPIENT_PHONE)
-    val recipientPhone: String = "",
-
     @ColumnInfo(name = RECIPIENT_EMAIL)
     val recipientEmail: String = "",
 
@@ -43,7 +40,6 @@ data class ForwardingEntity(
         const val ID = "id"
         const val TITLE = "title"
         const val FORWARDING_TYPE = "forwarding_type"
-        const val RECIPIENT_PHONE = "recipient_phone"
         const val SENDER_EMAIL = "sender_email"
         const val RECIPIENT_EMAIL = "recipient_email"
         const val ERROR_TEXT = "error_text"

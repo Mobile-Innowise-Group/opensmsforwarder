@@ -27,6 +27,8 @@ jobs:
     steps:
       - name: Checking out branch
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Java (JDK)
         uses: actions/setup-java@v4
@@ -39,6 +41,12 @@ jobs:
 
       - name: Run static code analysis
         run: ./gradlew detekt
+
+      - name: Run Room schema export
+        run: ./gradlew clean assembleDebug
+
+      - name: Check for schema changes
+        run: git diff --exit-code -- app/schemas
 
       - name: Decode Release Keystore
         env:
