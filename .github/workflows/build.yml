@@ -42,12 +42,6 @@ jobs:
       - name: Run static code analysis
         run: ./gradlew detekt
 
-      - name: Run Room schema export
-        run: ./gradlew clean assembleDebug
-
-      - name: Check for schema changes
-        run: git diff --exit-code -- app/schemas
-
       - name: Decode Release Keystore
         env:
           ENCODED_RELEASE_STRING: ${{ secrets.RELEASE_KEY_BASE_64 }}
@@ -69,6 +63,12 @@ jobs:
         env:
           DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo $DATA | base64 -di > app/google-services.json
+
+      - name: Run Room schema export
+        run: ./gradlew clean assembleDebug
+
+      - name: Check for schema changes
+        run: git diff --exit-code -- app/schemas
 
       - name: Build
         run: ./gradlew build
