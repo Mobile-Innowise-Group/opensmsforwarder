@@ -36,6 +36,9 @@ jobs:
           distribution: 'oracle'
           java-version: '17'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3.2.1
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
@@ -72,6 +75,15 @@ jobs:
 
       - name: Run unit tests
         run: ./gradlew test
+
+      - name: Create AVD and start emulator
+        uses: reactivecircus/android-emulator-runner@v2.34.0
+        with:
+          api-level: 30
+          target: google_apis
+          arch: x86_64
+          profile: pixel
+          script: ./gradlew connectedCheck
 
       - name: Build Release apk
         run: ./gradlew assembleRelease --stacktrace
