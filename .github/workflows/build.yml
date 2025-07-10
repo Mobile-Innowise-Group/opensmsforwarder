@@ -27,17 +27,12 @@ jobs:
     steps:
       - name: Checking out branch
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Java (JDK)
         uses: actions/setup-java@v4
         with:
           distribution: 'oracle'
           java-version: '17'
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3.2.1
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -70,14 +65,19 @@ jobs:
       - name: Build
         run: ./gradlew build
 
-      - name: Check for Room schema changes
+      - name: Check Room integrity
         run: git diff --exit-code -- app/schemas
 
       - name: Run unit tests
         run: ./gradlew test
 
-      - name: Create AVD and start emulator
-        uses: reactivecircus/android-emulator-runner@v2.34.0
+      - name: Set up Android SDK
+        if: github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main'
+        uses: android-actions/setup-android@v3
+
+      - name: Run instrumentation Tests
+        if: github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main'
+        uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 30
           target: google_apis
