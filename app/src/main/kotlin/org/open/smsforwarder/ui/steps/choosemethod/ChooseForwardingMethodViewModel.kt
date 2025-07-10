@@ -62,6 +62,7 @@ class ChooseForwardingMethodViewModel @AssistedInject constructor(
             val screenToNavigate = when (forwardingType) {
                 ForwardingType.SMS -> Screens.addPhoneDetailsFragment(id)
                 ForwardingType.EMAIL -> Screens.addEmailDetailsFragment(id)
+                ForwardingType.TELEGRAM -> Screens.addTelegramDetailsFragment(id)
             }
             analyticsTracker.trackEvent(RECIPIENT_CREATION_STEP1_NEXT_CLICKED)
             router.navigateTo(screenToNavigate)

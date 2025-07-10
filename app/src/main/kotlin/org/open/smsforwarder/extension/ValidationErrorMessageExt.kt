@@ -4,7 +4,7 @@ import org.open.smsforwarder.R
 import org.open.smsforwarder.domain.ValidationError
 import org.open.smsforwarder.utils.Resources
 
-fun ValidationError.getErrorStringProvider(): Resources.StringProvider {
+fun ValidationError.getStringProvider(): Resources.StringProvider {
     return when (this) {
         ValidationError.BLANK_FIELD -> Resources.StringResource(R.string.error_generic_is_blank)
         ValidationError.BLANK_EMAIL -> Resources.StringResource(R.string.error_email_is_blank)

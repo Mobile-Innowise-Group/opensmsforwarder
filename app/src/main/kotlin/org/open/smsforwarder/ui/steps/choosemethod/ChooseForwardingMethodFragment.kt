@@ -2,7 +2,6 @@ package org.open.smsforwarder.ui.steps.choosemethod
 
 import android.os.Bundle
 import android.view.View
-import android.view.accessibility.AccessibilityEvent
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -46,6 +45,7 @@ class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forward
             titleEt bindTextChangesTo viewModel::onTitleChanged
             emailRb bindCheckChangesTo { viewModel.onForwardingMethodChanged(ForwardingType.EMAIL) }
             smsRb bindCheckChangesTo { viewModel.onForwardingMethodChanged(ForwardingType.SMS) }
+            telegramRb bindCheckChangesTo { viewModel.onForwardingMethodChanged(ForwardingType.TELEGRAM) }
             arrowBackIv bindClicksTo viewModel::onBackClicked
             nextBtn bindClicksTo viewModel::onNextClicked
         }
@@ -62,6 +62,7 @@ class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forward
             titleEt.setTextIfChangedKeepState(state.title)
             emailRb.setValueIfChanged(state.isEmailForwardingType)
             smsRb.setValueIfChanged(state.isSmsForwardingType)
+            telegramRb.setValueIfChanged(state.isTelegramForwardingType)
             smsInfoTv.setVisibilityIfChanged(state.isSmsForwardingType)
         }
     }

@@ -15,6 +15,8 @@ fun ForwardingEntity.toDomain(): Forwarding =
         recipientPhone = recipientPhone,
         senderEmail = senderEmail,
         recipientEmail = recipientEmail,
+        telegramApiToken = telegramApiToken,
+        telegramChatId = telegramChatId,
         error = errorText
     )
 
@@ -42,6 +44,8 @@ fun Forwarding.toData(): ForwardingEntity =
         recipientPhone = recipientPhone,
         senderEmail = senderEmail,
         recipientEmail = recipientEmail,
+        telegramApiToken = telegramApiToken,
+        telegramChatId = telegramChatId,
         errorText = error
     )
 

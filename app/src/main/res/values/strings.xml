@@ -36,6 +36,11 @@
     <string name="add_recipient">Add recipient</string>
     <string name="add_forwarding_rule">Add forwarding rules</string>
     <string name="sms">SMS</string>
+    <string name="telegram">Telegram</string>
+    <string name="telegram_api_token">Telegram Api Token</string>
+    <string name="telegram_chat_id">Telegram Chat Id</string>
+    <string name="enter_telegram_api_token_hint">Enter telegram Api Token</string>
+    <string name="enter_telegram_chat_id_hint">Enter Telegram Chat Id</string>
     <string name="sms_warning">Warning! The mobile operator will charge a fee for sending each SMS.</string>
     <string name="email">Email</string>
     <string name="next">Next</string>
@@ -132,4 +137,16 @@
     <string name="feedback_letter_subject">Feedback from %s</string>
     <string name="feedback_success">Feedback successfully sent!</string>
     <string name="feedback_failure">Something went wrong while sending feedback.</string>
+    <string name="telegram_api_token_info">Telegram api token info</string>
+    <string name="telegram_chat_id_info">Telegram chat id info</string>
+    <string name="telegram_api_token_tooltip">A Telegram API token is a secret key that gives you access to control a Telegram Bot through the Telegram Bot API. If you don\'t have one yet then pass these steps to get it.\n\n
+        Step 1: Open Telegram App. Use either the mobile or desktop Telegram app.\n\n
+        Step2: Search for @BotFather.\n\n
+        Step 3: Create a New Bot by sending this command - /newbot. Fill the Bot name and Bot username.\n\n
+        Step 4: Find the token in bot message in such format:\n123456789:ABCdefGhIJKLmnoPQRstuVWxyz
+    </string>
+    <string name="telegram_chat_id_tooltip">To get Telegram Chat Id open your browser and request:\n
+        https://api.telegram.org/bot[YOUR_BOT_TOKEN]/getUpdates\n
+        In the response you\'ll see chat_id, copy and paste it.
+    </string>
 </resources>

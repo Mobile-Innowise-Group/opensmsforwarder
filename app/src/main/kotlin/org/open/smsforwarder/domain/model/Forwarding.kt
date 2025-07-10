@@ -7,10 +7,14 @@ data class Forwarding(
     val senderEmail: String? = null,
     val recipientPhone: String = "",
     val recipientEmail: String = "",
+    val telegramApiToken: String = "",
+    val telegramChatId: String = "",
     val error: String = "",
 ) {
 
     val isSmsForwardingType: Boolean get() = forwardingType != null && forwardingType == ForwardingType.SMS
 
     val isEmailForwardingType: Boolean get() = forwardingType != null && forwardingType == ForwardingType.EMAIL
+
+    val isTelegramForwardingType: Boolean get() = forwardingType != null && forwardingType == ForwardingType.TELEGRAM
 }

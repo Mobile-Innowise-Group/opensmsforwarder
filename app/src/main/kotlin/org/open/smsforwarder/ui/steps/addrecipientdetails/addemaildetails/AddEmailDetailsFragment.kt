@@ -24,7 +24,8 @@ import org.open.smsforwarder.extension.showToast
 class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
 
     private val binding by viewBinding(FragmentAddEmailDetailsBinding::bind)
-    private val viewModel by assistedViewModels<AddEmailDetailsViewModel, AddEmailDetailsViewModel.Factory> { factory ->
+    private val viewModel by
+    assistedViewModels<AddEmailDetailsViewModel, AddEmailDetailsViewModel.Factory> { factory ->
         factory.create(requireArguments().getLong(ID_KEY))
     }
 

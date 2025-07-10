@@ -24,12 +24,12 @@ import org.open.smsforwarder.data.repository.AuthRepository
 import org.open.smsforwarder.data.repository.ForwardingRepository
 import org.open.smsforwarder.domain.usecase.ValidateEmailUseCase
 import org.open.smsforwarder.extension.asStateFlowWithInitialAction
-import org.open.smsforwarder.extension.getErrorStringProvider
+import org.open.smsforwarder.extension.getStringProvider
 import org.open.smsforwarder.extension.launchAndCancelPrevious
 import org.open.smsforwarder.helper.GoogleSignInHelper
 import org.open.smsforwarder.navigation.Screens
 import org.open.smsforwarder.ui.mapper.toDomain
-import org.open.smsforwarder.ui.mapper.toEmailDetailsPresentation
+import org.open.smsforwarder.ui.mapper.toEmailDetailsUi
 
 @HiltViewModel(assistedFactory = AddEmailDetailsViewModel.Factory::class)
 class AddEmailDetailsViewModel @AssistedInject constructor(
@@ -61,7 +61,7 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
                 .getForwardingByIdFlow(id)
                 .collect { forwarding ->
                     _viewState.update {
-                        forwarding.toEmailDetailsPresentation()
+                        forwarding.toEmailDetailsUi()
                     }
                 }
         }
@@ -88,7 +88,7 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
         _viewState.update {
             it.copy(
                 recipientEmail = email,
-                inputErrorProvider = emailValidationResult.errorType?.getErrorStringProvider()
+                inputErrorProvider = emailValidationResult.errorType?.getStringProvider()
             )
         }
     }

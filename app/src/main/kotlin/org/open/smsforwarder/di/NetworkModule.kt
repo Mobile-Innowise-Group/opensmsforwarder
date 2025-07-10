@@ -1,6 +1,5 @@
 package org.open.smsforwarder.di
 
-import org.open.smsforwarder.BuildConfig
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -9,11 +8,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.open.smsforwarder.BuildConfig
 import org.open.smsforwarder.data.local.database.dao.AuthTokenDao
 import org.open.smsforwarder.data.remote.interceptor.AuthInterceptor
 import org.open.smsforwarder.data.remote.interceptor.TokenAuthenticator
 import org.open.smsforwarder.data.remote.service.AuthService
 import org.open.smsforwarder.data.remote.service.EmailService
+import org.open.smsforwarder.data.remote.service.TelegramService
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Qualifier
@@ -103,6 +104,20 @@ class NetworkModule {
             .baseUrl(BuildConfig.API_BASE_URL)
             .build()
             .create(EmailService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTelegramService(
+        okHttpClient: OkHttpClient,
+        moshiFactory: MoshiConverterFactory,
+    ): TelegramService =
+        Retrofit
+            .Builder()
+            .client(okHttpClient)
+            .addConverterFactory(moshiFactory)
+            .baseUrl(BuildConfig.TELEGRAM_API_BASE_URL)
+            .build()
+            .create(TelegramService::class.java)
 }
 
 @Qualifier

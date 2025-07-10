@@ -1,27 +1,26 @@
-package org.open.smsforwarder.ui.steps.addrecipientdetails.addphonedetails
+package org.open.smsforwarder.ui.steps.addrecipientdetails.addtelegramdetails
 
 import android.os.Bundle
 import android.view.View
-import android.view.accessibility.AccessibilityEvent
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.open.smsforwarder.R
-import org.open.smsforwarder.databinding.FragmentAddPhoneDetailsBinding
+import org.open.smsforwarder.databinding.FragmentAddTelegramDetailsBinding
 import org.open.smsforwarder.extension.assistedViewModels
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindTextChangesTo
 import org.open.smsforwarder.extension.observeWithLifecycle
-import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.setTextIfChangedKeepState
+import org.open.smsforwarder.extension.showTooltip
 
 @AndroidEntryPoint
-class AddPhoneDetailsFragment : Fragment(R.layout.fragment_add_phone_details) {
+class AddTelegramDetailsFragment : Fragment(R.layout.fragment_add_telegram_details) {
 
-    private val binding by viewBinding(FragmentAddPhoneDetailsBinding::bind)
+    private val binding by viewBinding(FragmentAddTelegramDetailsBinding::bind)
     private val viewModel by
-    assistedViewModels<AddPhoneDetailsViewModel, AddPhoneDetailsViewModel.Factory> { factory ->
+    assistedViewModels<AddTelegramDetailsViewModel, AddTelegramDetailsViewModel.Factory> { factory ->
         factory.create(requireArguments().getLong(ID_KEY))
     }
 
@@ -31,15 +30,13 @@ class AddPhoneDetailsFragment : Fragment(R.layout.fragment_add_phone_details) {
         setObservers()
     }
 
-    override fun onStart() {
-        super.onStart()
-        binding.step2.setAccessibilityFocus()
-    }
-
     private fun setListeners() {
         with(binding) {
             arrowBackIv bindClicksTo viewModel::onBackClicked
-            recipientPhoneEt bindTextChangesTo viewModel::onPhoneChanged
+            telegramApiTokenEt bindTextChangesTo viewModel::onTelegramApiTokenChanged
+            telegramApiTokenIv bindClicksTo { telegramApiTokenIv.showTooltip(R.string.telegram_api_token_tooltip) }
+            telegramChatIdEt bindTextChangesTo viewModel::onTelegramChatIdChanged
+            telegramChatIdIv bindClicksTo { telegramChatIdIv.showTooltip(R.string.telegram_chat_id_tooltip) }
             nextBtn bindClicksTo viewModel::onNextClicked
         }
     }
@@ -49,17 +46,19 @@ class AddPhoneDetailsFragment : Fragment(R.layout.fragment_add_phone_details) {
         viewLifecycleOwner.lifecycle.addObserver(viewModel)
     }
 
-    private fun renderState(state: AddPhoneDetailsState) {
+    private fun renderState(state: AddTelegramDetailsState) {
         with(binding) {
-            recipientPhoneEt.setTextIfChangedKeepState(state.recipientPhone)
-            recipientPhoneLayout.error = state.inputErrorProvider?.asString(requireContext())
+            telegramApiTokenEt.setTextIfChangedKeepState(state.telegramApiToken)
+            telegramChatIdEt.setTextIfChangedKeepState(state.telegramChatId)
+            telegramApiTokenLayout.error = state.inputErrorApiToken?.asString(requireContext())
+            telegramChatIdLayout.error = state.inputErrorChatId?.asString(requireContext())
             nextBtn.isEnabled = state.nextButtonEnabled
         }
     }
 
     companion object {
-        fun newInstance(id: Long): AddPhoneDetailsFragment =
-            AddPhoneDetailsFragment().apply {
+        fun newInstance(id: Long): AddTelegramDetailsFragment =
+            AddTelegramDetailsFragment().apply {
                 arguments = bundleOf(ID_KEY to id)
             }
 

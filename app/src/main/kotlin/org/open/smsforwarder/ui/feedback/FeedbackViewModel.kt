@@ -15,7 +15,7 @@ import org.open.smsforwarder.R
 import org.open.smsforwarder.data.repository.FeedbackRepository
 import org.open.smsforwarder.domain.usecase.ValidateBlankFieldUseCase
 import org.open.smsforwarder.domain.usecase.ValidateEmailUseCase
-import org.open.smsforwarder.extension.getErrorStringProvider
+import org.open.smsforwarder.extension.getStringProvider
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,7 +56,7 @@ class FeedbackViewModel @Inject constructor(
         _viewState.update {
             it.copy(
                 emailInput = email,
-                emailInputErrorProvider = emailValidationResult.errorType?.getErrorStringProvider()
+                emailInputErrorProvider = emailValidationResult.errorType?.getStringProvider()
             )
         }
     }
@@ -66,7 +66,7 @@ class FeedbackViewModel @Inject constructor(
         _viewState.update { state ->
             state.copy(
                 bodyInput = body,
-                bodyInputErrorProvider = bodyValidationResult.errorType?.getErrorStringProvider()
+                bodyInputErrorProvider = bodyValidationResult.errorType?.getStringProvider()
             )
         }
     }
