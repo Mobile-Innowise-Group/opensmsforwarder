@@ -64,14 +64,11 @@ jobs:
           DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo $DATA | base64 -di > app/google-services.json
 
-      - name: Run Room schema export
-        run: ./gradlew clean assembleDebug
-
-      - name: Check for schema changes
-        run: git diff --exit-code -- app/schemas
-
       - name: Build
         run: ./gradlew build
+
+      - name: Check for Room schema changes
+        run: git diff --exit-code -- app/schemas
 
       - name: Run unit tests
         run: ./gradlew test
