@@ -18,10 +18,11 @@
         android:layout_marginEnd="16dp"
         android:textAppearance="@style/SmsTextAppearance.SemiBold.18"
         android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@id/button_edit_item"
+        app:layout_constraintEnd_toStartOf="@id/edit_item_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="John Doe" />
+        tools:text="John Doe"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/forwarding_type_label"
@@ -40,32 +41,10 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:textAppearance="@style/SmsTextAppearance.Medium.12"
-        app:layout_constraintEnd_toStartOf="@id/button_edit_item"
+        app:layout_constraintEnd_toStartOf="@id/edit_item_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/forwarding_type_label"
         tools:text="email" />
-
-    <TextView
-        android:id="@+id/phone_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="@string/item_recipient_phone"
-        android:textAppearance="@style/SmsTextAppearance.Medium.12.Subsidiary"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/forwarding_type" />
-
-    <TextView
-        android:id="@+id/recipient_phone_et"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
-        android:textAppearance="@style/SmsTextAppearance.Medium.12"
-        app:layout_constraintEnd_toStartOf="@id/button_edit_item"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/phone_label"
-        tools:text="+1111111111" />
 
     <TextView
         android:id="@+id/email_label"
@@ -84,7 +63,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:textAppearance="@style/SmsTextAppearance.Medium.12"
-        app:layout_constraintEnd_toStartOf="@id/button_edit_item"
+        app:layout_constraintEnd_toStartOf="@id/edit_item_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/email_label"
         tools:text="john.doe@company.com" />
@@ -94,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="recipient_phone_et,email" />
+        app:constraint_referenced_ids="email" />
 
     <TextView
         android:id="@+id/error"
@@ -102,48 +81,41 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:textAppearance="@style/SmsTextAppearance.Medium.12.Error"
-        app:layout_constraintEnd_toStartOf="@id/button_edit_item"
+        app:layout_constraintEnd_toStartOf="@id/edit_item_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier"
         tools:text="@string/steps_are_not_completed_error" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/button_edit_item"
+        android:id="@+id/edit_item_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/image_button_background"
+        android:contentDescription="@string/edit_forwarding"
         android:minWidth="48dp"
         android:minHeight="48dp"
-        android:background="@drawable/image_button_background"
         android:paddingHorizontal="14dp"
         android:paddingVertical="13dp"
-        android:contentDescription="@string/edit_forwarding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_edit"
         app:tint="?attr/colorOnPrimary" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/button_remove_item"
+        android:id="@+id/remove_item_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="48dp"
-        android:minHeight="48dp"
         android:layout_marginTop="22dp"
         android:background="@drawable/image_button_background"
+        android:contentDescription="@string/delete_forwarding"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         android:paddingHorizontal="14dp"
         android:paddingVertical="13dp"
-        android:contentDescription="@string/delete_forwarding"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_edit_item"
+        app:layout_constraintTop_toBottomOf="@id/edit_item_btn"
         app:srcCompat="@drawable/ic_remove"
         app:tint="?attr/colorOnPrimary" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/phone_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="phone_label, recipient_phone_et" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/email_group"

@@ -7,7 +7,6 @@ import org.open.smsforwarder.ui.home.HomeState
 import org.open.smsforwarder.ui.model.ForwardingUI
 import org.open.smsforwarder.ui.model.HistoryUI
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails.AddEmailDetailsState
-import org.open.smsforwarder.ui.steps.addrecipientdetails.addphonedetails.AddPhoneDetailsState
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addtelegramdetails.AddTelegramDetailsState
 
 fun Forwarding.toEmailDetailsUi(): AddEmailDetailsState {
@@ -27,14 +26,6 @@ fun Forwarding.toEmailDetailsUi(): AddEmailDetailsState {
         signOutBtnVisible = signOutBtnVisible
     )
 }
-
-fun Forwarding.toPhoneDetailsUi(): AddPhoneDetailsState =
-    AddPhoneDetailsState(
-        id = id,
-        title = title,
-        forwardingType = forwardingType,
-        recipientPhone = recipientPhone
-    )
 
 fun Forwarding.toTelegramDetailsUi(): AddTelegramDetailsState =
     AddTelegramDetailsState(
@@ -62,7 +53,6 @@ fun List<Forwarding>.mergeWithRules(rules: List<Rule>): HomeState {
                 title = forwarding.title,
                 forwardingType = forwarding.forwardingType,
                 senderEmail = forwarding.senderEmail,
-                recipientPhone = forwarding.recipientPhone,
                 telegramApiToken = forwarding.telegramApiToken,
                 telegramChatId = forwarding.telegramChatId,
                 recipientEmail = forwarding.recipientEmail,
@@ -73,14 +63,6 @@ fun List<Forwarding>.mergeWithRules(rules: List<Rule>): HomeState {
     }
     return HomeState(forwardingUI)
 }
-
-fun AddPhoneDetailsState.toDomain() =
-    Forwarding(
-        id = id,
-        title = title,
-        forwardingType = forwardingType,
-        recipientPhone = recipientPhone
-    )
 
 fun AddTelegramDetailsState.toDomain() =
     Forwarding(
