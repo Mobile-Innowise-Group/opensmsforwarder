@@ -67,14 +67,14 @@ jobs:
       - name: Build
         run: ./gradlew build
 
-      - name: Check Room integrity
-        run: |
-          if git diff --quiet HEAD^ -- app/schemas/; then
-            echo "✅ No schema change"
-          else
-            echo "❌ Room schema has changed. Bump database version, add migration from xxx to xxx and don't forget to write instrumentation test"
-            exit 1
-          fi
+      - name: Make schema check script executable
+        run: chmod +x scripts/check_room_schema_drift.sh
+
+      - name: Run Room schema drift check
+        run: ./scripts/check_room_schema_drift.sh
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_BASE_REF: ${{ github.base_ref }}
 
       - name: Run unit tests
         run: ./gradlew test
