@@ -11,6 +11,7 @@ object RoomMigrationChecker {
         context: Context,
         registeredMigrations: List<Migration>
     ) {
+
         val targetVersion = AppDatabase.DATABASE_VERSION
         val dbVersion = getVersion(context)
         if (dbVersion == targetVersion || dbVersion == -1) {
