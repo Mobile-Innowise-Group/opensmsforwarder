@@ -7,14 +7,15 @@ echo "🔍 Checking Room schema drift..."
 # Determine base branch/commit for diff
 if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
   echo "📦 Pull request detected"
+  BASE_BRANCH="$GITHUB_BASE_REF"
   BASE_REF="origin/${GITHUB_BASE_REF}"
+  git fetch origin "$BASE_BRANCH"
 else
   echo "📦 Push detected"
   BASE_REF=$(git merge-base HEAD HEAD^)
 fi
 
 echo "🔁 Comparing with: $BASE_REF"
-git fetch origin "$BASE_REF"
 
 # Show changed schema files between current HEAD and base ref
 DIFF_FILES=$(git diff --name-only "$BASE_REF" HEAD -- app/schemas/)
