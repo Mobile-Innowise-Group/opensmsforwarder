@@ -4,11 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialException
 import com.google.android.gms.auth.api.identity.AuthorizationRequest
 import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.common.api.ApiException
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.tasks.await
-import org.open.smsforwarder.data.remote.dto.GoogleSignInResult
+import org.open.smsforwarder.data.remote.dto.SignInResult
 import org.open.smsforwarder.domain.GoogleAuthClient
 import javax.inject.Inject
 
@@ -18,7 +21,7 @@ class GoogleAuthClientImpl @Inject constructor(
     private val getCredentialRequest: GetCredentialRequest,
 ) : GoogleAuthClient {
 
-    override suspend fun getSignInIntent(context: Context): GoogleSignInResult =
+    override suspend fun getSignInIntent(context: Context): SignInResult =
         try {
             CredentialManager.create(context).getCredential(context, getCredentialRequest)
 
@@ -29,9 +32,13 @@ class GoogleAuthClientImpl @Inject constructor(
                 result.pendingIntent?.intentSender
                     ?: throw GoogleSignInException("Error getting intentSender")
 
-            GoogleSignInResult(intentSender)
-        } catch (e: Exception) {
-            throw GoogleSignInException("Error authorization", e)
+            SignInResult(intentSender)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: GetCredentialException) {
+            throw GoogleSignInException("Error retrieving credentials", e)
+        } catch (e: ApiException) {
+            throw GoogleSignInException("Google Sign-In API error", e)
         }
 
     override fun extractAuthorizationCode(data: Intent?): String {
@@ -40,7 +47,9 @@ class GoogleAuthClientImpl @Inject constructor(
                 .getAuthorizationClient(context)
                 .getAuthorizationResultFromIntent(data)
             authorizationResult.serverAuthCode ?: throw GoogleSignInException("Missing auth code")
-        } catch (e: Exception) {
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: ApiException) {
             throw GoogleSignInException("Failed to extract auth code", e)
         }
     }

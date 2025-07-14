@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 import org.open.smsforwarder.data.local.database.dao.AuthTokenDao
 import org.open.smsforwarder.data.local.database.entity.AuthTokenEntity
 import org.open.smsforwarder.data.remote.dto.AuthorizationResult
-import org.open.smsforwarder.data.remote.dto.GoogleSignInResult
+import org.open.smsforwarder.data.remote.dto.SignInResult
 import org.open.smsforwarder.data.remote.service.AuthService
 import org.open.smsforwarder.domain.GoogleAuthClient
 import org.open.smsforwarder.domain.IdTokenParser
@@ -21,7 +21,7 @@ class AuthRepository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
 ) {
 
-    suspend fun getSignInIntent(context: Context): Result<GoogleSignInResult> =
+    suspend fun getSignInIntent(context: Context): Result<SignInResult> =
         withContext(ioDispatcher) {
             runCatching {
                 googleAuthClient.getSignInIntent(context)
