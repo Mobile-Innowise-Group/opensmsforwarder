@@ -10,20 +10,12 @@ import org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails.AddEma
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addtelegramdetails.AddTelegramDetailsState
 
 fun Forwarding.toEmailDetailsUi(): AddEmailDetailsState {
-    val signInTvVisible = isEmailForwardingType && senderEmail.isNullOrEmpty()
-    val senderEmailVisible = !senderEmail.isNullOrEmpty() && isEmailForwardingType
-    val sigInBtnVisible = senderEmail.isNullOrEmpty() && isEmailForwardingType
-    val signOutBtnVisible = !senderEmail.isNullOrEmpty() && isEmailForwardingType
     return AddEmailDetailsState(
         id = id,
         title = title,
         forwardingType = forwardingType,
-        signInTvVisible = signInTvVisible,
-        senderEmailVisible = senderEmailVisible,
         senderEmail = senderEmail,
         recipientEmail = recipientEmail,
-        sigInBtnVisible = sigInBtnVisible,
-        signOutBtnVisible = signOutBtnVisible
     )
 }
 

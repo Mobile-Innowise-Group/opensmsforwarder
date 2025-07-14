@@ -1,7 +1,9 @@
 package org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails
 
 import android.app.Activity
+import android.content.Context
 import androidx.activity.result.ActivityResult
+import androidx.annotation.UiContext
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
@@ -26,7 +28,6 @@ import org.open.smsforwarder.domain.usecase.ValidateEmailUseCase
 import org.open.smsforwarder.extension.asStateFlowWithInitialAction
 import org.open.smsforwarder.extension.getStringProvider
 import org.open.smsforwarder.extension.launchAndCancelPrevious
-import org.open.smsforwarder.helper.GoogleSignInHelper
 import org.open.smsforwarder.navigation.Screens
 import org.open.smsforwarder.ui.mapper.toDomain
 import org.open.smsforwarder.ui.mapper.toEmailDetailsUi
@@ -36,7 +37,6 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
     @Assisted private val id: Long,
     private val forwardingRepository: ForwardingRepository,
     private val authRepository: AuthRepository,
-    private val googleSignInHelper: GoogleSignInHelper,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val analyticsTracker: AnalyticsTracker,
     private val router: Router,
@@ -67,17 +67,75 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
         }
     }
 
-    fun onSignInClicked() {
-        _viewEffect.trySend(GoogleSignInViewEffect(signInIntent = googleSignInHelper.signInIntent))
+    fun onSignInWithGoogleClicked(@UiContext context: Context) {
+        viewModelScope.launch {
+            authRepository.getSignInIntent(context)
+                .onSuccess { result ->
+                    _viewEffect.trySend(
+                        GoogleSignInIntentSenderEffect(result.intentSender)
+                    )
+                }
+                .onFailure {
+                    _viewEffect.trySend(
+                        GoogleSignInErrorEffect(R.string.error_google_sign_in)
+                    )
+                }
+        }
+    }
+
+    fun onSignInResult(result: ActivityResult) {
+        when (result.resultCode) {
+            Activity.RESULT_OK -> {
+                viewModelScope.launch {
+                    authRepository.processAuthorizationResult(
+                        result.data,
+                        viewState.value.id
+                    )
+                        .onSuccess { authResult ->
+                            _viewState.update {
+                                it.copy(senderEmail = authResult.email)
+                            }
+                        }
+                        .onFailure {
+                            _viewEffect.trySend(
+                                GoogleSignInErrorEffect(
+                                    R.string.error_google_sign_in
+                                )
+                            )
+                        }
+                }
+            }
+
+            Activity.RESULT_CANCELED -> {
+                _viewEffect.trySend(
+                    GoogleSignInErrorEffect(
+                        errorMessageRes = R.string.google_sign_in_canceled
+                    )
+                )
+            }
+
+            else -> {
+                _viewEffect.trySend(
+                    GoogleSignInErrorEffect(
+                        errorMessageRes = R.string.error_google_sign_in
+                    )
+                )
+            }
+        }
     }
 
     fun onSignOutClicked() {
         viewModelScope.launch {
             authRepository
-                .signOut(viewState.value.toDomain())
+                .signOut(viewState.value.id)
+                .onSuccess {
+                    _viewState.update {
+                        it.copy(senderEmail = null)
+                    }
+                }
                 .onFailure {
                     _viewEffect.trySend(
-                        GoogleSignInErrorViewEffect(R.string.error_google_sign_out)
+                        GoogleSignInErrorEffect(R.string.error_google_sign_out)
                     )
                 }
         }
@@ -90,40 +148,6 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
                 recipientEmail = email,
                 inputErrorProvider = emailValidationResult.errorType?.getStringProvider()
             )
-        }
-    }
-
-    fun onSignInResultReceived(result: ActivityResult) {
-        if (result.resultCode == Activity.RESULT_OK) {
-            viewModelScope.launch {
-                googleSignInHelper
-                    .getGoogleSignInAccount(data = result.data)
-                    .onSuccess { googleAccount ->
-                        authRepository
-                            .exchangeAuthCodeForTokensAnd(googleAccount.serverAuthCode)
-                            .onSuccess { response ->
-                                val recipient = viewState.value.copy(
-                                    senderEmail = googleAccount.email
-                                )
-                                forwardingRepository.insertOrUpdateForwarding(recipient.toDomain())
-                                authRepository.saveTokens(
-                                    viewState.value.id,
-                                    response.accessToken,
-                                    response.refreshToken
-                                )
-                            }
-                            .onFailure {
-                                _viewEffect.trySend(
-                                    GoogleSignInErrorViewEffect(R.string.error_google_sign_in)
-                                )
-                            }
-                    }
-                    .onFailure {
-                        _viewEffect.trySend(
-                            GoogleSignInErrorViewEffect(R.string.error_google_sign_in)
-                        )
-                    }
-            }
         }
     }
 

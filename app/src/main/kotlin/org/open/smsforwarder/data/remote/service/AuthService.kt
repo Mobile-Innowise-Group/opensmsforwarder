@@ -4,6 +4,7 @@ import org.open.smsforwarder.BuildConfig
 import org.open.smsforwarder.data.remote.dto.AuthCodeExchangeResponse
 import org.open.smsforwarder.data.remote.dto.GrantType
 import org.open.smsforwarder.data.remote.dto.RefreshTokenResponse
+import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
@@ -29,4 +30,10 @@ interface AuthService {
         @Field("client_id") clientId: String = BuildConfig.CLIENT_ID,
         @Field("client_secret") clientSecret: String = BuildConfig.CLIENT_SECRET,
     ): RefreshTokenResponse
+
+    @FormUrlEncoded
+    @POST("revoke")
+    suspend fun revokeToken(
+        @Field("token") token: String?
+    ): Response<Unit>
 }

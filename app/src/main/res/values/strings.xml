@@ -56,7 +56,8 @@
     <string name="error_email_is_not_valid">Email is not valid</string>
     <string name="error_email_is_blank">Email can not be blank</string>
     <string name="error_generic_is_blank">Field can not be blank</string>
-    <string name="error_google_sign_in">Unable to sign in to account</string>
+    <string name="error_google_sign_in">There was an error while trying to sign in</string>
+    <string name="google_sign_in_canceled">Sign in was canceled</string>
     <string name="error_google_sign_out">Unable to sign out from account</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="sign_in_to_email">Sign in to your gmail account to be able to forward messages on your behalf*</string>

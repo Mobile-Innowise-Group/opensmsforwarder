@@ -69,7 +69,8 @@ class ForwardingProcessor @Inject constructor(
 
     private suspend fun handleTokenErrors(error: Throwable, recipient: Forwarding) {
         if (error is TokenRevokedException || error is RefreshTokenException) {
-            authRepository.signOut(recipient)
+            authRepository.signOut(recipient.id)
+            forwardingRepository.insertOrUpdateForwarding(recipient.copy(senderEmail = null))
         }
     }
 }
