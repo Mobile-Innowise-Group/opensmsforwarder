@@ -11,6 +11,7 @@ import org.open.smsforwarder.data.remote.dto.SignInResult
 import org.open.smsforwarder.data.remote.service.AuthService
 import org.open.smsforwarder.domain.GoogleAuthClient
 import org.open.smsforwarder.domain.IdTokenParser
+import org.open.smsforwarder.utils.runSuspendCatching
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
@@ -23,7 +24,7 @@ class AuthRepository @Inject constructor(
 
     suspend fun getSignInIntent(context: Context): Result<SignInResult> =
         withContext(ioDispatcher) {
-            runCatching {
+            runSuspendCatching {
                 googleAuthClient.getSignInIntent(context)
             }
         }
@@ -33,7 +34,7 @@ class AuthRepository @Inject constructor(
         forwardingId: Long
     ): Result<AuthorizationResult> =
         withContext(ioDispatcher) {
-            runCatching {
+            runSuspendCatching {
                 val authCode = googleAuthClient.extractAuthorizationCode(data)
                 val authResponse = authService.exchangeAuthCodeForTokens(authCode)
                 val senderEmail = idTokenParser.extractEmail(authResponse.idToken)
@@ -44,8 +45,9 @@ class AuthRepository @Inject constructor(
 
     suspend fun signOut(forwardingId: Long): Result<Unit> =
         withContext(ioDispatcher) {
-            runCatching {
-                val authTokenEntity = authTokenDao.getAuthToken(forwardingId) ?: return@runCatching
+            runSuspendCatching {
+                val authTokenEntity =
+                    authTokenDao.getAuthToken(forwardingId) ?: return@runSuspendCatching
                 authService.revokeToken(authTokenEntity.accessToken)
                 authTokenDao.upsertAuthToken(
                     authTokenEntity.copy(

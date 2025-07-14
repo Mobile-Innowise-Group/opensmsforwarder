@@ -47,8 +47,6 @@ class GoogleAuthClientImpl @Inject constructor(
                 .getAuthorizationClient(context)
                 .getAuthorizationResultFromIntent(data)
             authorizationResult.serverAuthCode ?: throw GoogleSignInException("Missing auth code")
-        } catch (e: CancellationException) {
-            throw e
         } catch (e: ApiException) {
             throw GoogleSignInException("Failed to extract auth code", e)
         }
