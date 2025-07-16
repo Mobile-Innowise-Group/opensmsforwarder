@@ -1,9 +1,7 @@
 package org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails
 
 import android.app.Activity
-import android.content.Context
 import androidx.activity.result.ActivityResult
-import androidx.annotation.UiContext
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
@@ -29,8 +27,12 @@ import org.open.smsforwarder.extension.asStateFlowWithInitialAction
 import org.open.smsforwarder.extension.getStringProvider
 import org.open.smsforwarder.extension.launchAndCancelPrevious
 import org.open.smsforwarder.navigation.Screens
+import org.open.smsforwarder.platform.GoogleAuthClient
 import org.open.smsforwarder.ui.mapper.toDomain
 import org.open.smsforwarder.ui.mapper.toEmailDetailsUi
+import org.open.smsforwarder.ui.mapper.toUserMessageResId
+import org.open.smsforwarder.utils.mapSuspendCatching
+import org.open.smsforwarder.utils.runSuspendCatching
 
 @HiltViewModel(assistedFactory = AddEmailDetailsViewModel.Factory::class)
 class AddEmailDetailsViewModel @AssistedInject constructor(
@@ -39,6 +41,7 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
     private val authRepository: AuthRepository,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val analyticsTracker: AnalyticsTracker,
+    private val googleAuthClient: GoogleAuthClient,
     private val router: Router,
 ) : ViewModel(), DefaultLifecycleObserver {
 
@@ -67,17 +70,19 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
         }
     }
 
-    fun onSignInWithGoogleClicked(@UiContext context: Context) {
+    fun onSignInWithGoogleClicked(activity: Activity) {
         viewModelScope.launch {
-            authRepository.getSignInIntent(context)
-                .onSuccess { result ->
+            runSuspendCatching {
+                googleAuthClient.getSignInIntent(activity)
+            }
+                .onSuccess { signInResult ->
                     _viewEffect.trySend(
-                        GoogleSignInIntentSenderEffect(result.intentSender)
+                        GoogleSignInIntentSenderEffect(signInResult.intentSender)
                     )
                 }
-                .onFailure {
+                .onFailure { error ->
                     _viewEffect.trySend(
-                        GoogleSignInErrorEffect(R.string.error_google_sign_in)
+                        GoogleSignInErrorEffect(error.toUserMessageResId())
                     )
                 }
         }
@@ -87,20 +92,23 @@ class AddEmailDetailsViewModel @AssistedInject constructor(
         when (result.resultCode) {
             Activity.RESULT_OK -> {
                 viewModelScope.launch {
-                    authRepository.processAuthorizationResult(
-                        result.data,
-                        viewState.value.id
-                    )
+                    runSuspendCatching {
+                        googleAuthClient.extractAuthorizationCode(result.data)
+                    }
+                        .mapSuspendCatching { authCode ->
+                            authRepository.exchangeAuthCodeForTokens(
+                                authCode,
+                                viewState.value.id
+                            )
+                        }
                         .onSuccess { authResult ->
                             _viewState.update {
                                 it.copy(senderEmail = authResult.email)
                             }
                         }
-                        .onFailure {
+                        .onFailure { error ->
                             _viewEffect.trySend(
-                                GoogleSignInErrorEffect(
-                                    R.string.error_google_sign_in
-                                )
+                                GoogleSignInErrorEffect(error.toUserMessageResId())
                             )
                         }
                 }

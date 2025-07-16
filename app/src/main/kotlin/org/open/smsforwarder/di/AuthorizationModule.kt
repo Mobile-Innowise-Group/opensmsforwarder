@@ -4,7 +4,7 @@ import androidx.credentials.GetCredentialRequest
 import com.google.android.gms.auth.api.identity.AuthorizationRequest
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.Scope
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.api.services.gmail.GmailScopes
 import dagger.Binds
 import dagger.Module
@@ -12,29 +12,34 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.open.smsforwarder.BuildConfig
-import org.open.smsforwarder.data.repository.GoogleAuthClientImpl
 import org.open.smsforwarder.data.repository.IdTokenParserImpl
-import org.open.smsforwarder.domain.GoogleAuthClient
 import org.open.smsforwarder.domain.IdTokenParser
-import javax.inject.Singleton
+import org.open.smsforwarder.platform.CredentialClientWrapper
+import org.open.smsforwarder.platform.CredentialClientWrapperImpl
+import org.open.smsforwarder.platform.IdentityClientWrapper
+import org.open.smsforwarder.platform.IdentityClientWrapperImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AuthorizationModule {
 
     @Binds
-    @Singleton
-    abstract fun bindGoogleAuthClient(googleAuthClientImpl: GoogleAuthClientImpl): GoogleAuthClient
+    abstract fun bindIdTokenParser(idTokenParserImpl: IdTokenParserImpl): IdTokenParser
 
     @Binds
-    @Singleton
-    abstract fun bindIdTokenParser(idTokenParserImpl: IdTokenParserImpl): IdTokenParser
+    abstract fun bindCredentialClientWrapper(
+        credentialManagerWrapperImpl: CredentialClientWrapperImpl
+    ): CredentialClientWrapper
+
+    @Binds
+    abstract fun bindIdentityClientWrapper(
+        identityClientWrapperImpl: IdentityClientWrapperImpl
+    ): IdentityClientWrapper
 
 
     companion object {
 
         @Provides
-        @Singleton
         fun provideAuthorizationRequest(): AuthorizationRequest =
             AuthorizationRequest
                 .Builder()
@@ -48,12 +53,9 @@ abstract class AuthorizationModule {
                 .build()
 
         @Provides
-        @Singleton
         fun provideGetCredentialRequest(): GetCredentialRequest {
-            val googleOption = GetGoogleIdOption.Builder()
-                .setServerClientId(BuildConfig.CLIENT_ID)
-                .setFilterByAuthorizedAccounts(false)
-                .setAutoSelectEnabled(false)
+            val googleOption = GetSignInWithGoogleOption
+                .Builder(BuildConfig.CLIENT_ID)
                 .build()
 
             return GetCredentialRequest.Builder()

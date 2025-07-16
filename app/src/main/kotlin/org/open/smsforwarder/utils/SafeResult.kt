@@ -19,3 +19,18 @@ suspend fun <R> runSuspendCatching(block: suspend () -> R): Result<R> {
         Result.failure(e)
     }
 }
+
+@Suppress("TooGenericExceptionCaught")
+inline fun <R, T> Result<T>.mapSuspendCatching(transform: (value: T) -> R): Result<R> {
+    return if (isSuccess) {
+        try {
+            Result.success(transform(getOrThrow()))
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    } else {
+        Result.failure(exceptionOrNull() ?: IllegalStateException("Unknown failure"))
+    }
+}

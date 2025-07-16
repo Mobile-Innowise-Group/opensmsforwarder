@@ -150,4 +150,10 @@
         https://api.telegram.org/bot[YOUR_BOT_TOKEN]/getUpdates\n
         In the response you\'ll see chat_id, copy and paste it.
     </string>
+    <string name="credentials_not_found">No credentials found on this device. Please check your account settings.</string>
+    <string name="authorization_failed">Authorization failed. Please try again later.</string>
+    <string name="authorization_result_is_null">Sign-in failed: Invalid authorization response received.</string>
+    <string name="pending_intent_missing">Something went wrong while preparing sign-in. Please try again.</string>
+    <string name="auth_code_not_received">Unable to retrieve authorization code. Please try again.</string>
+    <string name="sign_in_general_error">Unexpected error. Please check your connection or try again.</string>
 </resources>

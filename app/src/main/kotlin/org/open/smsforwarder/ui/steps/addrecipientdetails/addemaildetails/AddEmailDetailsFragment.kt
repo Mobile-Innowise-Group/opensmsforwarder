@@ -48,7 +48,7 @@ class AddEmailDetailsFragment : Fragment(R.layout.fragment_add_email_details) {
         with(binding) {
             arrowBackIv bindClicksTo viewModel::onBackClicked
             recipientEmailEt bindTextChangesTo viewModel::onEmailChanged
-            signInBtn bindClicksTo { viewModel.onSignInWithGoogleClicked(requireContext()) }
+            signInBtn bindClicksTo { viewModel.onSignInWithGoogleClicked(requireActivity()) }
             signOutBtn bindClicksTo viewModel::onSignOutClicked
             nextBtn bindClicksTo viewModel::onNextClicked
         }
