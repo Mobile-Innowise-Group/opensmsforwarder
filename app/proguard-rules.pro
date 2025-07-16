@@ -39,11 +39,30 @@
 # kept. Suspend functions are wrapped in continuations where the type argument
 # is used.
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
--if class androidx.credentials.CredentialManager
--keep class androidx.credentials.playservices.** {
-  *;
-}
-
 -keep class org.open.smsforwarder.data.remote.dto.** { *; }
 -keep class * extends androidx.room.RoomDatabase
 -keep @androidx.room.Entity class *
+
+# Credential Manager - Keep Credential Classes & Annotations
+-keep class androidx.credentials.** { *; }
+-keep @interface androidx.credentials.** { *; }
+
+# Google Identity Services - Prevent Stripping of Public API
+-keep class com.google.android.gms.auth.api.identity.** { *; }
+
+# Keep annotations used for reflection
+-keep @interface com.google.android.gms.common.annotation.KeepName
+
+# Required for Sign-In Intent + Credential retrieval
+-keepclassmembers class * {
+    @com.google.android.gms.common.annotation.KeepName *;
+}
+
+# Keep Play Services internal annotations & base
+-keep class com.google.android.gms.common.** { *; }
+
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**
+
+
+
