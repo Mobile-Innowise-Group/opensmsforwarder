@@ -76,7 +76,7 @@ class GoogleAuthClientTest {
     @Test
     fun `getSignInIntent should throw CredentialCancellation when cancelled`() = runTest {
         whenever(credentialClientWrapper.getCredential(activity))
-            .thenThrow(GoogleSignInFailure.CredentialCancellation)
+            .thenThrow(GoogleSignInFailure.CredentialCancellation())
 
         assertThrows<GoogleSignInFailure.CredentialCancellation> {
             client.getSignInIntent(activity)
@@ -87,7 +87,7 @@ class GoogleAuthClientTest {
     fun `getSignInIntent should throw CredentialsNotFound when credential error occurs`() =
         runTest {
             whenever(credentialClientWrapper.getCredential(activity))
-                .thenThrow(GoogleSignInFailure.CredentialsNotFound)
+                .thenThrow(GoogleSignInFailure.CredentialsNotFound())
 
             assertThrows<GoogleSignInFailure.CredentialsNotFound> {
                 client.getSignInIntent(activity)
@@ -98,7 +98,7 @@ class GoogleAuthClientTest {
     fun `getSignInIntent should throw AuthorizationFailed when authorization fails`() = runTest {
         whenever(credentialClientWrapper.getCredential(activity)).then { /* success */ }
         whenever(identityClientWrapper.authorize(activity))
-            .thenThrow(GoogleSignInFailure.AuthorizationFailed)
+            .thenThrow(GoogleSignInFailure.AuthorizationFailed())
 
         assertThrows<GoogleSignInFailure.AuthorizationFailed> {
             client.getSignInIntent(activity)
