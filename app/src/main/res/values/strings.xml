@@ -56,7 +56,8 @@
     <string name="error_email_is_not_valid">Email is not valid</string>
     <string name="error_email_is_blank">Email can not be blank</string>
     <string name="error_generic_is_blank">Field can not be blank</string>
-    <string name="error_google_sign_in">Unable to sign in to account</string>
+    <string name="error_google_sign_in">There was an error while trying to sign in</string>
+    <string name="google_sign_in_canceled">Sign in was canceled</string>
     <string name="error_google_sign_out">Unable to sign out from account</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="sign_in_to_email">Sign in to your gmail account to be able to forward messages on your behalf*</string>
@@ -149,4 +150,10 @@
         https://api.telegram.org/bot[YOUR_BOT_TOKEN]/getUpdates\n
         In the response you\'ll see chat_id, copy and paste it.
     </string>
+    <string name="credentials_not_found">No credentials found on this device. Please check your account settings.</string>
+    <string name="authorization_failed">Authorization failed. Please try again later.</string>
+    <string name="authorization_result_is_null">Sign-in failed: Invalid authorization response received.</string>
+    <string name="pending_intent_missing">Something went wrong while preparing sign-in. Please try again.</string>
+    <string name="auth_code_not_received">Unable to retrieve authorization code. Please try again.</string>
+    <string name="sign_in_general_error">Unexpected error. Please check your connection or try again.</string>
 </resources>

@@ -2,6 +2,7 @@ package org.open.smsforwarder.processing.forwarder
 
 import org.open.smsforwarder.data.remote.service.TelegramService
 import org.open.smsforwarder.domain.model.Forwarding
+import org.open.smsforwarder.utils.runSuspendCatching
 import javax.inject.Inject
 
 class TelegramForwarder @Inject constructor(
@@ -9,7 +10,7 @@ class TelegramForwarder @Inject constructor(
 ) : Forwarder {
 
     override suspend fun execute(forwarding: Forwarding, message: String): Result<Unit> =
-        runCatching {
+        runSuspendCatching {
             telegramService.sendMessage(
                 apiToken = forwarding.telegramApiToken,
                 chatId = forwarding.telegramChatId,

@@ -13,7 +13,6 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
-import android.view.accessibility.AccessibilityEvent
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -54,7 +53,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
 
     private val permissions = mutableListOf<String>().apply {
         add(Manifest.permission.RECEIVE_SMS)
-        add(Manifest.permission.SEND_SMS)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             add(Manifest.permission.POST_NOTIFICATIONS)
         }

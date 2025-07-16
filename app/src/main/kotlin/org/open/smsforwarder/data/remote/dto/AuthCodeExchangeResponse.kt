@@ -7,4 +7,8 @@ data class AuthCodeExchangeResponse(
     val accessToken: String,
     @Json(name = "refresh_token")
     val refreshToken: String,
+    @Json(name = "scope")
+    val scope: String,
+    @Json(name = "id_token")
+    val idToken: String
 )
