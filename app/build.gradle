@@ -151,6 +151,7 @@ dependencies {
     // Room
     implementation 'androidx.room:room-runtime:2.6.1'
     implementation 'androidx.room:room-ktx:2.6.1'
+    implementation 'com.google.firebase:firebase-appcheck-ktx:18.0.0'
     ksp "androidx.room:room-compiler:2.6.1"
 
     // Hilt
@@ -168,6 +169,7 @@ dependencies {
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1"
 
     // Gmail API
     implementation 'com.google.apis:google-api-services-gmail:v1-rev20231218-2.0.0'
@@ -190,6 +192,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation "com.google.firebase:firebase-crashlytics"
     implementation "com.google.firebase:firebase-analytics"
+    implementation "com.google.firebase:firebase-appcheck"
+    implementation "com.google.firebase:firebase-appcheck-debug"
+    implementation "com.google.firebase:firebase-appcheck-playintegrity"
 
     // Unit tests
     testImplementation 'junit:junit:4.13.2'
