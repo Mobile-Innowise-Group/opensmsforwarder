@@ -23,8 +23,8 @@ android {
         applicationId "org.open.smsforwarder"
         minSdk 26
         targetSdk 34
-        versionCode 6
-        versionName "1.6"
+        versionCode 7
+        versionName "1.7"
 
         android.buildFeatures.buildConfig true
         buildConfigField "String", "OAUTH_BASE_URL", "\"https://oauth2.googleapis.com/\""
