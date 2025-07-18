@@ -42,19 +42,21 @@
         android:padding="14dp"
         android:src="@drawable/ic_warning"
         android:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/feedback_iv"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/feedback_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="6dp"
+        android:contentDescription="@string/feedback_heading"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:padding="14dp"
         android:src="@drawable/ic_feedback"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/title_label"
+        android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@id/forwarding_history"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
     <ImageView
@@ -66,9 +68,9 @@
         android:minHeight="48dp"
         android:padding="14dp"
         android:src="@drawable/ic_forwarding_history"
-        android:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/end_margin" />
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/end_margin"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/permission_permanently_denied_info"

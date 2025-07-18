@@ -3,6 +3,10 @@ package org.open.smsforwarder
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
@@ -31,6 +35,15 @@ class App : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+
+        FirebaseApp.initializeApp(this)
+        val appCheck = FirebaseAppCheck.getInstance()
+
+        if (BuildConfig.DEBUG) {
+            appCheck.installAppCheckProviderFactory(DebugAppCheckProviderFactory.getInstance())
+        } else {
+            appCheck.installAppCheckProviderFactory(PlayIntegrityAppCheckProviderFactory.getInstance())
+        }
         workManagerConfigurator.scheduleDailyForwardedMessageCountWork()
     }
 }
