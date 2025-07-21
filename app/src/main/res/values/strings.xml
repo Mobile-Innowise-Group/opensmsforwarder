@@ -17,7 +17,6 @@
     <string name="back">Back</string>
     <string name="add_rule_error">Pattern is already in the list</string>
     <string name="blank_rule_error">Pattern can\'t be blank</string>
-    <string name="sms_send_error">Can\'t send sms to some recipients, please recheck steps</string>
     <string name="go_to_settings"><u>Go to Settings</u></string>
     <string name="item_recipient_title">Title:</string>
     <string name="item_recipient_fwd_type">Forwarding type:</string>
