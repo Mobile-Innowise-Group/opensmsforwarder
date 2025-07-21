@@ -8,6 +8,7 @@ import org.open.smsforwarder.data.repository.HistoryRepository
 import org.open.smsforwarder.data.repository.RulesRepository
 import org.open.smsforwarder.domain.model.Forwarding
 import org.open.smsforwarder.domain.model.ForwardingType
+import org.open.smsforwarder.extension.normalizeSpaces
 import org.open.smsforwarder.processing.forwarder.Forwarder
 import javax.inject.Inject
 
@@ -26,8 +27,9 @@ class ForwardingProcessor @Inject constructor(
         val messagesToForward = mutableListOf<Pair<Long, String>>()
 
         messages.forEach { message ->
+            val normalizedMessage = message.normalizeSpaces()
             rules.forEach { rule ->
-                if (message.contains(rule.textRule)) {
+                if (normalizedMessage.contains(rule.textRule.normalizeSpaces())) {
                     messagesToForward.add(rule.forwardingId to message)
                 }
             }
