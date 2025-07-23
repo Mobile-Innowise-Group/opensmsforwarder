@@ -48,6 +48,7 @@
         android:layout_height="wrap_content"
         android:minWidth="48dp"
         android:minHeight="48dp"
+        android:gravity="center"
         android:paddingVertical="8dp"
         android:text="@string/onboarding_skip_all"
         android:textAppearance="@style/SmsTextAppearance.Regular.14.Subsidiary"
