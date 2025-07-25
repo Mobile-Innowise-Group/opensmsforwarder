@@ -4,9 +4,12 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import com.github.terrakok.cicerone.NavigatorHolder
 import dagger.hilt.android.AndroidEntryPoint
 import org.open.smsforwarder.databinding.ActivityMainBinding
+import org.open.smsforwarder.extension.observeWithLifecycle
 import org.open.smsforwarder.extension.playCustomSplashAnimation
 import org.open.smsforwarder.navigation.AnimatedAppNavigator
 import javax.inject.Inject
@@ -28,6 +31,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel.networkStatus.observeWithLifecycle(this, Lifecycle.State.CREATED) { isOnline ->
+            binding.networkOfflineTv.isVisible = !isOnline
+        }
     }
 
     private fun setUpSplashScreen() {

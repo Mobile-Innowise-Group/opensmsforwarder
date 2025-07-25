@@ -2,15 +2,16 @@ package org.open.smsforwarder.ui.mapper
 
 import kotlinx.coroutines.CancellationException
 import org.open.smsforwarder.R
-import org.open.smsforwarder.platform.GoogleSignInFailure
 import org.open.smsforwarder.domain.model.Forwarding
 import org.open.smsforwarder.domain.model.History
 import org.open.smsforwarder.domain.model.Rule
+import org.open.smsforwarder.platform.GoogleSignInFailure
 import org.open.smsforwarder.ui.home.HomeState
 import org.open.smsforwarder.ui.model.ForwardingUI
 import org.open.smsforwarder.ui.model.HistoryUI
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails.AddEmailDetailsState
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addtelegramdetails.AddTelegramDetailsState
+import java.net.UnknownHostException
 
 fun Forwarding.toEmailDetailsUi(): AddEmailDetailsState {
     return AddEmailDetailsState(
@@ -80,6 +81,7 @@ fun AddEmailDetailsState.toDomain() =
 fun Throwable.toUserMessageResId(): Int = when (this) {
     is CancellationException -> throw this
     is GoogleSignInFailure.CredentialCancellation -> R.string.google_sign_in_canceled
+    is GoogleSignInFailure.NoInternetConnection, is UnknownHostException -> R.string.network_failure
     is GoogleSignInFailure.CredentialsNotFound -> R.string.credentials_not_found
     is GoogleSignInFailure.AuthorizationFailed -> R.string.authorization_failed
     is GoogleSignInFailure.AuthResultIntentIsNull -> R.string.authorization_result_is_null

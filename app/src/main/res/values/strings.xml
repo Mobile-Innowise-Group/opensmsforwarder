@@ -155,4 +155,6 @@
     <string name="pending_intent_missing">Something went wrong while preparing sign-in. Please try again.</string>
     <string name="auth_code_not_received">Unable to retrieve authorization code. Please try again.</string>
     <string name="sign_in_general_error">Unexpected error. Please check your connection or try again.</string>
+    <string name="network_state_offline">Offline</string>
+    <string name="network_failure">Network failure. Please check your connection and try again.</string>
 </resources>
