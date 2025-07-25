@@ -15,7 +15,7 @@ class IdentityClientWrapperImpl @Inject constructor(
     private val authorizationRequest: AuthorizationRequest,
 ) : IdentityClientWrapper {
 
-    override suspend fun authorize(activity: Activity): AuthorizationResult? =
+    override suspend fun authorize(activity: Activity): AuthorizationResult =
         Identity.getAuthorizationClient(activity)
             .authorize(authorizationRequest)
             .await()

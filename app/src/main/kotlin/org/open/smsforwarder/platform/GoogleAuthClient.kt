@@ -7,11 +7,13 @@ import androidx.credentials.exceptions.GetCredentialException
 import com.google.android.gms.auth.api.identity.AuthorizationResult
 import com.google.android.gms.common.api.ApiException
 import org.open.smsforwarder.data.remote.dto.SignInResult
+import org.open.smsforwarder.domain.NetworkStateObserver
 import javax.inject.Inject
 
 class GoogleAuthClient @Inject constructor(
     private val credentialClientWrapper: CredentialClientWrapper,
-    private val identityClientWrapper: IdentityClientWrapper
+    private val identityClientWrapper: IdentityClientWrapper,
+    private val networkStateObserver: NetworkStateObserver
 ) {
 
     suspend fun getSignInIntent(activity: Activity): SignInResult {
@@ -34,6 +36,9 @@ class GoogleAuthClient @Inject constructor(
         try {
             credentialClientWrapper.getCredential(activity)
         } catch (e: GetCredentialCancellationException) {
+            if (!networkStateObserver.networkStatus.value.isOnline()) {
+                throw GoogleSignInFailure.NoInternetConnection(e)
+            }
             throw GoogleSignInFailure.CredentialCancellation(e)
         } catch (e: GetCredentialException) {
             throw GoogleSignInFailure.CredentialsNotFound(e)
@@ -52,6 +57,7 @@ class GoogleAuthClient @Inject constructor(
 sealed class GoogleSignInFailure(cause: Throwable? = null) : RuntimeException(cause) {
     class CredentialsNotFound(cause: Throwable? = null) : GoogleSignInFailure(cause)
     class CredentialCancellation(cause: Throwable? = null) : GoogleSignInFailure(cause)
+    class NoInternetConnection(cause: Throwable? = null) : GoogleSignInFailure(cause)
     class AuthorizationFailed(cause: Throwable? = null) : GoogleSignInFailure(cause)
     data object AuthResultIntentIsNull : GoogleSignInFailure()
     data object MissingPendingIntent : GoogleSignInFailure()
