@@ -16,6 +16,7 @@ import org.mockito.Mockito.mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.open.smsforwarder.domain.NetworkStateObserver
 import org.open.smsforwarder.platform.CredentialClientWrapper
 import org.open.smsforwarder.platform.GoogleAuthClient
 import org.open.smsforwarder.platform.GoogleSignInFailure
@@ -42,11 +43,14 @@ class GoogleAuthClientTest {
     @Mock
     lateinit var intentSender: IntentSender
 
+    @Mock
+    lateinit var networkStateObserver: NetworkStateObserver
+
     private lateinit var client: GoogleAuthClient
 
     @BeforeEach
     fun setUp() {
-        client = GoogleAuthClient(credentialClientWrapper, identityClientWrapper)
+        client = GoogleAuthClient(credentialClientWrapper, identityClientWrapper, networkStateObserver)
     }
 
     @Test
