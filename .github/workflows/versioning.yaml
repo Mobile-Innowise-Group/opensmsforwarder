@@ -1,9 +1,7 @@
 name: Bump Version and Tag
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   bump-version:
