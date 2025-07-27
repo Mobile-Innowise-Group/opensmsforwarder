@@ -15,6 +15,9 @@ plugins {
     id 'io.gitlab.arturbosch.detekt' version("1.23.6")
 }
 
+def versionProps = new Properties()
+versionProps.load(new File(rootProject.projectDir, "version.properties").newDataInputStream())
+
 android {
     namespace 'org.open.smsforwarder'
     compileSdk 35
@@ -23,8 +26,8 @@ android {
         applicationId "org.open.smsforwarder"
         minSdk 26
         targetSdk 35
-        versionCode 10
-        versionName "1.91"
+        versionName versionProps['VERSION_NAME']
+        versionCode versionProps['VERSION_CODE'].toInteger()
 
         android.buildFeatures.buildConfig true
         buildConfigField "String", "OAUTH_BASE_URL", "\"https://oauth2.googleapis.com/\""
