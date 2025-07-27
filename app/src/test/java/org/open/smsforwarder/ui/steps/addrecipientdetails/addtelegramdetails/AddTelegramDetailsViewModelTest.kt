@@ -33,6 +33,7 @@ import org.open.smsforwarder.domain.model.ForwardingType
 import org.open.smsforwarder.domain.usecase.ValidateBlankFieldUseCase
 import org.open.smsforwarder.navigation.Screens
 import org.open.smsforwarder.ui.mapper.toDomain
+import org.open.smsforwarder.utils.awaitInitialAction
 
 @ExperimentalCoroutinesApi
 @ExtendWith(MockitoExtension::class)
@@ -87,33 +88,25 @@ class AddTelegramDetailsViewModelTest {
                 errorType = ValidationError.BLANK_FIELD
             )
         )
-        val collectionJob = launch {
-            viewModel.viewState.collect { }
+        awaitInitialAction(viewModel.viewState) {
+            viewModel.onTelegramApiTokenChanged("")
+
+            val state = viewModel.viewState.value
+            assertEquals("", state.telegramApiToken)
+            assertNotNull(state.inputErrorApiToken)
         }
-        advanceUntilIdle()
-
-        viewModel.onTelegramApiTokenChanged("")
-
-        val state = viewModel.viewState.value
-        assertEquals("", state.telegramApiToken)
-        assertNotNull(state.inputErrorApiToken)
-        collectionJob.cancel()
     }
 
     @Test
     fun `onTelegramChatIdChanged - updates state with validation error`() = runTest {
         whenever(validateBlankFieldUseCase.execute("chatId")).thenReturn(ValidationResult(successful = true))
-        val collectionJob = launch {
-            viewModel.viewState.collect { }
+        awaitInitialAction(viewModel.viewState) {
+            viewModel.onTelegramChatIdChanged("chatId")
+
+            val state = viewModel.viewState.value
+            assertEquals("chatId", state.telegramChatId)
+            assertNull(state.inputErrorChatId)
         }
-        advanceUntilIdle()
-
-        viewModel.onTelegramChatIdChanged("chatId")
-
-        val state = viewModel.viewState.value
-        assertEquals("chatId", state.telegramChatId)
-        assertNull(state.inputErrorChatId)
-        collectionJob.cancel()
     }
 
     @Test

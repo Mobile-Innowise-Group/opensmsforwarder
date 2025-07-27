@@ -29,6 +29,7 @@ import org.open.smsforwarder.analytics.AnalyticsEvents
 import org.open.smsforwarder.analytics.AnalyticsTracker
 import org.open.smsforwarder.data.repository.RulesRepository
 import org.open.smsforwarder.domain.model.Rule
+import org.open.smsforwarder.utils.awaitInitialAction
 
 @ExperimentalCoroutinesApi
 @ExtendWith(MockitoExtension::class)
@@ -69,15 +70,12 @@ class AddForwardingRuleViewModelTest {
     fun `onNewRuleEntered - enables button when input is valid and not duplicate`() = runTest {
         whenever(rulesRepository.getRulesByForwardingIdFlow(testId))
             .thenReturn(MutableStateFlow(emptyList()))
-        val collectionJob = launch {
-            viewModel.viewState.collect { }
+        awaitInitialAction(viewModel.viewState) {
+            viewModel.onNewRuleEntered("valid-rule")
+            val state = viewModel.viewState.value
+            assertEquals(true, state.isAddRuleButtonEnabled)
+            assertEquals(null, state.errorMessage)
         }
-        advanceUntilIdle()
-        viewModel.onNewRuleEntered("valid-rule")
-        val state = viewModel.viewState.value
-        assertEquals(true, state.isAddRuleButtonEnabled)
-        assertEquals(null, state.errorMessage)
-        collectionJob.cancel()
     }
 
     @Test
@@ -93,16 +91,12 @@ class AddForwardingRuleViewModelTest {
         whenever(rulesRepository.getRulesByForwardingIdFlow(testId))
             .thenReturn(MutableStateFlow(listOf(existingRule)))
 
-        val collectionJob = launch {
-            viewModel.viewState.collect { }
+        awaitInitialAction(viewModel.viewState) {
+            viewModel.onNewRuleEntered("duplicate")
+            val state = viewModel.viewState.value
+            assertEquals(false, state.isAddRuleButtonEnabled)
+            assertEquals(R.string.add_rule_error, state.errorMessage)
         }
-        advanceUntilIdle()
-
-        viewModel.onNewRuleEntered("duplicate")
-        val state = viewModel.viewState.value
-        assertEquals(false, state.isAddRuleButtonEnabled)
-        assertEquals(R.string.add_rule_error, state.errorMessage)
-        collectionJob.cancel()
     }
 
     @Test
@@ -145,16 +139,12 @@ class AddForwardingRuleViewModelTest {
         whenever(rulesRepository.getRulesByForwardingIdFlow(testId))
             .thenReturn(MutableStateFlow(listOf(existing)))
 
-        val collectionJob = launch {
-            viewModel.viewState.collect { }
+        awaitInitialAction(viewModel.viewState) {
+            viewModel.onItemEdited(1L, "updated")
+
+            val updated = existing.copy(textRule = "updated")
+            verify(rulesRepository).insertRule(updated)
         }
-        advanceUntilIdle()
-
-        viewModel.onItemEdited(1L, "updated")
-
-        val updated = existing.copy(textRule = "updated")
-        verify(rulesRepository).insertRule(updated)
-        collectionJob.cancel()
     }
 
     @Test

@@ -28,6 +28,7 @@ import org.open.smsforwarder.data.repository.ForwardingRepository
 import org.open.smsforwarder.domain.model.Forwarding
 import org.open.smsforwarder.domain.model.ForwardingType
 import org.open.smsforwarder.navigation.Screens
+import org.open.smsforwarder.utils.awaitInitialAction
 
 @ExperimentalCoroutinesApi
 @ExtendWith(MockitoExtension::class)
@@ -71,73 +72,61 @@ class ChooseForwardingMethodViewModelTest {
 
     @Test
     fun `onTitleChanged - updates view state with new title`() = runTest {
-        val collectionJob = launch {
-            viewModel.viewState.collect { /* no-op */ }
+        awaitInitialAction(viewModel.viewState) {
+            viewModel.onTitleChanged("My Forwarding")
+
+            val state = viewModel.viewState.value
+            assertEquals("My Forwarding", state.title)
         }
-
-        advanceUntilIdle()
-        viewModel.onTitleChanged("My Forwarding")
-
-        val state = viewModel.viewState.value
-        assertEquals("My Forwarding", state.title)
-
-        collectionJob.cancel()
     }
 
     @Test
     fun `onForwardingMethodChanged - updates view state with new method`() = runTest {
-        val collectionJob = launch {
-            viewModel.viewState.collect { /* no-op */ }
+        awaitInitialAction(viewModel.viewState) {
+            viewModel.onForwardingMethodChanged(ForwardingType.EMAIL)
+            val state = viewModel.viewState.value
+            assertEquals(ForwardingType.EMAIL, state.forwardingType)
         }
-        advanceUntilIdle()
-        viewModel.onForwardingMethodChanged(ForwardingType.EMAIL)
-        val state = viewModel.viewState.value
-        assertEquals(ForwardingType.EMAIL, state.forwardingType)
-        collectionJob.cancel()
     }
 
     @Test
     fun `onNextClicked - with EMAIL method navigates to email screen`() = runTest {
-        val collectionJob = launch {
-            viewModel.viewState.collect { /* no-op */ }
-        }
-        advanceUntilIdle()
-        viewModel.onForwardingMethodChanged(ForwardingType.EMAIL)
-        viewModel.onNextClicked()
+        awaitInitialAction(viewModel.viewState) {
+            viewModel.onForwardingMethodChanged(ForwardingType.EMAIL)
+            viewModel.onNextClicked()
 
-        verify(analyticsTracker).trackEvent(AnalyticsEvents.RECIPIENT_CREATION_STEP1_NEXT_CLICKED)
-        verify(router).navigateTo(argThat { screenKey == Screens.addEmailDetailsFragment(testId).screenKey })
-        collectionJob.cancel()
+            verify(analyticsTracker).trackEvent(AnalyticsEvents.RECIPIENT_CREATION_STEP1_NEXT_CLICKED)
+            verify(router).navigateTo(argThat { screenKey == Screens.addEmailDetailsFragment(testId).screenKey })
+        }
     }
 
     @Test
     fun `onNextClicked - with TELEGRAM method navigates to telegram screen`() = runTest {
-        val collectionJob = launch {
-            viewModel.viewState.collect { /* no-op */ }
-        }
-        advanceUntilIdle()
-        viewModel.onForwardingMethodChanged(ForwardingType.TELEGRAM)
-        viewModel.onNextClicked()
+        awaitInitialAction(viewModel.viewState) {
+            viewModel.onForwardingMethodChanged(ForwardingType.TELEGRAM)
+            viewModel.onNextClicked()
 
-        verify(analyticsTracker).trackEvent(AnalyticsEvents.RECIPIENT_CREATION_STEP1_NEXT_CLICKED)
-        verify(router).navigateTo(argThat { screenKey == Screens.addTelegramDetailsFragment(testId).screenKey })
-        collectionJob.cancel()
+            verify(analyticsTracker).trackEvent(AnalyticsEvents.RECIPIENT_CREATION_STEP1_NEXT_CLICKED)
+            verify(router).navigateTo(argThat {
+                screenKey == Screens.addTelegramDetailsFragment(
+                    testId
+                ).screenKey
+            })
+        }
     }
 
     @Test
     fun `onNextClicked - with null method does not navigate`() = runTest {
-        val collectionJob = launch {
-            viewModel.viewState.collect { /* no-op */ }
-        }
-        viewModel.onForwardingMethodChanged(null)
-        viewModel.onNextClicked()
+        awaitInitialAction(viewModel.viewState) {
+            viewModel.onForwardingMethodChanged(null)
+            viewModel.onNextClicked()
 
-        verify(
-            analyticsTracker,
-            org.mockito.Mockito.never()
-        ).trackEvent(AnalyticsEvents.RECIPIENT_CREATION_STEP1_NEXT_CLICKED)
-        verify(router, org.mockito.Mockito.never()).navigateTo(org.mockito.kotlin.any())
-        collectionJob.cancel()
+            verify(
+                analyticsTracker,
+                org.mockito.Mockito.never()
+            ).trackEvent(AnalyticsEvents.RECIPIENT_CREATION_STEP1_NEXT_CLICKED)
+            verify(router, org.mockito.Mockito.never()).navigateTo(org.mockito.kotlin.any())
+        }
     }
 
     @Test
