@@ -1,4 +1,4 @@
-package com.github.smsforwarder
+package org.open.smsforwarder
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.testing.MigrationTestHelper

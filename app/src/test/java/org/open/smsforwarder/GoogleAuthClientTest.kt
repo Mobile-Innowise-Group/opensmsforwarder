@@ -1,4 +1,4 @@
-package com.github.smsforwarder
+package org.open.smsforwarder
 
 import android.app.Activity
 import android.app.PendingIntent
