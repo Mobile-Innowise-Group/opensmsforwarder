@@ -57,6 +57,7 @@ jobs:
 
       - name: Load google-services.json
         run: |
+          mkdir -p app/src/debug app/src/release
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -di > app/src/debug/google-services.json
           cp app/src/debug/google-services.json app/src/release/google-services.json
 
