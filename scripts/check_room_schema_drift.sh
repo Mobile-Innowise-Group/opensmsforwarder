@@ -17,15 +17,25 @@ fi
 
 echo "🔁 Comparing with: $BASE_REF"
 
-# Show changed schema files between current HEAD and base ref
-DIFF_FILES=$(git diff --name-only "$BASE_REF" HEAD -- app/schemas/)
+# Get status of changed schema files (A=Added, M=Modified, D=Deleted, etc.)
+SCHEMA_DIFFS=$(git diff --name-status "$BASE_REF" HEAD -- app/schemas/)
 
-if [[ -z "$DIFF_FILES" ]]; then
+MODIFIED_OR_DELETED=()
+
+while read -r status file; do
+  if [[ "$status" == "M" || "$status" == "D" ]]; then
+    MODIFIED_OR_DELETED+=("$file")
+  fi
+done <<< "$SCHEMA_DIFFS"
+
+if [[ ${#MODIFIED_OR_DELETED[@]} -eq 0 ]]; then
   echo "✅ No Room schema changes detected between commits."
 else
-  echo "❌ Room schema has changed between commits:"
-  echo "$DIFF_FILES"
-  echo "💡 If this change was intentional:"
+  echo "❌ Room schema modifications detected:"
+  for file in "${MODIFIED_OR_DELETED[@]}"; do
+    echo " - $file"
+  done
+  echo "💡 If this change was intentional, check if you have done the following steps:"
   echo "   - Bump the Room DB version"
   echo "   - Add proper migration"
   echo "   - Regenerate schema with: ./gradlew assembleDebug"
