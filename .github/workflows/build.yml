@@ -1,29 +1,31 @@
-name: Build, run static analysis, run tests, generate release APK, AAB
+name: Android CI (Fast Build & Test)
 
 on:
   push:
-    branches:
-      - main
-      - develop
+    branches: [main, develop]
   pull_request:
-    branches:
-      - main
-      - develop
+    branches: [main, develop]
 
 env:
   RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
   RELEASE_KEYSTORE_ALIAS: ${{ secrets.RELEASE_KEYSTORE_ALIAS }}
   RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
-
   CLIENT_ID: ${{ secrets.CLIENT_ID }}
   CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
   REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
   FEEDBACK_DB_PATH: ${{ secrets.FEEDBACK_DB_PATH }}
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+defaults:
+  run:
+    shell: bash
 
+jobs:
+
+  prepare:
+    name: Setup & Decode Keys
+    runs-on: ubuntu-latest
+    outputs:
+      gradle-cache-key: ${{ steps.gradle-cache.outputs.cache-hit }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,38 +38,71 @@ jobs:
           distribution: 'oracle'
           java-version: '17'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Cache Gradle
+        id: gradle-cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            .gradle
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
 
-      - name: Run static code analysis
-        run: ./gradlew detekt
-
-      - name: Decode Release Keystore
-        env:
-          ENCODED_RELEASE_STRING: ${{ secrets.RELEASE_KEY_BASE_64 }}
+      - name: Decode Keystores
         run: |
-          echo $ENCODED_RELEASE_STRING > release-keystore-b64.txt
-          base64 -di release-keystore-b64.txt > release.jks
+          echo "${{ secrets.RELEASE_KEY_BASE_64 }}" | base64 -di > release.jks
+          echo "${{ secrets.DEBUG_KEY_BASE_64 }}" | base64 -di > app/keystore/debug/debug.jks
+          echo "${{ secrets.DEBUG_KEY_PROPERTIES }}" | base64 -di > app/keystore/debug/debug.properties
 
-      - name: Decode Debug Keystore
-        env:
-          ENCODED_DEBUG_STRING: ${{ secrets.DEBUG_KEY_BASE_64 }}
-          ENCODED_DEBUG_PROPERTIES: ${{ secrets.DEBUG_KEY_PROPERTIES }}
-        run: |
-          echo $ENCODED_DEBUG_STRING > debug-keystore-b64.txt
-          base64 -di debug-keystore-b64.txt > app/keystore/debug/debug.jks
-          echo $ENCODED_DEBUG_PROPERTIES > debug-key-properties-b64.txt
-          base64 -di debug-key-properties-b64.txt > app/keystore/debug/debug.properties
+      - name: Load google-services.json
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -di > app/google-services.json
 
-      - name: Load Google Service file
-        env:
-          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo $DATA | base64 -di > app/google-services.json
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./gradlew detekt --build-cache --parallel
 
-      - name: Build
-        run: ./gradlew build
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./gradlew testDebugUnitTest --build-cache --parallel
 
-      - name: Make schema check script executable
+  instrumentation-tests:
+    name: Instrumentation Tests
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main'
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Run Instrumentation Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: google_apis
+          arch: x86_64
+          profile: pixel
+          emulator-options: "-no-window -no-audio -gpu swiftshader_indirect"
+          disable-animations: true
+          script: ./gradlew connectedCheck --build-cache --parallel
+
+  build-release:
+    name: Build APK & AAB
+    runs-on: ubuntu-latest
+    needs: [static-analysis, unit-tests]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Make schema check executable
         run: chmod +x scripts/check_room_schema_drift.sh
 
       - name: Run Room schema drift check
@@ -76,46 +111,24 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           GITHUB_BASE_REF: ${{ github.base_ref }}
 
-      - name: Run unit tests
-        run: ./gradlew test
+      - name: Build Release APK and AAB
+        run: ./gradlew assembleRelease bundleRelease --build-cache --parallel
 
-      - name: Set up Android SDK
-        if: github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main'
-        uses: android-actions/setup-android@v3
-
-      - name: Run instrumentation Tests
-        if: github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 30
-          target: google_apis
-          arch: x86_64
-          profile: pixel
-          emulator-options: "-no-snapshot-save"
-          disable-animations: true
-          script: ./gradlew connectedCheck
-
-      - name: Build Release apk
-        run: ./gradlew assembleRelease --stacktrace
-
-      - name: Build Release bundle
-        run: ./gradlew bundleRelease --stacktrace
-
-      - name: Get release apk file path
+      - name: Get release apk path
         id: releaseApk
         run: echo "apkfile=$(find app/build/outputs/apk/release/*.apk)" >> $GITHUB_OUTPUT
 
-      - name: Get release aab file path
+      - name: Get release aab path
         id: releaseAab
         run: echo "aabfile=$(find app/build/outputs/bundle/release/*.aab)" >> $GITHUB_OUTPUT
 
-      - name: Upload Release APK to Artifacts
+      - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
           name: release-apk-artifacts
           path: ${{ steps.releaseApk.outputs.apkfile }}
 
-      - name: Upload Release AAB to Artifacts
+      - name: Upload Release AAB
         uses: actions/upload-artifact@v4
         with:
           name: release-aab-artifacts
