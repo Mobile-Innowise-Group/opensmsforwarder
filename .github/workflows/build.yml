@@ -56,10 +56,7 @@ jobs:
           echo "${{ secrets.DEBUG_KEY_PROPERTIES }}" | base64 -di > app/keystore/debug/debug.properties
 
       - name: Load google-services.json
-        run: |
-          mkdir -p app/src/debug app/src/release
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -di > app/src/debug/google-services.json
-          cp app/src/debug/google-services.json app/src/release/google-services.json
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -di > app/google-services.json
 
   static-analysis:
     name: Static Analysis
@@ -75,7 +72,7 @@ jobs:
     needs: prepare
     steps:
       - uses: actions/checkout@v4
-      - run: ./gradlew testDebugUnitTest --build-cache --parallel
+      - run: ./gradlew test --build-cache --parallel
 
   instrumentation-tests:
     name: Instrumentation Tests
