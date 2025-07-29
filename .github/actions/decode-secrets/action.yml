@@ -1,5 +1,12 @@
 name: "Decode Secrets"
 description: "Decode keystores and google-services.json"
+inputs:
+  DEBUG_KEY_BASE_64:
+    required: true
+  DEBUG_KEY_PROPERTIES:
+    required: true
+  GOOGLE_SERVICES_JSON:
+    required: true
 runs:
   using: "composite"
   steps:
