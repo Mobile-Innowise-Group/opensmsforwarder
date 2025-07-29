@@ -94,7 +94,16 @@ jobs:
           profile: pixel
           emulator-options: "-no-window -no-audio -gpu swiftshader_indirect -no-boot-anim"
           disable-animations: true
-          script: ./gradlew connectedCheck --build-cache --parallel
+          script: |
+            adb wait-for-device
+            boot_completed=""
+            while [ "$boot_completed" != "1" ]; do
+              sleep 5
+              boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
+              echo "Waiting for emulator... (boot_completed=$boot_completed)"
+            done
+            echo "Emulator ready!"
+            ./gradlew connectedCheck --build-cache --parallel
 
   build-release:
     name: Build APK & AAB
