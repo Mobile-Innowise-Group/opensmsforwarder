@@ -49,14 +49,6 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}-
 
-#      - name: Decode Keystores and google-services.json
-#        run: |
-#          mkdir -p app/keystore/debug
-#          echo "${{ secrets.RELEASE_KEY_BASE_64 }}" | base64 -di > release.jks
-#          echo "${{ secrets.DEBUG_KEY_BASE_64 }}" | base64 -di > app/keystore/debug/debug.jks
-#          echo "${{ secrets.DEBUG_KEY_PROPERTIES }}" | base64 -di > app/keystore/debug/debug.properties
-#          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -di > app/google-services.json
-
   static-analysis:
     name: Static Analysis
     runs-on: ubuntu-latest
