@@ -111,6 +111,8 @@ jobs:
     needs: [static-analysis, unit-tests]
     steps:
       - uses: actions/checkout@v4
+        with:
+         fetch-depth: 0
       - name: Decode Keystore
         run: |
           echo "${{ secrets.RELEASE_KEY_BASE_64 }}" | base64 -d > release.jks
