@@ -89,9 +89,8 @@ jobs:
       - name: Run Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 30
+          api-level: 29
           target: google_apis
-          arch: x86_64
           profile: pixel
           emulator-options: "-no-window -no-audio -gpu swiftshader_indirect -no-boot-anim"
           disable-animations: true
