@@ -108,7 +108,7 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/decode-secrets
         with:
-          RELEASE_KEY_BASE_64: ${{ secrets.DEBUG_KEY_BASE_64 }}
+          RELEASE_KEY_BASE_64: ${{ secrets.RELEASE_KEY_BASE_64 }}
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
 
       - name: Make schema check executable
