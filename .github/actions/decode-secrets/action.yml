@@ -7,6 +7,8 @@ inputs:
     required: true
   GOOGLE_SERVICES_JSON:
     required: true
+  RELEASE_KEY_BASE_64:
+    required: true
 runs:
   using: "composite"
   steps:

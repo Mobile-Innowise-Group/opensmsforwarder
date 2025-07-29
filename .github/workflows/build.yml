@@ -58,6 +58,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/decode-secrets
+        with:
+          DEBUG_KEY_BASE_64: ${{ secrets.DEBUG_KEY_BASE_64 }}
+          DEBUG_KEY_PROPERTIES: ${{ secrets.DEBUG_KEY_PROPERTIES }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
       - run: ./gradlew testDebugUnitTest --build-cache --parallel
 
   instrumentation-tests:
@@ -68,6 +72,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/decode-secrets
+        with:
+          DEBUG_KEY_BASE_64: ${{ secrets.DEBUG_KEY_BASE_64 }}
+          DEBUG_KEY_PROPERTIES: ${{ secrets.DEBUG_KEY_PROPERTIES }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -99,6 +107,9 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/actions/decode-secrets
+        with:
+          RELEASE_KEY_BASE_64: ${{ secrets.DEBUG_KEY_BASE_64 }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
 
       - name: Make schema check executable
         run: chmod +x scripts/check_room_schema_drift.sh
