@@ -94,7 +94,6 @@ jobs:
           profile: pixel
           emulator-options: "-no-window -no-audio -gpu swiftshader_indirect -no-boot-anim"
           disable-animations: true
-          working-directory: app
           script: ./gradlew connectedCheck --build-cache --parallel
 
   build-release:
