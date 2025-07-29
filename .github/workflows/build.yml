@@ -22,7 +22,7 @@ defaults:
 jobs:
 
   prepare:
-    name: Setup & Decode Keys
+    name: Setup
     runs-on: ubuntu-latest
     outputs:
       gradle-cache-key: ${{ steps.gradle-cache.outputs.cache-hit }}
