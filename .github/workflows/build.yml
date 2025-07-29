@@ -2,9 +2,9 @@ name: Open SMS Forwarder CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
   pull_request:
-    branches: [main, develop]
+    branches: [ main, develop ]
 
 env:
   RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
@@ -20,17 +20,12 @@ defaults:
     shell: bash
 
 jobs:
-
   prepare:
-    name: Setup
+    name: Setup & Cache
     runs-on: ubuntu-latest
-    outputs:
-      gradle-cache-key: ${{ steps.gradle-cache.outputs.cache-hit }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup JDK
         uses: actions/setup-java@v4
@@ -39,7 +34,6 @@ jobs:
           java-version: '17'
 
       - name: Cache Gradle
-        id: gradle-cache
         uses: actions/cache@v3
         with:
           path: |
@@ -63,15 +57,7 @@ jobs:
     needs: prepare
     steps:
       - uses: actions/checkout@v4
-      - name: Decode Keystore
-        run: |
-          mkdir -p app/keystore/debug
-          echo "${{ secrets.DEBUG_KEY_BASE_64 }}" | base64 -d > app/keystore/debug/debug.jks
-          echo "${{ secrets.DEBUG_KEY_PROPERTIES }}" | base64 -d > app/keystore/debug/debug.properties
-
-      - name: Decode google-services.json
-        run: mkdir -p app && echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
-
+      - uses: ./.github/actions/decode-secrets
       - run: ./gradlew testDebugUnitTest --build-cache --parallel
 
   instrumentation-tests:
@@ -81,18 +67,16 @@ jobs:
     needs: prepare
     steps:
       - uses: actions/checkout@v4
-
-      - name: Decode Keystore
-        run: |
-          mkdir -p app/keystore/debug
-          echo "${{ secrets.DEBUG_KEY_BASE_64 }}" | base64 -d > app/keystore/debug/debug.jks
-          echo "${{ secrets.DEBUG_KEY_PROPERTIES }}" | base64 -d > app/keystore/debug/debug.properties
-
-      - name: Decode google-services.json
-        run: mkdir -p app && echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
+      - uses: ./.github/actions/decode-secrets
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Increase VM Performance
+        run: |
+          echo "Installing KVM acceleration tools"
+          sudo apt-get update
+          sudo apt-get install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils  
 
       - name: Run Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -101,27 +85,20 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel
-          emulator-options: "-no-window -no-audio -gpu swiftshader_indirect"
+          emulator-options: "-no-window -no-audio -gpu swiftshader_indirect -no-boot-anim"
           disable-animations: true
+          working-directory: app
           script: ./gradlew connectedCheck --build-cache --parallel
 
   build-release:
     name: Build APK & AAB
     runs-on: ubuntu-latest
-    needs: [static-analysis, unit-tests]
+    needs: [ static-analysis, unit-tests ]
     steps:
       - uses: actions/checkout@v4
         with:
-         fetch-depth: 0
-      - name: Decode Keystore
-        run: |
-          echo "${{ secrets.RELEASE_KEY_BASE_64 }}" | base64 -d > release.jks
-          mkdir -p app/keystore/debug
-          echo "${{ secrets.DEBUG_KEY_BASE_64 }}" | base64 -d > app/keystore/debug/debug.jks
-          echo "${{ secrets.DEBUG_KEY_PROPERTIES }}" | base64 -d > app/keystore/debug/debug.properties
-
-      - name: Decode google-services.json
-        run: mkdir -p app && echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
+          fetch-depth: 0
+      - uses: ./.github/actions/decode-secrets
 
       - name: Make schema check executable
         run: chmod +x scripts/check_room_schema_drift.sh
