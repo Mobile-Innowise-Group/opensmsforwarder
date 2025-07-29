@@ -49,23 +49,13 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}-
 
-      - name: Decode Keystores and google-services.json
-        run: |
-          mkdir -p app/keystore/debug
-          echo "${{ secrets.RELEASE_KEY_BASE_64 }}" | base64 -di > release.jks
-          echo "${{ secrets.DEBUG_KEY_BASE_64 }}" | base64 -di > app/keystore/debug/debug.jks
-          echo "${{ secrets.DEBUG_KEY_PROPERTIES }}" | base64 -di > app/keystore/debug/debug.properties
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -di > app/google-services.json 
-
-      - name: Upload secrets artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: secrets-files
-          path: |
-            release.jks
-            app/keystore/debug/debug.jks
-            app/keystore/debug/debug.properties     
-            app/google-services.json  
+#      - name: Decode Keystores and google-services.json
+#        run: |
+#          mkdir -p app/keystore/debug
+#          echo "${{ secrets.RELEASE_KEY_BASE_64 }}" | base64 -di > release.jks
+#          echo "${{ secrets.DEBUG_KEY_BASE_64 }}" | base64 -di > app/keystore/debug/debug.jks
+#          echo "${{ secrets.DEBUG_KEY_PROPERTIES }}" | base64 -di > app/keystore/debug/debug.properties
+#          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -di > app/google-services.json
 
   static-analysis:
     name: Static Analysis
@@ -81,11 +71,14 @@ jobs:
     needs: prepare
     steps:
       - uses: actions/checkout@v4
-      - name: Download secrets artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: secrets-files
-          path: .
+      - name: Decode Keystore
+        run: |
+          mkdir -p app/keystore/debug
+          echo "${{ secrets.DEBUG_KEY_BASE_64 }}" | base64 -d > app/keystore/debug/debug.jks
+          echo "${{ secrets.DEBUG_KEY_PROPERTIES }}" | base64 -d > app/keystore/debug/debug.properties
+
+      - name: Decode google-services.json
+        run: mkdir -p app && echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
 
       - run: ./gradlew testDebugUnitTest --build-cache --parallel
 
@@ -96,6 +89,16 @@ jobs:
     needs: prepare
     steps:
       - uses: actions/checkout@v4
+
+      - name: Decode Keystore
+        run: |
+          mkdir -p app/keystore/debug
+          echo "${{ secrets.DEBUG_KEY_BASE_64 }}" | base64 -d > app/keystore/debug/debug.jks
+          echo "${{ secrets.DEBUG_KEY_PROPERTIES }}" | base64 -d > app/keystore/debug/debug.properties
+
+      - name: Decode google-services.json
+        run: mkdir -p app && echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
@@ -116,11 +119,15 @@ jobs:
     needs: [static-analysis, unit-tests]
     steps:
       - uses: actions/checkout@v4
-      - name: Download secrets artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: secrets-files
-          path: .
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.RELEASE_KEY_BASE_64 }}" | base64 -d > release.jks
+          mkdir -p app/keystore/debug
+          echo "${{ secrets.DEBUG_KEY_BASE_64 }}" | base64 -d > app/keystore/debug/debug.jks
+          echo "${{ secrets.DEBUG_KEY_PROPERTIES }}" | base64 -d > app/keystore/debug/debug.properties
+
+      - name: Decode google-services.json
+        run: mkdir -p app && echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
 
       - name: Make schema check executable
         run: chmod +x scripts/check_room_schema_drift.sh
