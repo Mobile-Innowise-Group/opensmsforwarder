@@ -67,6 +67,8 @@ jobs:
   instrumentation-tests:
     name: Instrumentation Tests
     runs-on: ubuntu-latest
+    env:
+      ANDROID_AVD_HOME: ${{ github.workspace }}/.android/avd
     if: github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main'
     needs: prepare
     steps:
@@ -80,30 +82,56 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Increase VM Performance
+      - name: Install system image
+        run: sdkmanager "system-images;android-29;google_apis;x86"
+
+      - name: Create AVD
         run: |
-          echo "Installing KVM acceleration tools"
-          sudo apt-get update
-          sudo apt-get install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils  
+          mkdir -p $ANDROID_AVD_HOME
+          echo "no" | avdmanager create avd -n test -k "system-images;android-29;google_apis;x86" --device "pixel"
+          avdmanager list avd
+          ls -l $ANDROID_AVD_HOME
+
+      - name: Start Emulator
+        run: |
+          $ANDROID_HOME/emulator/emulator -avd test -accel off -no-snapshot-save -no-window -no-audio -gpu swiftshader_indirect -no-boot-anim &
+          echo $! > emulator.pid
+
+      - name: Wait for Emulator to Boot
+        run: |
+          echo "Waiting for emulator to start..."
+          adb wait-for-device
+          
+          boot_completed=""
+          until [ "$boot_completed" = "1" ]; do
+            sleep 5
+            boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
+            echo "Waiting... boot_completed=$boot_completed"
+          done
+          
+          until adb shell pm list packages > /dev/null 2>&1; do
+            echo "Waiting for package manager to become available..."
+            sleep 5
+          done
+          
+          api_level=""
+          until [ -n "$api_level" ] && [ "$api_level" != "unknown" ]; do
+            sleep 5
+            api_level=$(adb shell getprop ro.build.version.sdk 2>/dev/null | tr -d '\r')
+            echo "Waiting for emulator to report API level... api_level=$api_level"
+          done
+          
+          echo "Emulator fully ready with API level $api_level"
 
       - name: Run Instrumentation Tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          target: google_apis
-          profile: pixel
-          emulator-options: "-no-window -no-audio -gpu swiftshader_indirect -no-boot-anim"
-          disable-animations: true
-          script: |
-            adb wait-for-device
-            boot_completed=""
-            while [ "$boot_completed" != "1" ]; do
-              sleep 5
-              boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
-              echo "Waiting for emulator... (boot_completed=$boot_completed)"
-            done
-            echo "Emulator ready!"
-            ./gradlew connectedCheck --build-cache --parallel
+        run: ./gradlew connectedCheck --build-cache --parallel
+
+      - name: Kill Emulator
+        if: always()
+        run: |
+          if [ -f emulator.pid ]; then
+            kill $(cat emulator.pid) || true
+          fi
 
   build-release:
     name: Build APK & AAB
