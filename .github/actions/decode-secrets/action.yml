@@ -1,0 +1,21 @@
+name: "Decode Secrets"
+description: "Decode keystores and google-services.json"
+inputs:
+  DEBUG_KEY_BASE_64:
+    required: true
+  DEBUG_KEY_PROPERTIES:
+    required: true
+  GOOGLE_SERVICES_JSON:
+    required: true
+  RELEASE_KEY_BASE_64:
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        echo "${{ inputs.RELEASE_KEY_BASE_64 }}" | base64 -d > release.jks
+        mkdir -p app/keystore/debug
+        echo "${{ inputs.DEBUG_KEY_BASE_64 }}" | base64 -d > app/keystore/debug/debug.jks
+        echo "${{ inputs.DEBUG_KEY_PROPERTIES }}" | base64 -d > app/keystore/debug/debug.properties
+        echo "${{ inputs.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
+      shell: bash

@@ -3,6 +3,7 @@ package org.open.smsforwarder.processing.forwarder
 import org.open.smsforwarder.data.remote.service.EmailService
 import org.open.smsforwarder.domain.model.Forwarding
 import org.open.smsforwarder.processing.composer.EmailComposer
+import org.open.smsforwarder.utils.runSuspendCatching
 import javax.inject.Inject
 
 class EmailForwarder @Inject constructor(
@@ -11,7 +12,7 @@ class EmailForwarder @Inject constructor(
 ) : Forwarder {
 
     override suspend fun execute(forwarding: Forwarding, message: String): Result<Unit> =
-        runCatching {
+        runSuspendCatching {
             val emailMessage = emailComposer.composeMessage(
                 toEmailAddress = forwarding.recipientEmail,
                 subject = DEFAULT_SUBJECT,

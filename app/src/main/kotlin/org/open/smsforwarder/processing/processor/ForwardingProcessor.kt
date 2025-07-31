@@ -8,6 +8,7 @@ import org.open.smsforwarder.data.repository.HistoryRepository
 import org.open.smsforwarder.data.repository.RulesRepository
 import org.open.smsforwarder.domain.model.Forwarding
 import org.open.smsforwarder.domain.model.ForwardingType
+import org.open.smsforwarder.extension.normalizeSpaces
 import org.open.smsforwarder.processing.forwarder.Forwarder
 import javax.inject.Inject
 
@@ -26,8 +27,9 @@ class ForwardingProcessor @Inject constructor(
         val messagesToForward = mutableListOf<Pair<Long, String>>()
 
         messages.forEach { message ->
+            val normalizedMessage = message.normalizeSpaces()
             rules.forEach { rule ->
-                if (message.contains(rule.textRule)) {
+                if (normalizedMessage.contains(rule.textRule.normalizeSpaces())) {
                     messagesToForward.add(rule.forwardingId to message)
                 }
             }
@@ -38,30 +40,39 @@ class ForwardingProcessor @Inject constructor(
                 forwarders[recipient.forwardingType]
                     ?.execute(recipient, message)
                     ?.onSuccess {
-                        updateForwardingStatus(recipient, message, "")
+                        postProcessForwarding(recipient, message, "")
                     }
                     ?.onFailure { error ->
-                        updateForwardingStatus(recipient, message, error.message.orEmpty())
-                        if (error is TokenRevokedException || error is RefreshTokenException) {
-                            authRepository.signOut(recipient)
-                        }
+                        postProcessForwarding(
+                            recipient,
+                            message,
+                            error.message.orEmpty()
+                        )
+                        handleTokenErrors(error, recipient)
                     }
             }
         }
     }
 
-    private suspend fun updateForwardingStatus(
+    private suspend fun postProcessForwarding(
         forwarding: Forwarding,
         message: String,
-        errorText: String
+        errorText: String,
     ) {
         forwardingRepository.insertOrUpdateForwarding(
             forwarding.copy(error = errorText)
         )
-        historyRepository.insertOrUpdateForwardedSms(
+        historyRepository.insertForwardedSms(
             forwardingId = forwarding.id,
             message = message,
-            isForwardingSuccessful = errorText.isEmpty()
+            isForwardingSuccessful = errorText.isEmpty(),
         )
+    }
+
+    private suspend fun handleTokenErrors(error: Throwable, recipient: Forwarding) {
+        if (error is TokenRevokedException || error is RefreshTokenException) {
+            authRepository.signOut(recipient.id)
+            forwardingRepository.insertOrUpdateForwarding(recipient.copy(senderEmail = null))
+        }
     }
 }

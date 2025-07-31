@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium"
             android:text="@string/feedback_description"
-            android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant" />
+            android:textAppearance="@style/SmsTextAppearance.Regular.14.Subsidiary" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_et_layout"
@@ -40,8 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/feedback_email"
-                android:imeOptions="actionDone"
-                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
                 android:textAppearance="@style/SmsTextAppearance.Regular.16" />
         </com.google.android.material.textfield.TextInputLayout>
 

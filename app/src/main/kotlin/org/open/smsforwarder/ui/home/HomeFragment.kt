@@ -28,6 +28,7 @@ import org.open.smsforwarder.analytics.AnalyticsTracker
 import org.open.smsforwarder.databinding.FragmentHomeBinding
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.showOkDialog
 import org.open.smsforwarder.extension.unsafeLazy
 import org.open.smsforwarder.ui.dialog.delete.DeleteDialog
@@ -52,7 +53,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
 
     private val permissions = mutableListOf<String>().apply {
         add(Manifest.permission.RECEIVE_SMS)
-        add(Manifest.permission.SEND_SMS)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             add(Manifest.permission.POST_NOTIFICATIONS)
         }
@@ -77,6 +77,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
 
     override fun onStart() {
         super.onStart()
+        binding.titleLabel.setAccessibilityFocus()
         requestPermissions()
     }
 
@@ -96,6 +97,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), DeleteDialogListener {
             powerManagementWarningIv bindClicksTo viewModel::onBatteryOptimizationWarningClicked
             feedbackIv bindClicksTo viewModel::onFeedbackClicked
             startNewForwardingBtn bindClicksTo viewModel::onNewForwardingClicked
+            binding.forwardingHistory bindClicksTo viewModel::onSmsHistoryClicked
         }
     }
 

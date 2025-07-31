@@ -1,8 +1,7 @@
 package org.open.smsforwarder.domain.usecase
 
-import org.open.smsforwarder.R
+import org.open.smsforwarder.domain.ValidationError
 import org.open.smsforwarder.domain.ValidationResult
-import org.open.smsforwarder.utils.Resources
 import javax.inject.Inject
 
 class ValidateBlankFieldUseCase @Inject constructor() {
@@ -10,7 +9,7 @@ class ValidateBlankFieldUseCase @Inject constructor() {
     fun execute(field: String?): ValidationResult = if (field.isNullOrBlank()) {
         ValidationResult(
             successful = false,
-            errorMessage = Resources.StringResource(R.string.error_generic_is_blank)
+            errorType = ValidationError.BLANK_FIELD
         )
     } else {
         ValidationResult(successful = true)

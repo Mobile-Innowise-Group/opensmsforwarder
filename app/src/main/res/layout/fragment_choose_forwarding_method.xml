@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -27,24 +26,30 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="16dp" />
 
-        <ImageView
-            android:id="@+id/arrow_back_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/arrow_back"
-            app:layout_constraintStart_toStartOf="@id/start_margin"
-            app:layout_constraintTop_toTopOf="@id/step1" />
-
         <TextView
             android:id="@+id/step1"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:importantForAccessibility="yes"
             android:text="@string/step_1_from_3"
             android:textAlignment="center"
             android:textAppearance="@style/SmsTextAppearance.Bold.16"
             app:layout_constraintBottom_toBottomOf="@id/arrow_back_iv"
             app:layout_constraintEnd_toEndOf="@id/end_margin"
+            app:layout_constraintStart_toStartOf="@id/start_margin"
+            app:layout_constraintTop_toTopOf="@id/arrow_back_iv" />
+
+        <ImageView
+            android:id="@+id/arrow_back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:accessibilityTraversalAfter="@id/step1"
+            android:contentDescription="@string/back"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:padding="14dp"
+            android:src="@drawable/arrow_back"
             app:layout_constraintStart_toStartOf="@id/start_margin"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,7 +81,8 @@
                 android:hint="@string/forwarding_title_hint"
                 android:imeOptions="actionDone"
                 android:inputType="textCapSentences"
-                android:textAppearance="@style/SmsTextAppearance.Regular.16" />
+                android:textAppearance="@style/SmsTextAppearance.Regular.16"
+                android:textColorHint="?attr/colorSubsidiary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <RadioGroup
@@ -107,25 +113,15 @@
                 app:buttonTint="@drawable/radio_color_state_list" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/sms_rb"
+                android:id="@+id/telegram_rb"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/radio_button_background"
-                android:text="@string/sms"
+                android:text="@string/telegram"
                 android:textAppearance="@style/SmsTextAppearance.Regular.16"
                 android:textColor="@drawable/radio_button_text_colors"
                 app:buttonTint="@drawable/radio_color_state_list" />
-
-            <TextView
-                android:id="@+id/sms_info_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/sms_warning"
-                android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant"
-                android:visibility="gone"
-                tools:visibility="visible" />
         </RadioGroup>
 
         <com.google.android.material.button.MaterialButton

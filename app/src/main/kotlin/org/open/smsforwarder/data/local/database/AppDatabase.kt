@@ -18,11 +18,16 @@ import org.open.smsforwarder.data.local.database.entity.RuleEntity
         RuleEntity::class,
         HistoryEntity::class
     ],
-    version = 1
+    version = AppDatabase.DATABASE_VERSION
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun forwardingDao(): ForwardingDao
     abstract fun authDao(): AuthTokenDao
     abstract fun rulesDao(): RulesDao
     abstract fun historyDao(): HistoryDao
+
+    companion object {
+        const val DATABASE_NAME = "sms_forwarder"
+        const val DATABASE_VERSION = 2
+    }
 }

@@ -1,12 +1,12 @@
 package org.open.smsforwarder.ui.dialog.permission
 
 import android.app.Dialog
-import androidx.appcompat.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import org.open.smsforwarder.R
@@ -14,7 +14,6 @@ import org.open.smsforwarder.analytics.AnalyticsEvents.PERMISSIONS_DIALOG_GO_TO_
 import org.open.smsforwarder.analytics.AnalyticsTracker
 import org.open.smsforwarder.extension.notificationsPermissionGranted
 import org.open.smsforwarder.extension.smsReceivePermissionGranted
-import org.open.smsforwarder.extension.smsSendPermissionGranted
 import javax.inject.Inject
 
 class PermissionsDialog : DialogFragment() {
@@ -25,7 +24,7 @@ class PermissionsDialog : DialogFragment() {
     private val systemSettingsStartForResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { _ ->
-        if (requireActivity().smsReceivePermissionGranted() && requireActivity().smsSendPermissionGranted()
+        if (requireActivity().smsReceivePermissionGranted()
             && requireActivity().notificationsPermissionGranted()
         ) {
             dismiss()

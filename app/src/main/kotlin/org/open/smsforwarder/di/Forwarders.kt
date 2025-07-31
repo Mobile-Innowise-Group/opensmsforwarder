@@ -9,7 +9,7 @@ import dagger.multibindings.IntoMap
 import org.open.smsforwarder.domain.model.ForwardingType
 import org.open.smsforwarder.processing.forwarder.EmailForwarder
 import org.open.smsforwarder.processing.forwarder.Forwarder
-import org.open.smsforwarder.processing.forwarder.SmsForwarder
+import org.open.smsforwarder.processing.forwarder.TelegramForwarder
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -22,8 +22,8 @@ abstract class Forwarders {
 
     @Binds
     @IntoMap
-    @ForwardingTypeKey(ForwardingType.SMS)
-    abstract fun provideSmsForwarder(smsForwarder: SmsForwarder): Forwarder
+    @ForwardingTypeKey(ForwardingType.TELEGRAM)
+    abstract fun provideTelegramForwarder(telegramForwarder: TelegramForwarder): Forwarder
 }
 
 @MapKey

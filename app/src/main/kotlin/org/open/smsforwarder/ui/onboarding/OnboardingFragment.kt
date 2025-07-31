@@ -13,9 +13,11 @@ import org.open.smsforwarder.databinding.FragmentOnboardingBinding
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindPageChangesTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.showOkDialog
 import org.open.smsforwarder.extension.unsafeLazy
 import org.open.smsforwarder.ui.onboarding.OnboardingState.Companion.slides
+import org.open.smsforwarder.ui.onboarding.adapter.OnboardingPagerTransformer
 import org.open.smsforwarder.ui.onboarding.adapter.OnboardingSliderAdapter
 import org.open.smsforwarder.utils.ButtonFillAnimator
 
@@ -35,11 +37,20 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
         setupObservers()
     }
 
+    override fun onStart() {
+        super.onStart()
+        binding.stepLabel.setAccessibilityFocus()
+    }
+
     private fun setupView() {
         with(binding) {
             adapter.setData(slides)
+            onboardingVp.setPageTransformer(OnboardingPagerTransformer())
             onboardingVp.adapter = adapter
-            TabLayoutMediator(dotsIndicator, onboardingVp) { _, _ -> }.attach()
+            dotsIndicator.tabIconTint = null
+            TabLayoutMediator(dotsIndicator, onboardingVp) { tab, _ ->
+                tab.setIcon(R.drawable.dots_selector)
+            }.attach()
             buttonFillAnimator = ButtonFillAnimator(
                 button = nextBtn,
                 lifecycle = viewLifecycleOwner.lifecycle,
@@ -72,6 +83,8 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
         with(binding) {
             backBtn.isVisible = onboardingState.currentStep >= 2
             stepLabel.text = getString(R.string.onboarding_step_label, onboardingState.currentStep)
+            stepLabel.contentDescription =
+                getString(R.string.onboarding_title_content_description, stepLabel.text)
             skipAllBtn.isVisible = !onboardingState.isLastSlide
             nextBtn.text = getString(onboardingState.nextButtonRes)
             acknowledgeChBx.isVisible = onboardingState.isLastSlide
@@ -89,9 +102,20 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
                 )
             }
 
-            NextPageEffect -> binding.onboardingVp.currentItem++
-            PreviousPageEffect -> binding.onboardingVp.currentItem--
-            SkipAllEffect -> binding.onboardingVp.currentItem = adapter.itemCount - 1
+            NextPageEffect -> {
+                binding.onboardingVp.currentItem++
+                binding.stepLabel.setAccessibilityFocus()
+            }
+
+            PreviousPageEffect -> {
+                binding.onboardingVp.currentItem--
+                binding.stepLabel.setAccessibilityFocus()
+            }
+
+            SkipAllEffect -> {
+                binding.onboardingVp.currentItem = adapter.itemCount - 1
+                binding.stepLabel.setAccessibilityFocus()
+            }
         }
     }
 }

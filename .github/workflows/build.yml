@@ -1,94 +1,178 @@
-name: Build, run static analysis, run tests, generate release APK, AAB
+name: Open SMS Forwarder CI
 
 on:
   push:
-    branches:
-      - main
-      - develop
+    branches: [ main, develop ]
   pull_request:
-    branches:
-      - main
-      - develop
+    branches: [ main, develop ]
 
 env:
   RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
   RELEASE_KEYSTORE_ALIAS: ${{ secrets.RELEASE_KEYSTORE_ALIAS }}
   RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
-
   CLIENT_ID: ${{ secrets.CLIENT_ID }}
   CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
   REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
   FEEDBACK_DB_PATH: ${{ secrets.FEEDBACK_DB_PATH }}
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+defaults:
+  run:
+    shell: bash
 
+jobs:
+  prepare:
+    name: Setup & Cache
+    runs-on: ubuntu-latest
     steps:
-      - name: Checking out branch
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java (JDK)
+      - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'oracle'
           java-version: '17'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Cache Gradle
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            .gradle
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
 
-      - name: Run static code analysis
-        run: ./gradlew detekt
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./gradlew detekt --build-cache --parallel
 
-      - name: Decode Release Keystore
-        env:
-          ENCODED_RELEASE_STRING: ${{ secrets.RELEASE_KEY_BASE_64 }}
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/decode-secrets
+        with:
+          DEBUG_KEY_BASE_64: ${{ secrets.DEBUG_KEY_BASE_64 }}
+          DEBUG_KEY_PROPERTIES: ${{ secrets.DEBUG_KEY_PROPERTIES }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+      - run: ./gradlew testDebugUnitTest --build-cache --parallel
+
+  instrumentation-tests:
+    name: Instrumentation Tests
+    runs-on: ubuntu-latest
+    env:
+      ANDROID_AVD_HOME: ${{ github.workspace }}/.android/avd
+    if: github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main'
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/decode-secrets
+        with:
+          DEBUG_KEY_BASE_64: ${{ secrets.DEBUG_KEY_BASE_64 }}
+          DEBUG_KEY_PROPERTIES: ${{ secrets.DEBUG_KEY_PROPERTIES }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install system image
+        run: sdkmanager "system-images;android-29;google_apis;x86"
+
+      - name: Create AVD
         run: |
-          echo $ENCODED_RELEASE_STRING > release-keystore-b64.txt
-          base64 -di release-keystore-b64.txt > release.jks
+          mkdir -p $ANDROID_AVD_HOME
+          echo "no" | avdmanager create avd -n test -k "system-images;android-29;google_apis;x86" --device "pixel"
+          avdmanager list avd
+          ls -l $ANDROID_AVD_HOME
 
-      - name: Decode Debug Keystore
-        env:
-          ENCODED_DEBUG_STRING: ${{ secrets.DEBUG_KEY_BASE_64 }}
-          ENCODED_DEBUG_PROPERTIES: ${{ secrets.DEBUG_KEY_PROPERTIES }}
+      - name: Start Emulator
         run: |
-          echo $ENCODED_DEBUG_STRING > debug-keystore-b64.txt
-          base64 -di debug-keystore-b64.txt > app/keystore/debug/debug.jks
-          echo $ENCODED_DEBUG_PROPERTIES > debug-key-properties-b64.txt
-          base64 -di debug-key-properties-b64.txt > app/keystore/debug/debug.properties
+          $ANDROID_HOME/emulator/emulator -avd test -accel off -no-snapshot-save -no-window -no-audio -gpu swiftshader_indirect -no-boot-anim &
+          echo $! > emulator.pid
 
-      - name: Load Google Service file
+      - name: Wait for Emulator to Boot
+        run: |
+          echo "Waiting for emulator to start..."
+          adb wait-for-device
+          
+          boot_completed=""
+          until [ "$boot_completed" = "1" ]; do
+            sleep 5
+            boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
+            echo "Waiting... boot_completed=$boot_completed"
+          done
+          
+          until adb shell pm list packages > /dev/null 2>&1; do
+            echo "Waiting for package manager to become available..."
+            sleep 5
+          done
+          
+          api_level=""
+          until [ -n "$api_level" ] && [ "$api_level" != "unknown" ]; do
+            sleep 5
+            api_level=$(adb shell getprop ro.build.version.sdk 2>/dev/null | tr -d '\r')
+            echo "Waiting for emulator to report API level... api_level=$api_level"
+          done
+          
+          echo "Emulator fully ready with API level $api_level"
+
+      - name: Run Instrumentation Tests
+        run: ./gradlew connectedCheck --build-cache --parallel
+
+      - name: Kill Emulator
+        if: always()
+        run: |
+          if [ -f emulator.pid ]; then
+            kill $(cat emulator.pid) || true
+          fi
+
+  build-release:
+    name: Build APK & AAB
+    runs-on: ubuntu-latest
+    needs: [ static-analysis, unit-tests ]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/decode-secrets
+        with:
+          RELEASE_KEY_BASE_64: ${{ secrets.RELEASE_KEY_BASE_64 }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+
+      - name: Make schema check executable
+        run: chmod +x scripts/check_room_schema_drift.sh
+
+      - name: Run Room schema drift check
+        run: ./scripts/check_room_schema_drift.sh
         env:
-          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo $DATA | base64 -di > app/google-services.json
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_BASE_REF: ${{ github.base_ref }}
 
-      - name: Build
-        run: ./gradlew build
+      - name: Build Release APK and AAB
+        run: ./gradlew assembleRelease bundleRelease --build-cache --parallel
 
-      - name: Run unit tests
-        run: ./gradlew test
-
-      - name: Build Release apk
-        run: ./gradlew assembleRelease --stacktrace
-
-      - name: Build Release bundle
-        run: ./gradlew bundleRelease --stacktrace
-
-      - name: Get release apk file path
+      - name: Get release apk path
         id: releaseApk
         run: echo "apkfile=$(find app/build/outputs/apk/release/*.apk)" >> $GITHUB_OUTPUT
 
-      - name: Get release aab file path
+      - name: Get release aab path
         id: releaseAab
         run: echo "aabfile=$(find app/build/outputs/bundle/release/*.aab)" >> $GITHUB_OUTPUT
 
-      - name: Upload Release APK to Artifacts
+      - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
           name: release-apk-artifacts
           path: ${{ steps.releaseApk.outputs.apkfile }}
 
-      - name: Upload Release AAB to Artifacts
+      - name: Upload Release AAB
         uses: actions/upload-artifact@v4
         with:
           name: release-aab-artifacts

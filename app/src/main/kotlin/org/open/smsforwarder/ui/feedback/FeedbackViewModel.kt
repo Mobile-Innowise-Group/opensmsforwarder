@@ -15,6 +15,8 @@ import org.open.smsforwarder.R
 import org.open.smsforwarder.data.repository.FeedbackRepository
 import org.open.smsforwarder.domain.usecase.ValidateBlankFieldUseCase
 import org.open.smsforwarder.domain.usecase.ValidateEmailUseCase
+import org.open.smsforwarder.extension.getStringProvider
+import org.open.smsforwarder.utils.runSuspendCatching
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,13 +42,16 @@ class FeedbackViewModel @Inject constructor(
         body: String,
     ) {
         viewModelScope.launch {
-            val result = feedbackRepository.sendFeedback(email, body)
-            val messageRes = when (result) {
-               true -> R.string.feedback_success
-               false -> R.string.feedback_failure
+            runSuspendCatching {
+                feedbackRepository.sendFeedback(email, body)
             }
-            _viewEffect.trySend(SubmitResultEffect(messageRes))
-            router.exit()
+                .onSuccess {
+                    _viewEffect.trySend(SubmitResultEffect(R.string.feedback_success))
+                    router.exit()
+                }
+                .onFailure {
+                    _viewEffect.trySend(SubmitResultEffect(R.string.feedback_failure))
+                }
         }
     }
 
@@ -55,7 +60,7 @@ class FeedbackViewModel @Inject constructor(
         _viewState.update {
             it.copy(
                 emailInput = email,
-                emailInputError = emailValidationResult.errorMessage
+                emailInputErrorProvider = emailValidationResult.errorType?.getStringProvider()
             )
         }
     }
@@ -65,7 +70,7 @@ class FeedbackViewModel @Inject constructor(
         _viewState.update { state ->
             state.copy(
                 bodyInput = body,
-                bodyInputError = bodyValidationResult.errorMessage
+                bodyInputErrorProvider = bodyValidationResult.errorType?.getStringProvider()
             )
         }
     }

@@ -2,6 +2,7 @@ package org.open.smsforwarder.ui.steps.addrule
 
 import android.os.Bundle
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import org.open.smsforwarder.extension.assistedViewModels
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindTextChangesTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.unsafeLazy
 import org.open.smsforwarder.ui.dialog.delete.DeleteDialog
 import org.open.smsforwarder.ui.dialog.delete.DeleteDialogListener
@@ -42,6 +44,11 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
         setAdapter()
         setListeners()
         setObservers()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.step3.setAccessibilityFocus()
     }
 
     private fun setAdapter() {
@@ -74,6 +81,7 @@ class AddForwardingRuleFragment : Fragment(R.layout.fragment_add_forwarding_rule
             adapter.submitList(state.rules)
             emptyTv.isVisible = state.rules.isEmpty()
             finishBtn.isEnabled = state.rules.isNotEmpty()
+            rulesRv.isVisible = state.rules.isNotEmpty()
             messagePatternLayout.error = state.errorMessage?.let { getString(it) }
             buttonAddRuleBtn.isEnabled = state.isAddRuleButtonEnabled
         }

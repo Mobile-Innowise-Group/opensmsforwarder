@@ -2,8 +2,8 @@
 <img width="20" height="20" src="https://github.com/Mobile-Innowise-Group/opensmsforwarder/assets/79689735/3ba6195c-4f30-4134-840b-8d736074b132"/> [View on Google Play](https://play.google.com/store/apps/details?id=org.open.smsforwarder)
 
 
-The application for forwarding incoming SMS messages by email or via SMS to your colleagues and friends.
-You can create a set of forwarding rules that will act as a filter for all incoming messages. All SMS that will meet the forwarding rules will be redirected to a chosen reciever's phone or email.
+The application for forwarding incoming SMS messages by email or other forwarding types to your colleagues and friends.
+You can create a set of forwarding rules that will act as a filter for all incoming messages. All SMS that will meet the forwarding rules will be redirected to a chosen receiver's phone or email.
 
 # The idea 
 

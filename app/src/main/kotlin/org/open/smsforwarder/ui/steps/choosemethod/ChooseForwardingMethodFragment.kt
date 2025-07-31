@@ -15,9 +15,9 @@ import org.open.smsforwarder.extension.bindCheckChangesTo
 import org.open.smsforwarder.extension.bindClicksTo
 import org.open.smsforwarder.extension.bindTextChangesTo
 import org.open.smsforwarder.extension.observeWithLifecycle
+import org.open.smsforwarder.extension.setAccessibilityFocus
 import org.open.smsforwarder.extension.setTextIfChangedKeepState
 import org.open.smsforwarder.extension.setValueIfChanged
-import org.open.smsforwarder.extension.setVisibilityIfChanged
 
 @AndroidEntryPoint
 class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forwarding_method) {
@@ -34,11 +34,16 @@ class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forward
         setObservers()
     }
 
+    override fun onStart() {
+        super.onStart()
+        binding.step1.setAccessibilityFocus()
+    }
+
     private fun setListeners() {
         with(binding) {
             titleEt bindTextChangesTo viewModel::onTitleChanged
             emailRb bindCheckChangesTo { viewModel.onForwardingMethodChanged(ForwardingType.EMAIL) }
-            smsRb bindCheckChangesTo { viewModel.onForwardingMethodChanged(ForwardingType.SMS) }
+            telegramRb bindCheckChangesTo { viewModel.onForwardingMethodChanged(ForwardingType.TELEGRAM) }
             arrowBackIv bindClicksTo viewModel::onBackClicked
             nextBtn bindClicksTo viewModel::onNextClicked
         }
@@ -51,11 +56,10 @@ class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forward
 
     private fun renderState(state: Forwarding) {
         with(binding) {
-            nextBtn.isEnabled = state.forwardingType != null
             titleEt.setTextIfChangedKeepState(state.title)
             emailRb.setValueIfChanged(state.isEmailForwardingType)
-            smsRb.setValueIfChanged(state.isSmsForwardingType)
-            smsInfoTv.setVisibilityIfChanged(state.isSmsForwardingType)
+            telegramRb.setValueIfChanged(state.isTelegramForwardingType)
+            nextBtn.isEnabled = state.forwardingType != null
         }
     }
 

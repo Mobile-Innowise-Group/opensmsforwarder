@@ -7,25 +7,42 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import org.open.smsforwarder.BuildConfig
 import org.open.smsforwarder.data.local.database.AppDatabase
 import org.open.smsforwarder.data.local.database.dao.AuthTokenDao
 import org.open.smsforwarder.data.local.database.dao.ForwardingDao
 import org.open.smsforwarder.data.local.database.dao.HistoryDao
 import org.open.smsforwarder.data.local.database.dao.RulesDao
+import org.open.smsforwarder.data.local.database.migration.MIGRATION_1_2
+import org.open.smsforwarder.data.local.database.migration.RoomMigrationChecker
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 class DatabaseModule {
 
+    private val migrations = listOf(
+        MIGRATION_1_2
+    )
+
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase =
-        Room.databaseBuilder(
-            appContext,
-            AppDatabase::class.java,
-            DATABASE_NAME
-        ).build()
+    @Suppress("SpreadOperator")
+    fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
+        if (BuildConfig.DEBUG) {
+            RoomMigrationChecker.validateMigrations(appContext, migrations)
+        }
+
+        val database = Room
+            .databaseBuilder(
+                appContext,
+                AppDatabase::class.java,
+                AppDatabase.DATABASE_NAME
+            )
+            .addMigrations(*migrations.toTypedArray())
+            .build()
+        return database
+    }
 
     @Provides
     @Singleton
@@ -43,8 +60,4 @@ class DatabaseModule {
     @Singleton
     fun provideForwardingHistoryDao(database: AppDatabase): HistoryDao =
         database.historyDao()
-
-    private companion object {
-        const val DATABASE_NAME = "sms_forwarder"
-    }
 }

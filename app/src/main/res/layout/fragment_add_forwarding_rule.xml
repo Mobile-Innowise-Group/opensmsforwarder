@@ -21,27 +21,32 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 
-    <ImageView
-        android:id="@+id/arrow_back_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/arrow_back"
-        app:layout_constraintStart_toStartOf="@id/start_margin"
-        app:layout_constraintTop_toTopOf="@id/step3"
-        tools:ignore="ContentDescription" />
-
     <TextView
         android:id="@+id/step3"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/step_3_from_3"
         android:textAlignment="center"
         android:textAppearance="@style/SmsTextAppearance.Bold.16"
         app:layout_constraintBottom_toBottomOf="@id/arrow_back_iv"
         app:layout_constraintEnd_toEndOf="@id/end_margin"
         app:layout_constraintStart_toStartOf="@id/start_margin"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/arrow_back_iv" />
+
+    <ImageView
+        android:id="@+id/arrow_back_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_back"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:padding="14dp"
+        android:layout_marginTop="16dp"
+        android:accessibilityTraversalAfter="@id/step3"
+        android:contentDescription="@string/back"
+        app:layout_constraintStart_toStartOf="@id/start_margin"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/title_label"
@@ -60,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/add_rule_message"
-        android:textAppearance="@style/SmsTextAppearance.Regular.14.OnSurfaceVariant"
+        android:textAppearance="@style/SmsTextAppearance.Regular.14.Subsidiary"
         app:layout_constraintEnd_toEndOf="@id/end_margin"
         app:layout_constraintStart_toStartOf="@id/start_margin"
         app:layout_constraintTop_toBottomOf="@id/title_label" />
@@ -81,6 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:hint="@string/enter_text_rule_pattern"
+            android:textColorHint="?attr/colorSubsidiary"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:textAppearance="@style/SmsTextAppearance.Regular.16" />
