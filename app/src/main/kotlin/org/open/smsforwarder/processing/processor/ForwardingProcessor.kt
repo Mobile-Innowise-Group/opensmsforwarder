@@ -9,7 +9,9 @@ import org.open.smsforwarder.data.repository.RulesRepository
 import org.open.smsforwarder.domain.model.Forwarding
 import org.open.smsforwarder.domain.model.ForwardingType
 import org.open.smsforwarder.extension.normalizeSpaces
+import org.open.smsforwarder.processing.dedup.SmsDeduplicationManager
 import org.open.smsforwarder.processing.forwarder.Forwarder
+import org.open.smsforwarder.processing.model.IncomingSms
 import javax.inject.Inject
 
 class ForwardingProcessor @Inject constructor(
@@ -17,41 +19,54 @@ class ForwardingProcessor @Inject constructor(
     private val rulesRepository: RulesRepository,
     private val forwardingRepository: ForwardingRepository,
     private val historyRepository: HistoryRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val smsDeduplicationManager: SmsDeduplicationManager,
 ) {
 
-    suspend fun process(messages: Array<String>) {
+    suspend fun process(incomingMessages: List<IncomingSms>) {
         val rules = rulesRepository.getRules()
-        if (rules.isEmpty()) return
+        if (rules.isEmpty() || incomingMessages.isEmpty()) return
 
-        val messagesToForward = mutableListOf<Pair<Long, String>>()
+        val normalizedRules = rules.map { it.forwardingId to it.textRule.normalizeSpaces() }
 
-        messages.forEach { message ->
-            val normalizedMessage = message.normalizeSpaces()
-            rules.forEach { rule ->
-                if (normalizedMessage.contains(rule.textRule.normalizeSpaces())) {
-                    messagesToForward.add(rule.forwardingId to message)
-                }
+        incomingMessages.forEach { incomingSms ->
+            if (!smsDeduplicationManager.shouldProcess(incomingSms.sender, incomingSms.message)) return@forEach
+
+            val matchedRecipientIds = findMatchedRecipientIds(incomingSms.message, normalizedRules)
+            matchedRecipientIds.forEach { recipientId ->
+                forwardMessage(recipientId, incomingSms.message)
             }
         }
+    }
 
-        messagesToForward.forEach { (recipientId, message) ->
-            forwardingRepository.getForwardingById(recipientId)?.let { recipient ->
-                forwarders[recipient.forwardingType]
-                    ?.execute(recipient, message)
-                    ?.onSuccess {
-                        postProcessForwarding(recipient, message, "")
-                    }
-                    ?.onFailure { error ->
-                        postProcessForwarding(
-                            recipient,
-                            message,
-                            error.message.orEmpty()
-                        )
-                        handleTokenErrors(error, recipient)
-                    }
+    private fun findMatchedRecipientIds(
+        message: String,
+        normalizedRules: List<Pair<Long, String>>,
+    ): Set<Long> {
+        val normalizedMessage = message.normalizeSpaces()
+        return normalizedRules
+            .asSequence()
+            .filter { (_, normalizedRule) -> normalizedMessage.contains(normalizedRule) }
+            .map { (forwardingId, _) -> forwardingId }
+            .toSet()
+    }
+
+    private suspend fun forwardMessage(recipientId: Long, message: String) {
+        val recipient = forwardingRepository.getForwardingById(recipientId) ?: return
+        val forwarder = forwarders[recipient.forwardingType] ?: return
+
+        forwarder.execute(recipient, message)
+            .onSuccess {
+                postProcessForwarding(recipient, message, "")
             }
-        }
+            .onFailure { error ->
+                postProcessForwarding(
+                    recipient,
+                    message,
+                    error.message.orEmpty()
+                )
+                handleTokenErrors(error, recipient)
+            }
     }
 
     private suspend fun postProcessForwarding(

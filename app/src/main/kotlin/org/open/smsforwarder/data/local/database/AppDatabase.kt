@@ -5,10 +5,12 @@ import androidx.room.RoomDatabase
 import org.open.smsforwarder.data.local.database.dao.AuthTokenDao
 import org.open.smsforwarder.data.local.database.dao.ForwardingDao
 import org.open.smsforwarder.data.local.database.dao.HistoryDao
+import org.open.smsforwarder.data.local.database.dao.ProcessedMessageDao
 import org.open.smsforwarder.data.local.database.dao.RulesDao
 import org.open.smsforwarder.data.local.database.entity.AuthTokenEntity
 import org.open.smsforwarder.data.local.database.entity.ForwardingEntity
 import org.open.smsforwarder.data.local.database.entity.HistoryEntity
+import org.open.smsforwarder.data.local.database.entity.ProcessedMessageEntity
 import org.open.smsforwarder.data.local.database.entity.RuleEntity
 
 @Database(
@@ -16,7 +18,8 @@ import org.open.smsforwarder.data.local.database.entity.RuleEntity
         ForwardingEntity::class,
         AuthTokenEntity::class,
         RuleEntity::class,
-        HistoryEntity::class
+        HistoryEntity::class,
+        ProcessedMessageEntity::class
     ],
     version = AppDatabase.DATABASE_VERSION
 )
@@ -25,9 +28,10 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun authDao(): AuthTokenDao
     abstract fun rulesDao(): RulesDao
     abstract fun historyDao(): HistoryDao
+    abstract fun processedMessageDao(): ProcessedMessageDao
 
     companion object {
         const val DATABASE_NAME = "sms_forwarder"
-        const val DATABASE_VERSION = 3
+        const val DATABASE_VERSION = 4
     }
 }

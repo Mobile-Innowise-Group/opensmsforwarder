@@ -38,12 +38,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".processing.starter.ForwardingService"
-            android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="remoteMessaging" />
-
         <receiver
             android:name=".processing.reciever.SmsBroadcastReceiver"
             android:exported="true"

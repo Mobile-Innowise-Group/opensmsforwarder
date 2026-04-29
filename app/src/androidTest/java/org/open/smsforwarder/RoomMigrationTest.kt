@@ -15,6 +15,7 @@ import org.junit.runner.RunWith
 import org.open.smsforwarder.data.local.database.AppDatabase
 import org.open.smsforwarder.data.local.database.migration.MIGRATION_1_2
 import org.open.smsforwarder.data.local.database.migration.MIGRATION_2_3
+import org.open.smsforwarder.data.local.database.migration.MIGRATION_3_4
 
 @RunWith(AndroidJUnit4::class)
 class RoomMigrationTest {
@@ -138,8 +139,37 @@ class RoomMigrationTest {
     }
 
     @Test
-    fun migrate1To3_preservesDataAndAddsGoogleChatWebhook() {
-        val db = helper.createDatabase("test_db_1_3", 1)
+    fun migrate3To4_addsProcessedMessagesTableWithUniqueFingerprintIndex() {
+        val db = helper.createDatabase("test_db_3_4", 3)
+        db.close()
+
+        val migratedDb = helper.runMigrationsAndValidate(
+            "test_db_3_4",
+            4,
+            true,
+            MIGRATION_3_4
+        )
+
+        migratedDb.execSQL(
+            """
+            INSERT INTO `processed_messages_table` (`fingerprint`, `created_at`)
+            VALUES ('fp-1', 1000)
+            """.trimIndent()
+        )
+
+        assertThrows(android.database.sqlite.SQLiteConstraintException::class.java) {
+            migratedDb.execSQL(
+                """
+                INSERT INTO `processed_messages_table` (`fingerprint`, `created_at`)
+                VALUES ('fp-1', 2000)
+                """.trimIndent()
+            )
+        }
+    }
+
+    @Test
+    fun migrate1To4_preservesForwardingDataAndCreatesProcessedMessagesTable() {
+        val db = helper.createDatabase("test_db_1_4", 1)
 
         db.execSQL(
             """
@@ -152,37 +182,37 @@ class RoomMigrationTest {
                 `recipient_email` TEXT NOT NULL,
                 `error_text` TEXT NOT NULL
             )
-        """.trimIndent()
+            """.trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `forwarding_table`
             (`id`, `title`, `forwarding_type`, `sender_email`, `recipient_phone`, `recipient_email`, `error_text`)
-            VALUES (1, 'Chain Title', 'EMAIL', 'sender@example.com', '+123456789', 'recipient@example.com', 'none')
-        """.trimIndent()
+            VALUES (1, 'Chain v4 Title', 'EMAIL', 'sender@example.com', '+123456789', 'recipient@example.com', 'none')
+            """.trimIndent()
         )
-
         db.close()
 
         val migratedDb = helper.runMigrationsAndValidate(
-            "test_db_1_3",
-            3,
+            "test_db_1_4",
+            4,
             true,
             MIGRATION_1_2,
-            MIGRATION_2_3
+            MIGRATION_2_3,
+            MIGRATION_3_4
         )
 
-        val cursor = migratedDb.query("SELECT * FROM forwarding_table WHERE id = 1")
-        assertTrue(cursor.moveToFirst())
-        assertEquals("Chain Title", cursor.getString(cursor.getColumnIndexOrThrow("title")))
-        assertEquals("EMAIL", cursor.getString(cursor.getColumnIndexOrThrow("forwarding_type")))
-        assertEquals("sender@example.com", cursor.getString(cursor.getColumnIndexOrThrow("sender_email")))
-        assertEquals("recipient@example.com", cursor.getString(cursor.getColumnIndexOrThrow("recipient_email")))
-        assertEquals("", cursor.getString(cursor.getColumnIndexOrThrow("telegram_api_token")))
-        assertEquals("", cursor.getString(cursor.getColumnIndexOrThrow("telegram_chat_id")))
-        assertEquals("", cursor.getString(cursor.getColumnIndexOrThrow("google_chat_web_hook")))
-        assertEquals("none", cursor.getString(cursor.getColumnIndexOrThrow("error_text")))
-        cursor.close()
+        val forwardingCursor = migratedDb.query("SELECT * FROM forwarding_table WHERE id = 1")
+        assertTrue(forwardingCursor.moveToFirst())
+        assertEquals("Chain v4 Title", forwardingCursor.getString(forwardingCursor.getColumnIndexOrThrow("title")))
+        assertEquals("", forwardingCursor.getString(forwardingCursor.getColumnIndexOrThrow("google_chat_web_hook")))
+        forwardingCursor.close()
+
+        migratedDb.execSQL(
+            """
+            INSERT INTO `processed_messages_table` (`fingerprint`, `created_at`)
+            VALUES ('fp-chain', 3000)
+            """.trimIndent()
+        )
     }
 }

@@ -12,9 +12,11 @@ import org.open.smsforwarder.data.local.database.AppDatabase
 import org.open.smsforwarder.data.local.database.dao.AuthTokenDao
 import org.open.smsforwarder.data.local.database.dao.ForwardingDao
 import org.open.smsforwarder.data.local.database.dao.HistoryDao
+import org.open.smsforwarder.data.local.database.dao.ProcessedMessageDao
 import org.open.smsforwarder.data.local.database.dao.RulesDao
 import org.open.smsforwarder.data.local.database.migration.MIGRATION_1_2
 import org.open.smsforwarder.data.local.database.migration.MIGRATION_2_3
+import org.open.smsforwarder.data.local.database.migration.MIGRATION_3_4
 import org.open.smsforwarder.data.local.database.migration.RoomMigrationChecker
 import javax.inject.Singleton
 
@@ -24,7 +26,8 @@ class DatabaseModule {
 
     private val migrations = listOf(
         MIGRATION_1_2,
-        MIGRATION_2_3
+        MIGRATION_2_3,
+        MIGRATION_3_4,
     )
 
     @Provides
@@ -62,4 +65,9 @@ class DatabaseModule {
     @Singleton
     fun provideForwardingHistoryDao(database: AppDatabase): HistoryDao =
         database.historyDao()
+
+    @Provides
+    @Singleton
+    fun provideProcessedMessageDao(database: AppDatabase): ProcessedMessageDao =
+        database.processedMessageDao()
 }

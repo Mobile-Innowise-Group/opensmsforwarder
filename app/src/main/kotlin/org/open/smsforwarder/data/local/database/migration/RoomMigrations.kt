@@ -56,3 +56,26 @@ val MIGRATION_2_3 = object : Migration(MIGRATION_2_3_START_VERSION, MIGRATION_2_
         )
     }
 }
+
+private const val MIGRATION_3_4_START_VERSION = 3
+private const val MIGRATION_3_4_END_VERSION = 4
+
+val MIGRATION_3_4 = object : Migration(MIGRATION_3_4_START_VERSION, MIGRATION_3_4_END_VERSION) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `processed_messages_table` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `fingerprint` TEXT NOT NULL,
+                `created_at` INTEGER NOT NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL(
+            """
+            CREATE UNIQUE INDEX IF NOT EXISTS `index_processed_messages_table_fingerprint`
+            ON `processed_messages_table` (`fingerprint`)
+            """.trimIndent()
+        )
+    }
+}
