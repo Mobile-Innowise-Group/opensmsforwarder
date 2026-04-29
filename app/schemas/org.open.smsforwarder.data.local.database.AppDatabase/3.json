@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "c560fca29014d5927b5aa05a5af0fe54",
+    "version": 3,
+    "identityHash": "c8dc009b4f01ea316c34cd887a89fc39",
     "entities": [
       {
         "tableName": "forwarding_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `forwarding_type` TEXT, `sender_email` TEXT, `recipient_email` TEXT NOT NULL, `telegram_api_token` TEXT NOT NULL, `telegram_chat_id` TEXT NOT NULL, `error_text` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `forwarding_type` TEXT, `sender_email` TEXT, `recipient_email` TEXT NOT NULL, `telegram_api_token` TEXT NOT NULL, `telegram_chat_id` TEXT NOT NULL, `google_chat_web_hook` TEXT NOT NULL, `error_text` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -45,6 +45,12 @@
           {
             "fieldPath": "telegramChatId",
             "columnName": "telegram_chat_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "googleChatWebHook",
+            "columnName": "google_chat_web_hook",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -209,7 +215,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c560fca29014d5927b5aa05a5af0fe54')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c8dc009b4f01ea316c34cd887a89fc39')"
     ]
   }
 }

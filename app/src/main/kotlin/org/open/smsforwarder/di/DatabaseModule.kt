@@ -14,6 +14,7 @@ import org.open.smsforwarder.data.local.database.dao.ForwardingDao
 import org.open.smsforwarder.data.local.database.dao.HistoryDao
 import org.open.smsforwarder.data.local.database.dao.RulesDao
 import org.open.smsforwarder.data.local.database.migration.MIGRATION_1_2
+import org.open.smsforwarder.data.local.database.migration.MIGRATION_2_3
 import org.open.smsforwarder.data.local.database.migration.RoomMigrationChecker
 import javax.inject.Singleton
 
@@ -22,7 +23,8 @@ import javax.inject.Singleton
 class DatabaseModule {
 
     private val migrations = listOf(
-        MIGRATION_1_2
+        MIGRATION_1_2,
+        MIGRATION_2_3
     )
 
     @Provides

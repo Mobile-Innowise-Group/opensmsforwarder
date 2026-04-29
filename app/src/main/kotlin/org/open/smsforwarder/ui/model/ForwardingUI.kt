@@ -10,6 +10,7 @@ data class ForwardingUI(
     val recipientEmail: String = "",
     val telegramApiToken: String = "",
     val telegramChatId: String = "",
+    val googleChatWebHook: String = "",
     val error: String = "",
     val atLeastOneRuleAdded: Boolean = true
 ) {
@@ -17,12 +18,16 @@ data class ForwardingUI(
     fun isEmailBlockCompleted() =
         forwardingType == ForwardingType.EMAIL && recipientEmail.isNotEmpty() && !senderEmail.isNullOrEmpty()
 
-    val allStepsCompleted: Boolean
-        get() = (isEmailBlockCompleted()
-                || isTelegramBlockCompleted())
-                && atLeastOneRuleAdded
-
     private fun isTelegramBlockCompleted(): Boolean =
         forwardingType == ForwardingType.TELEGRAM
                 && telegramApiToken.isNotBlank() && telegramChatId.isNotBlank()
+
+    private fun isGoogleChatWebHookBlockCompleted(): Boolean =
+        forwardingType == ForwardingType.GOOGLE_CHAT && googleChatWebHook.isNotBlank()
+
+    val allStepsCompleted: Boolean
+        get() = (isEmailBlockCompleted()
+                || isTelegramBlockCompleted()
+                || isGoogleChatWebHookBlockCompleted())
+                && atLeastOneRuleAdded
 }

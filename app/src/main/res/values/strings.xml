@@ -38,7 +38,11 @@
     <string name="telegram">Telegram</string>
     <string name="telegram_api_token">Telegram Api Token</string>
     <string name="telegram_chat_id">Telegram Chat Id</string>
-    <string name="enter_telegram_api_token_hint">Enter telegram Api Token</string>
+    <string name="google_chat">Google Chat</string>
+    <string name="google_chat_web_hook">Google Chat Web Hook</string>
+    <string name="enter_google_chat_web_hook_hint">Enter Google chat web hook</string>
+    <string name="google_chat_web_hook_tooltip">WebHook is needed to forward messages to Google Chat</string>
+    <string name="enter_telegram_api_token_hint">Enter Telegram Api Token</string>
     <string name="enter_telegram_chat_id_hint">Enter Telegram Chat Id</string>
     <string name="sms_warning">Warning! The mobile operator will charge a fee for sending each SMS.</string>
     <string name="email">Email</string>
@@ -55,6 +59,7 @@
     <string name="error_email_is_not_valid">Email is not valid</string>
     <string name="error_email_is_blank">Email can not be blank</string>
     <string name="error_generic_is_blank">Field can not be blank</string>
+    <string name="error_google_chat_web_hook_is_not_valid">Google Chat Web Hook is not valid</string>
     <string name="error_google_sign_in">There was an error while trying to sign in</string>
     <string name="google_sign_in_canceled">Sign in was canceled</string>
     <string name="error_google_sign_out">Unable to sign out from account</string>

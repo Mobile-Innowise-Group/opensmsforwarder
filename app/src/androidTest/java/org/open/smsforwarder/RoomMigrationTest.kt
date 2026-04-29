@@ -14,6 +14,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.open.smsforwarder.data.local.database.AppDatabase
 import org.open.smsforwarder.data.local.database.migration.MIGRATION_1_2
+import org.open.smsforwarder.data.local.database.migration.MIGRATION_2_3
 
 @RunWith(AndroidJUnit4::class)
 class RoomMigrationTest {
@@ -89,6 +90,99 @@ class RoomMigrationTest {
             cursor.getColumnIndexOrThrow("recipient_phone")
         }
 
+        cursor.close()
+    }
+
+    @Test
+    fun migrate2To3_addsGoogleChatWebhookWithDefaultValue() {
+        val db = helper.createDatabase("test_db_2_3", 2)
+
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `forwarding_table` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `title` TEXT NOT NULL,
+                `forwarding_type` TEXT,
+                `sender_email` TEXT,
+                `recipient_email` TEXT NOT NULL,
+                `telegram_api_token` TEXT NOT NULL,
+                `telegram_chat_id` TEXT NOT NULL,
+                `error_text` TEXT NOT NULL
+            )
+        """.trimIndent()
+        )
+
+        db.execSQL(
+            """
+            INSERT INTO `forwarding_table`
+            (`id`, `title`, `forwarding_type`, `sender_email`, `recipient_email`, `telegram_api_token`, `telegram_chat_id`, `error_text`)
+            VALUES (1, 'GC Title', 'GOOGLE_CHAT', null, 'recipient@example.com', '', '', 'none')
+        """.trimIndent()
+        )
+
+        db.close()
+
+        val migratedDb = helper.runMigrationsAndValidate(
+            "test_db_2_3",
+            3,
+            true,
+            MIGRATION_2_3
+        )
+
+        val cursor = migratedDb.query("SELECT * FROM forwarding_table WHERE id = 1")
+        assertTrue(cursor.moveToFirst())
+        assertEquals("", cursor.getString(cursor.getColumnIndexOrThrow("google_chat_web_hook")))
+        assertEquals("GC Title", cursor.getString(cursor.getColumnIndexOrThrow("title")))
+        assertEquals("GOOGLE_CHAT", cursor.getString(cursor.getColumnIndexOrThrow("forwarding_type")))
+        cursor.close()
+    }
+
+    @Test
+    fun migrate1To3_preservesDataAndAddsGoogleChatWebhook() {
+        val db = helper.createDatabase("test_db_1_3", 1)
+
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `forwarding_table` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `title` TEXT NOT NULL,
+                `forwarding_type` TEXT,
+                `sender_email` TEXT,
+                `recipient_phone` TEXT NOT NULL,
+                `recipient_email` TEXT NOT NULL,
+                `error_text` TEXT NOT NULL
+            )
+        """.trimIndent()
+        )
+
+        db.execSQL(
+            """
+            INSERT INTO `forwarding_table`
+            (`id`, `title`, `forwarding_type`, `sender_email`, `recipient_phone`, `recipient_email`, `error_text`)
+            VALUES (1, 'Chain Title', 'EMAIL', 'sender@example.com', '+123456789', 'recipient@example.com', 'none')
+        """.trimIndent()
+        )
+
+        db.close()
+
+        val migratedDb = helper.runMigrationsAndValidate(
+            "test_db_1_3",
+            3,
+            true,
+            MIGRATION_1_2,
+            MIGRATION_2_3
+        )
+
+        val cursor = migratedDb.query("SELECT * FROM forwarding_table WHERE id = 1")
+        assertTrue(cursor.moveToFirst())
+        assertEquals("Chain Title", cursor.getString(cursor.getColumnIndexOrThrow("title")))
+        assertEquals("EMAIL", cursor.getString(cursor.getColumnIndexOrThrow("forwarding_type")))
+        assertEquals("sender@example.com", cursor.getString(cursor.getColumnIndexOrThrow("sender_email")))
+        assertEquals("recipient@example.com", cursor.getString(cursor.getColumnIndexOrThrow("recipient_email")))
+        assertEquals("", cursor.getString(cursor.getColumnIndexOrThrow("telegram_api_token")))
+        assertEquals("", cursor.getString(cursor.getColumnIndexOrThrow("telegram_chat_id")))
+        assertEquals("", cursor.getString(cursor.getColumnIndexOrThrow("google_chat_web_hook")))
+        assertEquals("none", cursor.getString(cursor.getColumnIndexOrThrow("error_text")))
         cursor.close()
     }
 }

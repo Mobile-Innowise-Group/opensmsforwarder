@@ -10,6 +10,7 @@ import org.open.smsforwarder.ui.home.HomeState
 import org.open.smsforwarder.ui.model.ForwardingUI
 import org.open.smsforwarder.ui.model.HistoryUI
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addemaildetails.AddEmailDetailsState
+import org.open.smsforwarder.ui.steps.addrecipientdetails.addgooglechatdetails.AddGoogleChatDetailsState
 import org.open.smsforwarder.ui.steps.addrecipientdetails.addtelegramdetails.AddTelegramDetailsState
 import java.net.UnknownHostException
 
@@ -32,6 +33,14 @@ fun Forwarding.toTelegramDetailsUi(): AddTelegramDetailsState =
         telegramChatId = telegramChatId,
     )
 
+fun Forwarding.toGoogleChatDetailsUi(): AddGoogleChatDetailsState =
+    AddGoogleChatDetailsState(
+        id = id,
+        title = title,
+        forwardingType = forwardingType,
+        googleChatWebHook = googleChatWebHook
+    )
+
 fun History.toHistoryUi() =
     HistoryUI(
         id = id,
@@ -52,6 +61,7 @@ fun List<Forwarding>.mergeWithRules(rules: List<Rule>): HomeState {
                 telegramApiToken = forwarding.telegramApiToken,
                 telegramChatId = forwarding.telegramChatId,
                 recipientEmail = forwarding.recipientEmail,
+                googleChatWebHook = forwarding.googleChatWebHook,
                 error = forwarding.error,
                 atLeastOneRuleAdded = rules.any { forwarding.id == it.forwardingId }
             )
@@ -67,6 +77,14 @@ fun AddTelegramDetailsState.toDomain() =
         forwardingType = forwardingType,
         telegramApiToken = telegramApiToken,
         telegramChatId = telegramChatId,
+    )
+
+fun AddGoogleChatDetailsState.toDomain() =
+    Forwarding(
+        id = id,
+        title = title,
+        forwardingType = forwardingType,
+        googleChatWebHook = googleChatWebHook
     )
 
 fun AddEmailDetailsState.toDomain() =

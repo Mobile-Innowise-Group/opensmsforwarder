@@ -8,10 +8,13 @@ data class Forwarding(
     val recipientEmail: String = "",
     val telegramApiToken: String = "",
     val telegramChatId: String = "",
+    val googleChatWebHook: String = "",
     val error: String = "",
 ) {
 
     val isEmailForwardingType: Boolean get() = forwardingType != null && forwardingType == ForwardingType.EMAIL
 
     val isTelegramForwardingType: Boolean get() = forwardingType != null && forwardingType == ForwardingType.TELEGRAM
+
+    val isGoogleChatForwardingType: Boolean get() = forwardingType != null && forwardingType == ForwardingType.GOOGLE_CHAT
 }

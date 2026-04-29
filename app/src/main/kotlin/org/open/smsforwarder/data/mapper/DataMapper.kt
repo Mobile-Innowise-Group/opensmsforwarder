@@ -16,6 +16,7 @@ fun ForwardingEntity.toDomain(): Forwarding =
         recipientEmail = recipientEmail,
         telegramApiToken = telegramApiToken,
         telegramChatId = telegramChatId,
+        googleChatWebHook = googleChatWebHook,
         error = errorText
     )
 
@@ -44,6 +45,7 @@ fun Forwarding.toData(): ForwardingEntity =
         recipientEmail = recipientEmail,
         telegramApiToken = telegramApiToken,
         telegramChatId = telegramChatId,
+        googleChatWebHook = googleChatWebHook,
         errorText = error
     )
 

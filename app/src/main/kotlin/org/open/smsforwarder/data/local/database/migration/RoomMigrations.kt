@@ -39,3 +39,14 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         db.execSQL("ALTER TABLE `forwarding_table_new` RENAME TO `forwarding_table`")
     }
 }
+
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            ALTER TABLE `forwarding_table`
+            ADD COLUMN `google_chat_web_hook` TEXT NOT NULL DEFAULT ''
+            """.trimIndent()
+        )
+    }
+}

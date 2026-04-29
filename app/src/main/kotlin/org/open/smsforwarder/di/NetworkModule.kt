@@ -14,6 +14,7 @@ import org.open.smsforwarder.data.remote.interceptor.AuthInterceptor
 import org.open.smsforwarder.data.remote.interceptor.TokenAuthenticator
 import org.open.smsforwarder.data.remote.service.AuthService
 import org.open.smsforwarder.data.remote.service.EmailService
+import org.open.smsforwarder.data.remote.service.GoogleChatService
 import org.open.smsforwarder.data.remote.service.TelegramService
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -118,6 +119,20 @@ class NetworkModule {
             .baseUrl(BuildConfig.TELEGRAM_API_BASE_URL)
             .build()
             .create(TelegramService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGoogleChatService(
+        okHttpClient: OkHttpClient,
+        moshiFactory: MoshiConverterFactory,
+    ): GoogleChatService =
+        Retrofit
+            .Builder()
+            .client(okHttpClient)
+            .addConverterFactory(moshiFactory)
+            .baseUrl(BuildConfig.GOOGLE_CHAT_API_BASE_URL)
+            .build()
+            .create(GoogleChatService::class.java)
 }
 
 @Qualifier

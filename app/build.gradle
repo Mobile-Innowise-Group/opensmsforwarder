@@ -33,6 +33,7 @@ android {
         buildConfigField "String", "OAUTH_BASE_URL", "\"https://oauth2.googleapis.com/\""
         buildConfigField "String", "API_BASE_URL", "\"https://www.googleapis.com/\""
         buildConfigField "String", "TELEGRAM_API_BASE_URL", "\"https://api.telegram.org/\""
+        buildConfigField "String", "GOOGLE_CHAT_API_BASE_URL", "\"https://chat.googleapis.com/\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

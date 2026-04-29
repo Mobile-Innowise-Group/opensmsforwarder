@@ -28,6 +28,6 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         const val DATABASE_NAME = "sms_forwarder"
-        const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 3
     }
 }

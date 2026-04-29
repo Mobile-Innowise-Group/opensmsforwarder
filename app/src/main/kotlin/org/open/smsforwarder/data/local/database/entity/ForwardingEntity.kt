@@ -31,6 +31,9 @@ data class ForwardingEntity(
     @ColumnInfo(name = TELEGRAM_CHAT_ID)
     val telegramChatId: String = "",
 
+    @ColumnInfo(name = GOOGLE_CHAT_WEB_HOOK)
+    val googleChatWebHook: String = "",
+
     @ColumnInfo(name = ERROR_TEXT)
     val errorText: String = ""
 ) {
@@ -45,5 +48,6 @@ data class ForwardingEntity(
         const val ERROR_TEXT = "error_text"
         const val TELEGRAM_API_TOKEN = "telegram_api_token"
         const val TELEGRAM_CHAT_ID = "telegram_chat_id"
+        const val GOOGLE_CHAT_WEB_HOOK = "google_chat_web_hook"
     }
 }

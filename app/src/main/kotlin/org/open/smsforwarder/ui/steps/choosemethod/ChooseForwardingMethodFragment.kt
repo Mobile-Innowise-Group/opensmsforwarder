@@ -44,6 +44,7 @@ class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forward
             titleEt bindTextChangesTo viewModel::onTitleChanged
             emailRb bindCheckChangesTo { viewModel.onForwardingMethodChanged(ForwardingType.EMAIL) }
             telegramRb bindCheckChangesTo { viewModel.onForwardingMethodChanged(ForwardingType.TELEGRAM) }
+            googleChatRb bindCheckChangesTo { viewModel.onForwardingMethodChanged(ForwardingType.GOOGLE_CHAT) }
             arrowBackIv bindClicksTo viewModel::onBackClicked
             nextBtn bindClicksTo viewModel::onNextClicked
         }
@@ -59,6 +60,7 @@ class ChooseForwardingMethodFragment : Fragment(R.layout.fragment_choose_forward
             titleEt.setTextIfChangedKeepState(state.title)
             emailRb.setValueIfChanged(state.isEmailForwardingType)
             telegramRb.setValueIfChanged(state.isTelegramForwardingType)
+            googleChatRb.setValueIfChanged(state.isGoogleChatForwardingType)
             nextBtn.isEnabled = state.forwardingType != null
         }
     }

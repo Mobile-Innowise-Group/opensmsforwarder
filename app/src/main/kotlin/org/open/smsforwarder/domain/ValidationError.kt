@@ -4,5 +4,6 @@ enum class ValidationError {
     BLANK_FIELD,
     BLANK_EMAIL,
     INVALID_EMAIL,
-    INVALID_PHONE
+    INVALID_PHONE,
+    INVALID_GOOGLE_CHAT_WEB_HOOK
 }

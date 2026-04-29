@@ -122,6 +122,17 @@
                 android:textAppearance="@style/SmsTextAppearance.Regular.16"
                 android:textColor="@drawable/radio_button_text_colors"
                 app:buttonTint="@drawable/radio_color_state_list" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/google_chat_rb"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/radio_button_background"
+                android:text="@string/google_chat"
+                android:textAppearance="@style/SmsTextAppearance.Regular.16"
+                android:textColor="@drawable/radio_button_text_colors"
+                app:buttonTint="@drawable/radio_color_state_list" />
         </RadioGroup>
 
         <com.google.android.material.button.MaterialButton
