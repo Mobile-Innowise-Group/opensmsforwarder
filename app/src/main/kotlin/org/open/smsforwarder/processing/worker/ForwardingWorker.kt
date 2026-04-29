@@ -14,8 +14,7 @@ import org.open.smsforwarder.R
 import org.open.smsforwarder.data.repository.RulesRepository
 import org.open.smsforwarder.processing.model.IncomingSms
 import org.open.smsforwarder.processing.processor.ForwardingProcessor
-import org.open.smsforwarder.processing.reciever.SmsBroadcastReceiver.Companion.MESSAGES_KEY
-import org.open.smsforwarder.processing.reciever.SmsBroadcastReceiver.Companion.SENDERS_KEY
+import org.open.smsforwarder.processing.reciever.SmsBroadcastReceiver
 import org.open.smsforwarder.utils.NotificationHelper
 
 @HiltWorker
@@ -27,18 +26,23 @@ class ForwardingWorker @AssistedInject constructor(
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        if (rulesRepository.getRules().isEmpty()) return Result.success()
+        val messages = inputData.getStringArray(SmsBroadcastReceiver.Companion.MESSAGES_KEY)
+        val senders = inputData.getStringArray(SmsBroadcastReceiver.Companion.SENDERS_KEY)
 
-        val messages = inputData.getStringArray(MESSAGES_KEY) ?: return Result.failure()
-        val senders = inputData.getStringArray(SENDERS_KEY) ?: return Result.failure()
-        if (messages.size != senders.size) return Result.failure()
-        val incomingMessages = messages.mapIndexed { index, message ->
-            IncomingSms(sender = senders[index], message = message)
+        val result = when {
+            rulesRepository.getRules().isEmpty() -> Result.success()
+            messages == null || senders == null || messages.size != senders.size -> Result.failure()
+            else -> {
+                val incomingMessages = messages.mapIndexed { index, message ->
+                    IncomingSms(sender = senders[index], message = message)
+                }
+                setForeground(createForegroundInfo())
+                forwardingProcessor.process(incomingMessages)
+                Result.success()
+            }
         }
 
-        setForeground(createForegroundInfo())
-        forwardingProcessor.process(incomingMessages)
-        return Result.success()
+        return result
     }
 
     private fun createForegroundInfo(): ForegroundInfo {
