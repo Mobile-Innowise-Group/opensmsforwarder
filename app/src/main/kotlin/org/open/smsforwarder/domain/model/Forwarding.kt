@@ -12,9 +12,12 @@ data class Forwarding(
     val error: String = "",
 ) {
 
-    val isEmailForwardingType: Boolean get() = forwardingType != null && forwardingType == ForwardingType.EMAIL
+    val isEmailForwardingType: Boolean
+        get() = forwardingType != null && forwardingType == ForwardingType.EMAIL
 
-    val isTelegramForwardingType: Boolean get() = forwardingType != null && forwardingType == ForwardingType.TELEGRAM
+    val isTelegramForwardingType: Boolean
+        get() = forwardingType != null && forwardingType == ForwardingType.TELEGRAM
 
-    val isGoogleChatForwardingType: Boolean get() = forwardingType != null && forwardingType == ForwardingType.GOOGLE_CHAT
+    val isGoogleChatForwardingType: Boolean
+        get() = forwardingType != null && forwardingType == ForwardingType.GOOGLE_CHAT
 }

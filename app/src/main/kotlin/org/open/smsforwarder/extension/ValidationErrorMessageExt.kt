@@ -6,10 +6,19 @@ import org.open.smsforwarder.utils.Resources
 
 fun ValidationError.getStringProvider(): Resources.StringProvider {
     return when (this) {
-        ValidationError.BLANK_FIELD -> Resources.StringResource(R.string.error_generic_is_blank)
-        ValidationError.BLANK_EMAIL -> Resources.StringResource(R.string.error_email_is_blank)
-        ValidationError.INVALID_EMAIL -> Resources.StringResource(R.string.error_email_is_not_valid)
-        ValidationError.INVALID_PHONE -> Resources.StringResource(R.string.error_phone_number_is_not_valid)
-        ValidationError.INVALID_GOOGLE_CHAT_WEB_HOOK -> Resources.StringResource(R.string.error_google_chat_web_hook_is_not_valid)
+        ValidationError.BLANK_FIELD ->
+            Resources.StringResource(R.string.error_generic_is_blank)
+
+        ValidationError.BLANK_EMAIL ->
+            Resources.StringResource(R.string.error_email_is_blank)
+
+        ValidationError.INVALID_EMAIL ->
+            Resources.StringResource(R.string.error_email_is_not_valid)
+
+        ValidationError.INVALID_PHONE ->
+            Resources.StringResource(R.string.error_phone_number_is_not_valid)
+
+        ValidationError.INVALID_GOOGLE_CHAT_WEB_HOOK ->
+            Resources.StringResource(R.string.error_google_chat_web_hook_is_not_valid)
     }
 }

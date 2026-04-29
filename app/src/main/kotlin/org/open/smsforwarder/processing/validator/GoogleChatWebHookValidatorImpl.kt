@@ -12,10 +12,10 @@ class GoogleChatWebHookValidatorImpl @Inject constructor() : GoogleChatWebHookVa
         return uri.scheme == HTTPS_SCHEME &&
                 uri.host == GOOGLE_CHAT_HOST &&
                 pathSegments.size >= MIN_PATH_SEGMENTS &&
-                pathSegments[0] == V1_SEGMENT &&
-                pathSegments[1] == SPACES_SEGMENT &&
-                pathSegments[2].isNotBlank() &&
-                pathSegments[3] == MESSAGES_SEGMENT &&
+                pathSegments[V1_SEGMENT_INDEX] == V1_SEGMENT &&
+                pathSegments[SPACES_SEGMENT_INDEX] == SPACES_SEGMENT &&
+                pathSegments[SPACE_ID_SEGMENT_INDEX].isNotBlank() &&
+                pathSegments[MESSAGES_SEGMENT_INDEX] == MESSAGES_SEGMENT &&
                 !uri.getQueryParameter(KEY_QUERY_PARAM).isNullOrBlank() &&
                 !uri.getQueryParameter(TOKEN_QUERY_PARAM).isNullOrBlank()
     }
@@ -29,5 +29,9 @@ class GoogleChatWebHookValidatorImpl @Inject constructor() : GoogleChatWebHookVa
         const val KEY_QUERY_PARAM = "key"
         const val TOKEN_QUERY_PARAM = "token"
         const val MIN_PATH_SEGMENTS = 4
+        const val V1_SEGMENT_INDEX = 0
+        const val SPACES_SEGMENT_INDEX = 1
+        const val SPACE_ID_SEGMENT_INDEX = 2
+        const val MESSAGES_SEGMENT_INDEX = 3
     }
 }

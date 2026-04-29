@@ -3,7 +3,10 @@ package org.open.smsforwarder.data.local.database.migration
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-val MIGRATION_1_2 = object : Migration(1, 2) {
+private const val MIGRATION_1_2_START_VERSION = 1
+private const val MIGRATION_1_2_END_VERSION = 2
+
+val MIGRATION_1_2 = object : Migration(MIGRATION_1_2_START_VERSION, MIGRATION_1_2_END_VERSION) {
 
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
@@ -40,7 +43,10 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
     }
 }
 
-val MIGRATION_2_3 = object : Migration(2, 3) {
+private const val MIGRATION_2_3_START_VERSION = 2
+private const val MIGRATION_2_3_END_VERSION = 3
+
+val MIGRATION_2_3 = object : Migration(MIGRATION_2_3_START_VERSION, MIGRATION_2_3_END_VERSION) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
             """

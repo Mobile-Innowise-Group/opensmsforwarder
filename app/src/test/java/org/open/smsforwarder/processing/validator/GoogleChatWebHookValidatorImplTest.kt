@@ -10,7 +10,10 @@ class GoogleChatWebHookValidatorImplTest {
 
     @Test
     fun `isValid returns true for valid google chat webhook`() {
-        val validWebHook = "https://chat.googleapis.com/v1/spaces/AAQAsyvwszg/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=1xqqxqqJztXNo7gJdvwuWOC8ZSHknsii2F8j3yPMFaQ"
+        val validWebHook =
+            "https://chat.googleapis.com/v1/spaces/AAQAsyvwszg/messages" +
+                "?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI" +
+                "&token=1xqqxqqJztXNo7gJdvwuWOC8ZSHknsii2F8j3yPMFaQ"
 
         assertTrue(validator.isValid(validWebHook))
     }
