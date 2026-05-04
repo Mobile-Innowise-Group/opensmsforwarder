@@ -7,16 +7,17 @@ import okhttp3.Response
 import okhttp3.Route
 import okio.IOException
 import org.open.smsforwarder.data.local.database.dao.AuthTokenDao
-import org.open.smsforwarder.data.local.database.entity.AuthTokenEntity
 import org.open.smsforwarder.data.remote.interceptor.AuthInterceptor.Companion.AUTHORIZATION_HEADER
 import org.open.smsforwarder.data.remote.interceptor.AuthInterceptor.Companion.TOKEN_TYPE
 import org.open.smsforwarder.data.remote.service.AuthService
+import org.open.smsforwarder.data.security.DataCipher
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class TokenAuthenticator @Inject constructor(
     private val authTokenDao: AuthTokenDao,
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val dataCipher: DataCipher,
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request {
@@ -29,14 +30,19 @@ class TokenAuthenticator @Inject constructor(
                 val authTokenEntity = authTokenDao.getAuthToken(recipientId)
                     ?: throw AuthTokenException()
 
-                val refreshToken = authTokenEntity.refreshToken
+                val refreshToken = dataCipher.decrypt(authTokenEntity.refreshToken)
                     ?: throw RefreshTokenException()
+                val currentAccessToken = dataCipher.decrypt(authTokenEntity.accessToken)
 
-                token = if (isRefreshNeed(response, authTokenEntity)) {
+                token = if (isRefreshNeed(response, currentAccessToken)) {
                     try {
                         val newToken =
                             authService.refreshToken(refreshToken = refreshToken).accessToken
-                        authTokenDao.upsertAuthToken(authTokenEntity.copy(accessToken = newToken))
+                        authTokenDao.upsertAuthToken(
+                            authTokenEntity.copy(
+                                accessToken = dataCipher.encrypt(newToken)
+                            )
+                        )
                         newToken
                     } catch (httpException: HttpException) {
                         throw TokenRevokedException()
@@ -44,7 +50,7 @@ class TokenAuthenticator @Inject constructor(
                         throw RefreshTokenException()
                     }
                 } else {
-                    authTokenEntity.accessToken
+                    currentAccessToken
                 }
             }
             return response
@@ -55,11 +61,10 @@ class TokenAuthenticator @Inject constructor(
         }
     }
 
-    private fun isRefreshNeed(response: Response, authTokenEntity: AuthTokenEntity): Boolean {
+    private fun isRefreshNeed(response: Response, currentAccessToken: String?): Boolean {
         val oldToken: String? =
             response.request.header(AUTHORIZATION_HEADER)?.replace("$TOKEN_TYPE ", "")
-        val newToken: String? = authTokenEntity.accessToken
-        return oldToken == newToken
+        return oldToken == currentAccessToken
     }
 }
 

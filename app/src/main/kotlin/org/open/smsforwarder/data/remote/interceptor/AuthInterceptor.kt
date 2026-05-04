@@ -4,10 +4,12 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import org.open.smsforwarder.data.local.database.dao.AuthTokenDao
+import org.open.smsforwarder.data.security.DataCipher
 import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
     private val authTokenDao: AuthTokenDao,
+    private val dataCipher: DataCipher,
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response =
@@ -20,9 +22,10 @@ class AuthInterceptor @Inject constructor(
             val recipientId = chain.request().header(ID)?.toLong()
                 ?: throw RecipientIdNotFoundException()
 
-            val accessToken = authTokenDao.getAuthToken(recipientId)?.accessToken
+            val encryptedAccessToken = authTokenDao.getAuthToken(recipientId)?.accessToken
+            val accessToken = dataCipher.decrypt(encryptedAccessToken)
 
-            if (accessToken != null) {
+            if (!accessToken.isNullOrBlank()) {
                 modifiedRequest.addHeader(AUTHORIZATION_HEADER, "$TOKEN_TYPE $accessToken")
             }
 

@@ -10,22 +10,28 @@ import org.open.smsforwarder.data.local.database.dao.ForwardingDao
 import org.open.smsforwarder.data.local.database.entity.ForwardingEntity
 import org.open.smsforwarder.data.mapper.toData
 import org.open.smsforwarder.data.mapper.toDomain
+import org.open.smsforwarder.data.security.DataCipher
 import org.open.smsforwarder.domain.model.Forwarding
 import javax.inject.Inject
 
 class ForwardingRepository @Inject constructor(
     private val forwardingDao: ForwardingDao,
+    private val dataCipher: DataCipher,
 ) {
 
     fun getForwardingFlow(): Flow<List<Forwarding>> =
         forwardingDao
             .getForwardingFlow()
             .distinctUntilChanged()
-            .map { forwardingEntity -> forwardingEntity.map(ForwardingEntity::toDomain) }
+            .map { forwardingEntity ->
+                forwardingEntity.map { entity ->
+                    entity.decryptSensitive().toDomain()
+                }
+            }
 
     suspend fun getForwardingById(id: Long): Forwarding? =
         withContext(Dispatchers.IO) {
-            forwardingDao.getForwardingById(id)?.toDomain()
+            forwardingDao.getForwardingById(id)?.decryptSensitive()?.toDomain()
         }
 
     fun getForwardingByIdFlow(id: Long): Flow<Forwarding> =
@@ -33,13 +39,13 @@ class ForwardingRepository @Inject constructor(
             .getForwardingByIdFlow(id)
             .filterNotNull()
             .distinctUntilChanged()
-            .map(ForwardingEntity::toDomain)
+            .map { it.decryptSensitive().toDomain() }
 
     suspend fun createNewForwarding(): Long = insertOrUpdateForwarding(Forwarding())
 
     suspend fun insertOrUpdateForwarding(forwarding: Forwarding): Long =
         withContext(Dispatchers.IO) {
-            forwardingDao.upsertForwarding(forwarding.toData())
+            forwardingDao.upsertForwarding(forwarding.toData().encryptSensitive())
         }
 
     suspend fun deleteForwarding(id: Long) {
@@ -47,4 +53,22 @@ class ForwardingRepository @Inject constructor(
             forwardingDao.deleteForwarding(id)
         }
     }
+
+    private fun ForwardingEntity.encryptSensitive(): ForwardingEntity =
+        copy(
+            senderEmail = dataCipher.encrypt(senderEmail),
+            recipientEmail = dataCipher.encrypt(recipientEmail).orEmpty(),
+            telegramApiToken = dataCipher.encrypt(telegramApiToken).orEmpty(),
+            telegramChatId = dataCipher.encrypt(telegramChatId).orEmpty(),
+            googleChatWebHook = dataCipher.encrypt(googleChatWebHook).orEmpty(),
+        )
+
+    private fun ForwardingEntity.decryptSensitive(): ForwardingEntity =
+        copy(
+            senderEmail = dataCipher.decrypt(senderEmail),
+            recipientEmail = dataCipher.decrypt(recipientEmail).orEmpty(),
+            telegramApiToken = dataCipher.decrypt(telegramApiToken).orEmpty(),
+            telegramChatId = dataCipher.decrypt(telegramChatId).orEmpty(),
+            googleChatWebHook = dataCipher.decrypt(googleChatWebHook).orEmpty(),
+        )
 }

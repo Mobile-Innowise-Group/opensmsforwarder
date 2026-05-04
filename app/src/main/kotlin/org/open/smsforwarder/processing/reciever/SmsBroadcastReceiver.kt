@@ -9,14 +9,11 @@ import androidx.work.Data
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import org.open.smsforwarder.extension.notificationsPermissionGranted
 import org.open.smsforwarder.processing.worker.ForwardingWorker
 
 class SmsBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (!context.notificationsPermissionGranted()) return
-
         if (isSmsReceived(intent.action)) {
             val smsParts = Telephony.Sms.Intents.getMessagesFromIntent(intent)
             val smsMessages = smsParts.map { it.messageBody }

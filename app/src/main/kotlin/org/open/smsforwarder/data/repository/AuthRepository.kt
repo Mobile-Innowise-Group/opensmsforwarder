@@ -6,6 +6,7 @@ import org.open.smsforwarder.data.local.database.dao.AuthTokenDao
 import org.open.smsforwarder.data.local.database.entity.AuthTokenEntity
 import org.open.smsforwarder.data.remote.dto.AuthorizationResult
 import org.open.smsforwarder.data.remote.service.AuthService
+import org.open.smsforwarder.data.security.DataCipher
 import org.open.smsforwarder.domain.IdTokenParser
 import org.open.smsforwarder.utils.runSuspendCatching
 import javax.inject.Inject
@@ -15,6 +16,7 @@ class AuthRepository @Inject constructor(
     private val authTokenDao: AuthTokenDao,
     private val idTokenParser: IdTokenParser,
     private val ioDispatcher: CoroutineDispatcher,
+    private val dataCipher: DataCipher,
 ) {
 
     suspend fun exchangeAuthCodeForTokens(
@@ -33,7 +35,10 @@ class AuthRepository @Inject constructor(
             runSuspendCatching {
                 val authTokenEntity =
                     authTokenDao.getAuthToken(forwardingId) ?: return@runSuspendCatching
-                authService.revokeToken(authTokenEntity.accessToken)
+                val accessToken = dataCipher.decrypt(authTokenEntity.accessToken)
+                if (!accessToken.isNullOrBlank()) {
+                    authService.revokeToken(accessToken)
+                }
                 authTokenDao.upsertAuthToken(
                     authTokenEntity.copy(
                         accessToken = null,
@@ -50,12 +55,12 @@ class AuthRepository @Inject constructor(
     ) {
         withContext(ioDispatcher) {
             val authEntity = authTokenDao.getAuthToken(forwardingId)?.copy(
-                accessToken = accessToken,
-                refreshToken = refreshToken
+                accessToken = dataCipher.encrypt(accessToken),
+                refreshToken = dataCipher.encrypt(refreshToken)
             ) ?: AuthTokenEntity(
                 forwardingId = forwardingId,
-                accessToken = accessToken,
-                refreshToken = refreshToken
+                accessToken = dataCipher.encrypt(accessToken),
+                refreshToken = dataCipher.encrypt(refreshToken)
             )
             authTokenDao.upsertAuthToken(authEntity)
         }

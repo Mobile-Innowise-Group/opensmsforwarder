@@ -16,6 +16,7 @@ import org.open.smsforwarder.data.remote.service.AuthService
 import org.open.smsforwarder.data.remote.service.EmailService
 import org.open.smsforwarder.data.remote.service.GoogleChatService
 import org.open.smsforwarder.data.remote.service.TelegramService
+import org.open.smsforwarder.data.security.DataCipher
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Qualifier
@@ -29,14 +30,16 @@ class NetworkModule {
     @Singleton
     fun provideAuthInterceptor(
         authTokenDao: AuthTokenDao,
-    ) = AuthInterceptor(authTokenDao)
+        dataCipher: DataCipher,
+    ) = AuthInterceptor(authTokenDao, dataCipher)
 
     @Provides
     @Singleton
     fun provideTokenAuthenticator(
         authTokenDao: AuthTokenDao,
         authService: AuthService,
-    ): TokenAuthenticator = TokenAuthenticator(authTokenDao, authService)
+        dataCipher: DataCipher,
+    ): TokenAuthenticator = TokenAuthenticator(authTokenDao, authService, dataCipher)
 
     @Provides
     @Singleton
