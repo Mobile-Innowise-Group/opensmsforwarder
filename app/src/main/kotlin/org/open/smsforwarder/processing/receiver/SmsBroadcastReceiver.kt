@@ -1,4 +1,4 @@
-package org.open.smsforwarder.processing.reciever
+package org.open.smsforwarder.processing.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context

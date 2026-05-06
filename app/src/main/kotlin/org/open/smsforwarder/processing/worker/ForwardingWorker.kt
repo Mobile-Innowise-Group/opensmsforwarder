@@ -14,7 +14,7 @@ import org.open.smsforwarder.R
 import org.open.smsforwarder.data.repository.RulesRepository
 import org.open.smsforwarder.processing.model.IncomingSms
 import org.open.smsforwarder.processing.processor.ForwardingProcessor
-import org.open.smsforwarder.processing.reciever.SmsBroadcastReceiver
+import org.open.smsforwarder.processing.receiver.SmsBroadcastReceiver
 import org.open.smsforwarder.utils.NotificationHelper
 
 @HiltWorker

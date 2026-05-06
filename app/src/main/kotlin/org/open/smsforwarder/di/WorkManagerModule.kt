@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import org.open.smsforwarder.processing.notifiction.WorkManagerConfigurator
+import org.open.smsforwarder.processing.notification.WorkManagerConfigurator
 import javax.inject.Singleton
 
 @Module

@@ -1,4 +1,4 @@
-package org.open.smsforwarder.processing.notifiction
+package org.open.smsforwarder.processing.notification
 
 import android.content.Context
 import androidx.work.ExistingPeriodicWorkPolicy

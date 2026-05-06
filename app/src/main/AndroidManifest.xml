@@ -39,7 +39,7 @@
         </activity>
 
         <receiver
-            android:name=".processing.reciever.SmsBroadcastReceiver"
+            android:name=".processing.receiver.SmsBroadcastReceiver"
             android:exported="true"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
