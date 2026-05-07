@@ -8,7 +8,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class ErrorMapper @Inject constructor() {
+class ForwardingErrorMapper @Inject constructor() {
     fun map(error: Throwable): ForwardingResult =
         when (error) {
             is TokenRevokedException -> ForwardingResult.AuthRevoked(error.message.orEmpty())

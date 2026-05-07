@@ -9,7 +9,7 @@ import javax.inject.Inject
 class EmailForwarder @Inject constructor(
     private val emailComposer: EmailComposer,
     private val emailService: EmailService,
-    private val errorMapper: ErrorMapper,
+    private val forwardingErrorMapper: ForwardingErrorMapper,
 ) : Forwarder {
 
     override suspend fun execute(forwarding: Forwarding, message: String): ForwardingResult =
@@ -26,7 +26,7 @@ class EmailForwarder @Inject constructor(
         }
             .fold(
                 onSuccess = { ForwardingResult.Success },
-                onFailure = { errorMapper.map(it) }
+                onFailure = { forwardingErrorMapper.map(it) }
             )
 
     private companion object {

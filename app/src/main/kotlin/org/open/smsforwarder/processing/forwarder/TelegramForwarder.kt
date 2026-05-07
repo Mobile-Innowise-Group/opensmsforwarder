@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class TelegramForwarder @Inject constructor(
     private val telegramService: TelegramService,
-    private val errorMapper: ErrorMapper,
+    private val forwardingErrorMapper: ForwardingErrorMapper,
 ) : Forwarder {
 
     override suspend fun execute(forwarding: Forwarding, message: String): ForwardingResult =
@@ -20,6 +20,6 @@ class TelegramForwarder @Inject constructor(
         }
             .fold(
                 onSuccess = { ForwardingResult.Success },
-                onFailure = { errorMapper.map(it) }
+                onFailure = { forwardingErrorMapper.map(it) }
             )
 }

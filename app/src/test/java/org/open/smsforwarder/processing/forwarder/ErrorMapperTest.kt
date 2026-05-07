@@ -12,7 +12,7 @@ import java.io.IOException
 
 class ErrorMapperTest {
 
-    private val mapper = ErrorMapper()
+    private val mapper = ForwardingErrorMapper()
 
     @Test
     fun `maps token revoked to auth revoked result`() {
