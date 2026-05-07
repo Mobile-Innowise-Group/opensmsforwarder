@@ -1,7 +1,5 @@
 package org.open.smsforwarder.processing.processor
 
-import org.open.smsforwarder.data.remote.interceptor.RefreshTokenException
-import org.open.smsforwarder.data.remote.interceptor.TokenRevokedException
 import org.open.smsforwarder.data.repository.AuthRepository
 import org.open.smsforwarder.data.repository.ForwardingRepository
 import org.open.smsforwarder.data.repository.HistoryRepository
@@ -11,6 +9,7 @@ import org.open.smsforwarder.domain.model.ForwardingType
 import org.open.smsforwarder.extension.normalizeSpaces
 import org.open.smsforwarder.processing.dedup.SmsDeduplicationManager
 import org.open.smsforwarder.processing.forwarder.Forwarder
+import org.open.smsforwarder.processing.forwarder.ForwardingResult
 import org.open.smsforwarder.processing.model.IncomingSms
 import javax.inject.Inject
 
@@ -55,19 +54,30 @@ class ForwardingProcessor @Inject constructor(
         val recipient = forwardingRepository.getForwardingById(recipientId) ?: return
         val forwarder = forwarders[recipient.forwardingType] ?: return
 
-        forwarder.execute(recipient, message)
-            .onSuccess {
+        when (val result = forwarder.execute(recipient, message)) {
+            is ForwardingResult.Success -> {
                 postProcessForwarding(recipient, message, "")
             }
-            .onFailure { error ->
-                postProcessForwarding(
-                    recipient,
-                    message,
-                    error.message.orEmpty()
-                )
-                handleTokenErrors(error, recipient)
+
+            is ForwardingResult.AuthRevoked -> {
+                postProcessForwarding(recipient, message, result.errorMessage)
+                handleRevokedAuth(recipient)
             }
+
+            is ForwardingResult.RetryableFailure,
+            is ForwardingResult.PermanentFailure,
+            is ForwardingResult.AuthUnavailable ->
+                postProcessForwarding(recipient, message, extractErrorMessage(result))
+        }
     }
+
+    private fun extractErrorMessage(result: ForwardingResult): String =
+        when (result) {
+            is ForwardingResult.RetryableFailure -> result.errorMessage
+            is ForwardingResult.PermanentFailure -> result.errorMessage
+            is ForwardingResult.AuthUnavailable -> result.errorMessage
+            else -> ""
+        }
 
     private suspend fun postProcessForwarding(
         forwarding: Forwarding,
@@ -84,10 +94,8 @@ class ForwardingProcessor @Inject constructor(
         )
     }
 
-    private suspend fun handleTokenErrors(error: Throwable, recipient: Forwarding) {
-        if (error is TokenRevokedException || error is RefreshTokenException) {
-            authRepository.signOut(recipient.id)
-            forwardingRepository.insertOrUpdateForwarding(recipient.copy(senderEmail = null))
-        }
+    private suspend fun handleRevokedAuth(recipient: Forwarding) {
+        authRepository.signOut(recipient.id)
+        forwardingRepository.insertOrUpdateForwarding(recipient.copy(senderEmail = null))
     }
 }

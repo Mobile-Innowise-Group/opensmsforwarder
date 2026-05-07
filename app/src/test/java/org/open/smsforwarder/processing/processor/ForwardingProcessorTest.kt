@@ -14,7 +14,6 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.open.smsforwarder.data.remote.interceptor.RefreshTokenException
-import org.open.smsforwarder.data.remote.interceptor.TokenRevokedException
 import org.open.smsforwarder.data.repository.AuthRepository
 import org.open.smsforwarder.data.repository.ForwardingRepository
 import org.open.smsforwarder.data.repository.HistoryRepository
@@ -24,6 +23,7 @@ import org.open.smsforwarder.domain.model.ForwardingType
 import org.open.smsforwarder.domain.model.Rule
 import org.open.smsforwarder.processing.dedup.SmsDeduplicationManager
 import org.open.smsforwarder.processing.forwarder.Forwarder
+import org.open.smsforwarder.processing.forwarder.ForwardingResult
 import org.open.smsforwarder.processing.model.IncomingSms
 
 @ExtendWith(MockitoExtension::class)
@@ -67,7 +67,7 @@ class ForwardingProcessorTest {
         whenever(rulesRepository.getRules()).thenReturn(listOf(Rule(id = 1, forwardingId = 10, textRule = "OTP")))
         whenever(deduplicationService.shouldProcess("bank", "Your OTP is 1111")).thenReturn(true)
         whenever(forwardingRepository.getForwardingById(10)).thenReturn(forwarding)
-        whenever(emailForwarder.execute(forwarding, "Your OTP is 1111")).thenReturn(Result.success(Unit))
+        whenever(emailForwarder.execute(forwarding, "Your OTP is 1111")).thenReturn(ForwardingResult.Success)
 
         processor.process(listOf(sms("Your OTP is 1111", "bank")))
 
@@ -87,7 +87,7 @@ class ForwardingProcessorTest {
         )
         whenever(deduplicationService.shouldProcess("bank", "Your OTP is 1111")).thenReturn(true)
         whenever(forwardingRepository.getForwardingById(10)).thenReturn(forwarding)
-        whenever(emailForwarder.execute(forwarding, "Your OTP is 1111")).thenReturn(Result.success(Unit))
+        whenever(emailForwarder.execute(forwarding, "Your OTP is 1111")).thenReturn(ForwardingResult.Success)
 
         processor.process(listOf(sms("Your OTP is 1111", "bank")))
 
@@ -181,7 +181,8 @@ class ForwardingProcessorTest {
         whenever(rulesRepository.getRules()).thenReturn(listOf(Rule(id = 1, forwardingId = 10, textRule = "OTP")))
         whenever(deduplicationService.shouldProcess("bank", "Your OTP is 1111")).thenReturn(true)
         whenever(forwardingRepository.getForwardingById(10)).thenReturn(forwarding)
-        whenever(emailForwarder.execute(forwarding, "Your OTP is 1111")).thenReturn(Result.failure(exception))
+        whenever(emailForwarder.execute(forwarding, "Your OTP is 1111"))
+            .thenReturn(ForwardingResult.PermanentFailure(exception.message.orEmpty()))
 
         processor.process(listOf(sms("Your OTP is 1111", "bank")))
 
@@ -193,14 +194,14 @@ class ForwardingProcessorTest {
     }
 
     @Test
-    fun `process signs out and clears sender email on token revoked error`() = runTest {
+    fun `process signs out and clears sender email on auth revoked result`() = runTest {
         val processor = createProcessor()
         val forwarding = Forwarding(id = 10, forwardingType = ForwardingType.EMAIL, senderEmail = "sender@example.com")
         whenever(rulesRepository.getRules()).thenReturn(listOf(Rule(id = 1, forwardingId = 10, textRule = "OTP")))
         whenever(deduplicationService.shouldProcess("bank", "Your OTP is 1111")).thenReturn(true)
         whenever(forwardingRepository.getForwardingById(10)).thenReturn(forwarding)
         whenever(emailForwarder.execute(forwarding, "Your OTP is 1111"))
-            .thenReturn(Result.failure(TokenRevokedException()))
+            .thenReturn(ForwardingResult.AuthRevoked("token revoked"))
 
         processor.process(listOf(sms("Your OTP is 1111", "bank")))
 
@@ -211,21 +212,19 @@ class ForwardingProcessorTest {
     }
 
     @Test
-    fun `process signs out and clears sender email on refresh token error`() = runTest {
+    fun `process does not sign out on regular forwarding failure`() = runTest {
         val processor = createProcessor()
         val forwarding = Forwarding(id = 10, forwardingType = ForwardingType.EMAIL, senderEmail = "sender@example.com")
         whenever(rulesRepository.getRules()).thenReturn(listOf(Rule(id = 1, forwardingId = 10, textRule = "OTP")))
         whenever(deduplicationService.shouldProcess("bank", "Your OTP is 1111")).thenReturn(true)
         whenever(forwardingRepository.getForwardingById(10)).thenReturn(forwarding)
         whenever(emailForwarder.execute(forwarding, "Your OTP is 1111"))
-            .thenReturn(Result.failure(RefreshTokenException()))
+            .thenReturn(ForwardingResult.RetryableFailure(RefreshTokenException().message.orEmpty()))
 
         processor.process(listOf(sms("Your OTP is 1111", "bank")))
 
-        verify(authRepository).signOut(10)
-        val forwardingCaptor = argumentCaptor<Forwarding>()
-        verify(forwardingRepository, times(2)).insertOrUpdateForwarding(forwardingCaptor.capture())
-        assertEquals(null, forwardingCaptor.secondValue.senderEmail)
+        verify(authRepository, never()).signOut(any())
+        verify(forwardingRepository, times(1)).insertOrUpdateForwarding(any())
     }
 
     private fun createProcessor(): ForwardingProcessor =

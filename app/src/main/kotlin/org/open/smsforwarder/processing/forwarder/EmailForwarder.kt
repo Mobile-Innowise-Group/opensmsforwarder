@@ -8,10 +8,11 @@ import javax.inject.Inject
 
 class EmailForwarder @Inject constructor(
     private val emailComposer: EmailComposer,
-    private val emailService: EmailService
+    private val emailService: EmailService,
+    private val errorMapper: ErrorMapper,
 ) : Forwarder {
 
-    override suspend fun execute(forwarding: Forwarding, message: String): Result<Unit> =
+    override suspend fun execute(forwarding: Forwarding, message: String): ForwardingResult =
         runSuspendCatching {
             val emailMessage = emailComposer.composeMessage(
                 toEmailAddress = forwarding.recipientEmail,
@@ -23,6 +24,10 @@ class EmailForwarder @Inject constructor(
                 rawBody = hashMapOf(SEND_FORMAT to emailMessage)
             )
         }
+            .fold(
+                onSuccess = { ForwardingResult.Success },
+                onFailure = { errorMapper.map(it) }
+            )
 
     private companion object {
         const val DEFAULT_SUBJECT = "Forwarded SMS"
